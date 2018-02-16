@@ -1,0 +1,189 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1030708423356466}
+  m_IsPrefabParent: 1
+--- !u!1 &1030708423356466
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4657391400128840}
+  - component: {fileID: 20905907841944416}
+  - component: {fileID: 81305465140820214}
+  - component: {fileID: 114031070738557716}
+  - component: {fileID: 114767852449001612}
+  - component: {fileID: 114650936816286212}
+  - component: {fileID: 114964562185623186}
+  m_Layer: 0
+  m_Name: ThirdPersonCamera
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4657391400128840
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1030708423356466}
+  m_LocalRotation: {x: 0.17364818, y: 0, z: 0, w: 0.9848078}
+  m_LocalPosition: {x: 0, y: 2, z: -8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!20 &20905907841944416
+Camera:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1030708423356466}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!81 &81305465140820214
+AudioListener:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1030708423356466}
+  m_Enabled: 1
+--- !u!114 &114031070738557716
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1030708423356466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37b6d74e3a3286c42926d147eea3a3ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraState: 1
+  thirdPersonCamera: {fileID: 20905907841944416}
+  targetPlayer: {fileID: 0}
+  targetObject: {fileID: 0}
+  cameraDesiredPosition: {x: 0, y: 0, z: 0}
+  cameraCurrentDistanceFromPlayer: 0
+  canCameraMove: 1
+  canCameraRotate: 1
+  isPlayerInCover: 0
+  thirdPersonCameraMovementAttributes:
+    cameraMoveSmoothTime: 0.12
+    cameraResetTime: 3
+  thirdPersonCameraRotationAttributes:
+    cameraRotationSmoothTime: 0.12
+    basePitch: 20
+    baseYaw: 0
+    pitchMinMax: {x: -40, y: 85}
+  thirdPersonCameraCollisionAttributes:
+    cameraBaseDistanceFromTarget: 3.5
+    cameraMinDistanceFromTarget: 1
+    cameraMaxDistanceFromTarget: 5
+    cameraCollisionSmoothTime: 0.1
+  thirdPersonCameraLockOnAttributes:
+    cameraLockOnRadius: 5
+    cameraMinLockOnDistance: 1
+    cameraMaxLockOnDistance: 5
+  cameraCurrentWaitResetTime: 0
+  canCameraReset: 1
+--- !u!114 &114650936816286212
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1030708423356466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ef1841adb0181f4dbff286948222bad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nearbyEnemyList: []
+  targetPlayer: {fileID: 0}
+  lockOnTarget: {fileID: 0}
+  cameraDistanceFromTarget: 0
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  isCameraLockedOn: 0
+  canShowDebug: 1
+--- !u!114 &114767852449001612
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1030708423356466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b821f5a9210bd14bbaab722d04bd3b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraCollisionData:
+  - 0
+  - 0
+  cameraCollisionDistance: 0
+  cameraCollisionDirection: 0
+  cameraClipCollisionSize: 3.34
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 130560
+  isCameraColliding: 0
+  canShowDebug: 0
+--- !u!114 &114964562185623186
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1030708423356466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f86f97fc568e1045a4cbaa8ffe35688, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraFadeImage: {fileID: 0}
+  isFading: 0
+  currentCameraFadeAttributes:
+    cameraFadeType: 0
+    fadeOutTime: 0
+    fadeInTime: 0
+    fadeTransitionWaitTime: 0
