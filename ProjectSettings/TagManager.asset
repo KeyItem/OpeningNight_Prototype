@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Enemy
+  - ConversationUI
+  - ConversationCamera
+  - PlayerUI
   layers:
   - Default
   - TransparentFX
@@ -13,16 +17,16 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Ground
+  - ClimbableWall
+  - Enemy
+  - Cover
+  - Interactable
+  - Actor
+  - Wall
+  - Doorway
+  - PhysicsInteractable
   - 
   - 
   - 
