@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class ChangeToRandomColor_SE : StageEvent
+public class ChangeToRandomColor_StageEvent : StageEvent
 {
     [Header("Custom Stage Event Attributes")]
     public Vector2 randomColorRange;

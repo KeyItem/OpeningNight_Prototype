@@ -1,16 +1,19 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class MoveToPositionStageEvent : StageEvent
+public class PlayerMoveToPosition_StageEvent : StageEvent
 {
     [Header("Custom Stage Event Attributes")]
-    public Transform targetTransform;
+    public Transform targetPlayer;
 
     [Space(10)]
     public Transform desiredPosition;
 
     [Space(10)]
     public float minDistanceToPosition = 2f;
+
+    [Header("Debug Attributes")]
+    public float currentDistanceToPosition = 0f;
 
     private void Update()
     {
@@ -19,6 +22,8 @@ public class MoveToPositionStageEvent : StageEvent
 
     public override void StageEventStart()
     {
+        targetPlayer = GameObject.FindGameObjectWithTag("Player").transform;
+
         base.StageEventStart();
     }
 
@@ -26,9 +31,11 @@ public class MoveToPositionStageEvent : StageEvent
     {
         if (isStageEventActive)
         {
-            if (targetTransform != null && desiredPosition != null)
+            if (targetPlayer != null && desiredPosition != null)
             {
-                float distanceToPosition = Vector3.Distance(targetTransform.position, desiredPosition.position);
+                float distanceToPosition = Vector3.Distance(targetPlayer.position, desiredPosition.position);
+
+                currentDistanceToPosition = distanceToPosition;
 
                 if (distanceToPosition <= minDistanceToPosition)
                 {
@@ -42,4 +49,5 @@ public class MoveToPositionStageEvent : StageEvent
     {
         base.StageEventCompleted();
     }
+
 }

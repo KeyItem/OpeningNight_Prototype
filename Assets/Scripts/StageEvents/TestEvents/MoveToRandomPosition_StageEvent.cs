@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class MoveToRandomPosition_SE : StageEvent
+public class MoveToRandomPosition_StageEvent : StageEvent
 {
     [Header("Custom Stage Event Attributes")]
     public Vector2 xAxisRange;

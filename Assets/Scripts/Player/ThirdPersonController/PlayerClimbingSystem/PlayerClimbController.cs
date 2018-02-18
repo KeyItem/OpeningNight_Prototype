@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class PlayerClimbSystem : MonoBehaviour
+public class PlayerClimbController : MonoBehaviour
 {
     private ThirdPersonPlayerController playerController;
 
     [Header("Climbing System Attributes")]
+    public LayerMask climbObjectMask;
     public LayerMask climbCollisionMask;
 
     private PlayerClimbingAttributes playerClimbingAttributes;
@@ -15,8 +16,6 @@ public class PlayerClimbSystem : MonoBehaviour
     private GameObject targetClimbObject;
     private Vector3 rayHitPoint;
     private RaycastHit rayHit;
-
-    private LayerMask climbMask;
 
     private bool isClimbing = false;
 
@@ -44,15 +43,13 @@ public class PlayerClimbSystem : MonoBehaviour
         playerController = GetComponent<ThirdPersonPlayerController>();
 
         playerClimbingAttributes = playerController.playerClimbingAttributes;
-
-        climbMask = playerController.climbMask;
     }
 
     private void WallCheck()
     {
         for (int i = 0; i < heightCheckPadding.Length; i++)
         {
-            if (Physics.Raycast(transform.position - (Vector3.up * heightCheckPadding[i]), transform.forward, out rayHit, playerClimbingAttributes.playerClimbRayLength, climbMask))
+            if (Physics.Raycast(transform.position - (Vector3.up * heightCheckPadding[i]), transform.forward, out rayHit, playerClimbingAttributes.playerClimbRayLength, climbObjectMask))
             {
                 rayHitPoint = rayHit.point;
 

@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof (ThirdPersonInputManager))]
-[RequireComponent(typeof (PlayerClimbSystem))]
+[RequireComponent(typeof (PlayerClimbController))]
 [RequireComponent(typeof (CharacterController))]
 public class ThirdPersonPlayerController : PlayerController
 {
@@ -93,23 +93,15 @@ public class ThirdPersonPlayerController : PlayerController
     [Header("Player Cover Attributes")]
     public PlayerCoverAttributes playerCoverAttributes;
 
-    [Space(10)]
-    public Cover playerCurrentCover = null;
-
-    [Space(10)]
-    public LayerMask coverMask;
+    private PlayerCoverController playerCoverController;
 
     [Space(10)]
     public bool canPlayerTakeCover = true;
-    public bool isPlayerInCover = false;
 
     [Header("Player Climbing Attributes")]
     public PlayerClimbingAttributes playerClimbingAttributes;
 
-    private PlayerClimbSystem playerClimbSystem;
-
-    [Space(10)]
-    public LayerMask climbMask;
+    private PlayerClimbController playerClimbController;
 
     [Space(10)]
     public bool canPlayerClimb = true;
@@ -118,13 +110,7 @@ public class ThirdPersonPlayerController : PlayerController
     [Header("Player Interaction Attributes")]
     public PlayerInteractionAttributes playerInteractionAttributes;
 
-    [Space(10)]
-    private GameObject[] interactableObjectsInRange;
-
-    [Space(10)]
-    public LayerMask interactableLayerMask;
-
-    private RaycastHit interactRayHit;
+    private PlayerInteractionController playerInteractionController;
 
     [Space(10)]
     public bool canPlayerInteract = true;
@@ -147,9 +133,13 @@ public class ThirdPersonPlayerController : PlayerController
     [Header("Player Debug Attributes")]
     public bool canShowDebug = false;
 
-    private void Start()
+    private void Awake()
     {
         InitializePlayer();
+    }
+
+    private void Start()
+    {
         InitializePlayerValues();
     }
 
@@ -160,8 +150,6 @@ public class ThirdPersonPlayerController : PlayerController
         ManageTurning();
 
         ManageMovement();
-
-        CheckForInteractableObjects();
     }
 
     #region PLAYER_INPUT
@@ -188,7 +176,11 @@ public class ThirdPersonPlayerController : PlayerController
 
         playerCharacterController = GetComponent<CharacterController>();
 
-        playerClimbSystem = GetComponent<PlayerClimbSystem>();
+        playerClimbController = GetComponent<PlayerClimbController>();
+
+        playerInteractionController = GetComponent<PlayerInteractionController>();
+
+        playerCoverController = GetComponent<PlayerCoverController>();
 
         if (isUsingThirdPersonCam)
         {
@@ -212,7 +204,7 @@ public class ThirdPersonPlayerController : PlayerController
     {
         if (canPlayerMove)
         {
-            if (isPlayerInCover)
+            if (playerCoverController.isPlayerInCover)
             {
                 playerTargetSpeed = playerMovementAttributes.playerBaseCoverSpeed * inputVector.magnitude;
             }
@@ -229,7 +221,7 @@ public class ThirdPersonPlayerController : PlayerController
 
             playerAnimator.SetFloat("moveSpeed", playerCurrentSpeed);
 
-            if (isPlayerInCover)
+            if (playerCoverController.isPlayerInCover)
             {
                 PlayerCoverMovement();
             }
@@ -297,7 +289,7 @@ public class ThirdPersonPlayerController : PlayerController
             return;
         }
 
-        Vector3 playerCoverSplineMovePosition = playerCurrentCover.ReturnCoverMovePosition(playerDirection, playerCurrentSpeed);
+        Vector3 playerCoverSplineMovePosition = playerCoverController.playerCurrentCover.ReturnCoverMovePosition(playerDirection, playerCurrentSpeed);
 
         transform.position = playerCoverSplineMovePosition;
 
@@ -364,12 +356,15 @@ public class ThirdPersonPlayerController : PlayerController
             {
                 if (isPlayerGrounded)
                 {
-                    if ((playerClimbSystem.TryClimb()))
+                    if (playerClimbController != null)
                     {
-                        playerClimbSystem.StartClimb();
+                        if ((playerClimbController.TryClimb()))
+                        {
+                            playerClimbController.StartClimb();
 
-                        return;
-                    }
+                            return;
+                        }
+                    }               
                 }
             }
 
@@ -449,7 +444,7 @@ public class ThirdPersonPlayerController : PlayerController
 
     private float GetSmoothTime()
     {
-        if (isPlayerInCover)
+        if (playerCoverController.isPlayerInCover)
         {
             return playerMovementAttributes.playerCoverMoveSmoothTime;
         }
@@ -792,181 +787,45 @@ public class ThirdPersonPlayerController : PlayerController
 
     public override void TakeCover()
     {
-        if (CheckForCoverInPlayerRadius())
+        if (playerCoverController != null)
         {
-            PlayerTakeCover();
-        }
-        else
-        {
-            PlayerSetupRoll();
-        }
-    }
-
-    private void PlayerTakeCover()
-    {
-        if (canPlayerTakeCover)
-        {
-            if (!isPlayerInCover)
+            if (canPlayerTakeCover)
             {
-                if (CheckForCoverInPlayerRadius())
+                if (playerCoverController.CheckForCoverInPlayerRadius())
                 {
-                    Cover newPlayerCover = ReturnPlayerCover();
+                    playerCoverController.PlayerTakeCover();
 
-                    CoverPoint newPlayerCoverPoint = newPlayerCover.ReturnClosestCoverPoint(transform.position);
-
-                    float distanceToCoverPoint = Vector3.Distance(transform.position, newPlayerCoverPoint.transform.position);
-
-                    if (CheckPlayerPathToCover(newPlayerCoverPoint, distanceToCoverPoint))
-                    {
-                        StartCoroutine(TransitionPlayerToCover(newPlayerCover, newPlayerCoverPoint, distanceToCoverPoint));
-                    }
+                    return;
                 }
             }
-            else
-            {
-                PlayerLeaveCover();
-            }
+           
         }
+
+        PlayerSetupRoll();
     }
 
-    private IEnumerator TransitionPlayerToCover(Cover targetCover, CoverPoint targetCoverPoint, float distanceToCover)
+    public void PlayerStartMovingToCover()
     {
-        float coverSplinePercent = 1f / targetCover.coverPoints.Length;
-        coverSplinePercent *= targetCoverPoint.coverPointIndex + 1;
-
-        Vector3 targetCoverHookLocation = targetCover.coverSpline.GetPoint(coverSplinePercent);
-
-        transform.LookAt(targetCoverHookLocation);
-
         playerAnimator.SetTrigger("isSlide");
 
         canPlayerMove = false;
         canPlayerTurn = false;
         canPlayerTakeCover = false;
-
-        Vector3 playerStartPosition = transform.position;
-
-        float speedMultiplier = playerCoverAttributes.playerCoverDetectionRadius / distanceToCover;
-
-        float currentCoverTransitionTime = 0;
-
-        while(currentCoverTransitionTime < 1)
-        {
-            currentCoverTransitionTime += (Time.deltaTime * speedMultiplier) / playerCoverAttributes.playerCoverTransitionTime;
-
-            if (currentCoverTransitionTime > 1)
-            {
-                currentCoverTransitionTime = 1;
-            }
-
-            transform.position = Vector3.Lerp(playerStartPosition, targetCoverHookLocation, currentCoverTransitionTime);
-
-            yield return new WaitForEndOfFrame();
-        }
-
-        FinishPlayerMoveToCover(targetCover, targetCoverPoint, targetCoverHookLocation, coverSplinePercent);
-        
-        yield return null;
     }
 
-    private void FinishPlayerMoveToCover(Cover targetCover, CoverPoint targetCoverPoint, Vector3 coverSplinePercentPosition, float targetCoverSplinePercent)
+    public void PlayerFinishMovingToCover(Cover newCover)
     {
-        transform.position = coverSplinePercentPosition;
-
         canPlayerMove = true;
         canPlayerTakeCover = true;
-        isPlayerInCover = true;
 
-        playerCurrentCover = targetCover;
-        playerCurrentCover.isPlayerAttachedToCover = true;
-        playerCurrentCover.playerAttachedCoverPointIndex = targetCoverPoint.coverPointIndex;
-        playerCurrentCover.playerCoverSplineMovePercent = targetCoverSplinePercent;
-
-        playerCamera.currentLockOnTarget = playerCurrentCover.transform;
+        playerCamera.currentLockOnTarget = newCover.transform;
         playerCamera.isPlayerInCover = true;
     }
 
-    private void PlayerLeaveCover()
+    public void PlayerLeaveCover()
     {
-        isPlayerInCover = false;
-
-        playerCamera.isPlayerInCover = false;
-        playerCamera.currentLockOnTarget = null;
-
         canPlayerMove = true;
         canPlayerTurn = true;
-
-        playerCurrentCover.ResetCover();
-
-        playerCurrentCover = null;
-    }
-
-    private bool CheckForCoverInPlayerRadius()
-    {
-        Collider[] hitCoverColliders = Physics.OverlapSphere(transform.position, playerCoverAttributes.playerCoverDetectionRadius, coverMask);
-
-        if (hitCoverColliders.Length > 0)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private bool CheckPlayerPathToCover(CoverPoint coverPointToCheck, float distanceToCover)
-    {
-        float verticalDistanceBetweenCover = Mathf.Abs(coverPointToCheck.transform.position.y - transform.position.y);
-
-        if (verticalDistanceBetweenCover > 0.5f) //Check if Cover is on similar Y coordinates
-        {
-            return false;
-        }
-
-        Vector3 interceptVector = (coverPointToCheck.transform.position - transform.position).normalized;
-
-        if (Physics.Raycast(transform.position, interceptVector, distanceToCover))
-        {
-            if (canShowDebug)
-            {
-                Debug.DrawRay(transform.position, interceptVector * distanceToCover, Color.red, 1f);
-            }
-
-            return false;
-        }
-        else
-        {
-            if (canShowDebug)
-            {
-                Debug.DrawRay(transform.position, interceptVector * distanceToCover, Color.green, 1f);
-            }
-
-            return true;
-        }
-    }
-
-    private Cover ReturnPlayerCover()
-    {
-        Cover newPlayerCover = null;
-
-        float closestCoverPoint = float.MaxValue;
-
-        Collider[] hitCoverColliders = Physics.OverlapSphere(transform.position, playerCoverAttributes.playerCoverDetectionRadius, coverMask);
-
-        for (int i = 0; i < hitCoverColliders.Length; i++)
-        {
-            Cover coverToCheck = hitCoverColliders[i].GetComponent<Cover>();
-
-            float coverDistanceToPlayer = Vector3.Distance(transform.position, coverToCheck.transform.position);
-
-            if (coverDistanceToPlayer < closestCoverPoint)
-            {
-                closestCoverPoint = coverDistanceToPlayer;
-
-                newPlayerCover = coverToCheck;
-            }
-        }
-
-        return newPlayerCover;
     }
 
     #endregion
@@ -975,140 +834,9 @@ public class ThirdPersonPlayerController : PlayerController
 
     public override void Interact()
     {
-        PlayerInteraction();
-    }
-
-    private void PlayerInteraction()
-    {
-        if (canPlayerInteract)
+        if (playerInteractionController != null)
         {
-            if (interactableObjectsInRange.Length > 0)
-            {
-                Interactable newInteractableObject = ReturnClosestInteractableObject();
-
-                if (CheckForInteractAngle(newInteractableObject))
-                {
-                    float distanceFromPlayer = Vector3.Distance(transform.position, newInteractableObject.transform.position);
-
-                    if (CheckPathToInteractableObject(newInteractableObject, distanceFromPlayer))
-                    {
-                        newInteractableObject.Interact(gameObject);
-                    }
-                    else
-                    {
-                        Debug.Log("No Path to Object Interaction :: " + newInteractableObject);
-                    }
-                }         
-            }
-        }
-    }
-
-    private Interactable ReturnClosestInteractableObject()
-    {
-        Interactable closestInteractableObject = null;
-
-        float closestInteractableObjectDistance = float.MaxValue;
-
-        for (int i = 0; i < interactableObjectsInRange.Length; i++)
-        {
-            Interactable newInteractable = interactableObjectsInRange[i].GetComponent<Interactable>();
-
-            float interactableObjectDistance = Vector3.Distance(transform.position, newInteractable.transform.position);
-
-            if (interactableObjectDistance < closestInteractableObjectDistance)
-            {
-                closestInteractableObjectDistance = interactableObjectDistance;
-
-                closestInteractableObject = newInteractable;
-            }
-        }
-
-        return closestInteractableObject;
-    }
-
-    private bool CheckPathToInteractableObject(Interactable interactableObject, float playerDistanceFromInteractable)
-    {
-        float verticalDistanceBetweenInteraction = Mathf.Abs(interactableObject.transform.position.y - transform.position.y);
-
-        if (verticalDistanceBetweenInteraction > playerInteractionAttributes.playerInteractionMaxVerticalHeight) //Check if Cover is on similar Y coordinates
-        {
-            Debug.Log("Object is too high :: " + verticalDistanceBetweenInteraction);
-
-            return false;
-        }
-
-        Vector3 interceptVector = (interactableObject.transform.position - transform.position).normalized;
-
-        if (Physics.Raycast(transform.position, interceptVector, out interactRayHit, playerDistanceFromInteractable))
-        {
-            if (canShowDebug)
-            {
-                Debug.DrawRay(transform.position, interceptVector * playerDistanceFromInteractable, Color.red, 1f);
-            }
-
-            if (interactRayHit.collider.gameObject != interactableObject.gameObject)
-            {
-                Debug.Log(interactRayHit.collider.gameObject.name);
-
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-        else
-        {
-            if (canShowDebug)
-            {
-                Debug.DrawRay(transform.position, interceptVector * playerDistanceFromInteractable, Color.green, 1f);
-            }
-
-            return true;
-        }
-    }
-
-    private bool CheckForInteractAngle(Interactable interactableObject)
-    {
-        if (interactableObject.interactableObjectType == INTERACTABLE_OBJECT_TYPE.ACTOR)
-        {
-            Vector3 interceptVector = interactableObject.transform.position - transform.position;
-
-            float vectorAngle = Vector3.Angle(interceptVector, transform.forward);
-
-            if (vectorAngle > playerInteractionAttributes.playerInteractionActorMaxAngle)
-            {
-                Debug.Log(vectorAngle);
-
-                return false;
-            }
-        }
-        else if (interactableObject.interactableObjectType == INTERACTABLE_OBJECT_TYPE.PHYSICS)
-        {
-            Vector3 interceptVector = interactableObject.transform.position - transform.position;
-
-            float vectorAngle = Vector3.Angle(interceptVector, transform.forward);
-
-            if (vectorAngle > playerInteractionAttributes.playerInteractionPhysicsMaxAngle)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private void CheckForInteractableObjects()
-    {
-        if (canPlayerInteract)
-        {
-            Collider[] objectsInRange = Physics.OverlapSphere(transform.position, playerInteractionAttributes.playerInteractionMaxRadius, interactableLayerMask);
-            interactableObjectsInRange = new GameObject[objectsInRange.Length];
-
-            for (int i = 0; i < objectsInRange.Length; i++)
-            {
-                interactableObjectsInRange[i] = objectsInRange[i].gameObject;
-            }
+            playerInteractionController.AttemptPlayerInteraction();
         }
     }
 
