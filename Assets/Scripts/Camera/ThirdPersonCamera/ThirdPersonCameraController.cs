@@ -63,9 +63,6 @@ public class ThirdPersonCameraController : CameraController
 
     private bool canInputLockOnSwitch = true;
 
-    [Header("Camera Reset Attributes")]
-    public float cameraCurrentWaitResetTime;
-
     [Space(10)]
     public bool canCameraReset = true;
 
@@ -279,7 +276,7 @@ public class ThirdPersonCameraController : CameraController
         if (canShowDebug)
         {
             Gizmos.color = Colors.Red; //LockDistance
-            Gizmos.DrawWireSphere(transform.position, thirdPersonCameraLockOnAttributes.cameraMaxLockOnDistance);
+            Gizmos.DrawWireSphere(targetPlayer.position, thirdPersonCameraLockOnAttributes.cameraLockOnRadius);
         }
     }
 }

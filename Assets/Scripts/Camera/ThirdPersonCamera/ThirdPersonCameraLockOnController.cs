@@ -149,19 +149,34 @@ public class ThirdPersonCameraLockOnController : MonoBehaviour
 
         if (targetsInDirection.Count > 0)
         {
-            newTargetTransform = ReturnClosestEnemyInList(currentLockOnTransform, targetsInDirection);
-
-            if (newTargetTransform != null)
+            switch(targetDirection)
             {
-                SetLockOnTarget(newTargetTransform);
+                case DIRECTION.LEFT:
+                    newTargetTransform = ReturnClosestEnemyInList(currentLockOnTransform, targetsInDirection);
+                    break;
 
-                playerUI.SetNewLockOnIndicatorPosition(newTargetTransform);
-            }
+                case DIRECTION.RIGHT:
+                    newTargetTransform = ReturnClosestEnemyInList(currentLockOnTransform, targetsInDirection);
+                    break;
 
-            return newTargetTransform;
+                case DIRECTION.FORWARD:
+                    newTargetTransform = ReturnFarthestEnemyInList(currentLockOnTransform, targetsInDirection);
+                    break;
+
+                case DIRECTION.BACK:
+                    newTargetTransform = ReturnClosestEnemyInList(targetPlayer, targetsInDirection);
+                    break;
+            }                 
         }
 
-        return null;
+        if (newTargetTransform != null)
+        {
+            SetLockOnTarget(newTargetTransform);
+
+            playerUI.SetNewLockOnIndicatorPosition(newTargetTransform);
+        }
+
+        return newTargetTransform;
     }
 
     private List<Transform> ReturnEnemiesInRange()
@@ -210,6 +225,40 @@ public class ThirdPersonCameraLockOnController : MonoBehaviour
         }     
 
         return newEnemy;
+    }
+
+    private Transform ReturnFarthestEnemyInList(Transform targetTransform, List<Transform> targetList)
+    {
+        Transform newTarget = null;
+
+        float farthestEnemyDistance = 0f;
+
+        if (targetList.Count > 0)
+        {
+            for (int i = 0; i < targetList.Count; i++)
+            {
+                float distanceToTarget = Vector3.Distance(targetTransform.position, targetList[i].position);
+
+                if (distanceToTarget > farthestEnemyDistance)
+                {
+                    newTarget = targetList[i];
+
+                    farthestEnemyDistance = distanceToTarget;
+                }
+
+                if (canShowDebug)
+                {
+                    Debug.DrawLine(targetTransform.position, targetList[i].position, Color.white, 1f);
+                }
+            }
+
+            if (canShowDebug)
+            {
+                Debug.DrawLine(targetTransform.position, newTarget.position, Color.green, 1f);
+            }
+        }
+
+        return newTarget;
     }
 
     private List <Transform> ReturnEnemiesInDirection(Transform targetTransform, DIRECTION targetDirection, List<Transform> targetList)
