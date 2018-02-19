@@ -6,6 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof (CharacterController))]
 public class ThirdPersonPlayerController : PlayerController
 {
+    public static Transform playerInstance;
+
     private InputManager playerInputManager;
 
     private CharacterController playerCharacterController;
@@ -172,6 +174,8 @@ public class ThirdPersonPlayerController : PlayerController
 
     private void InitializePlayer()
     {
+        playerInstance = transform;
+
         playerInputManager = GetComponent<InputManager>();
 
         playerCharacterController = GetComponent<CharacterController>();

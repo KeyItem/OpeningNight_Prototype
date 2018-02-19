@@ -8,6 +8,8 @@ public class PlayerInteractionController : MonoBehaviour
 
     private PlayerInteractionAttributes playerInteractionAttributes;
 
+    private PlayerPickUpController playerPickUpController;
+
     [Space(10)]
     public LayerMask interactableLayerMask;
 
@@ -30,27 +32,73 @@ public class PlayerInteractionController : MonoBehaviour
     private void InitializePlayerInteraction()
     {
         playerInteractionAttributes = GetComponent<ThirdPersonPlayerController>().playerInteractionAttributes;
+
+        playerPickUpController = GetComponent<PlayerPickUpController>();
     }
 
     public void AttemptPlayerInteraction()
     {
+        if (playerPickUpController.isPlayerHoldingObject)
+        {
+            playerPickUpController.currentInteractableObject.Interact(gameObject);
+        }
+
         if (interactableObjectsInRange.Length > 0)
         {
             Interactable newInteractableObject = ReturnClosestInteractableObject();
 
-            if (CheckForInteractAngle(newInteractableObject))
+            if (newInteractableObject != null)
             {
-                float distanceFromPlayer = Vector3.Distance(transform.position, newInteractableObject.transform.position);
-
-                if (CheckPathToInteractableObject(newInteractableObject, distanceFromPlayer))
+                if (CheckForInteractAngle(newInteractableObject))
                 {
+                    float distanceFromPlayer = Vector3.Distance(transform.position, newInteractableObject.transform.position);
+
+                    if (CheckPathToInteractableObject(newInteractableObject, distanceFromPlayer))
+                    {
+                        ManageObjectInteraction(newInteractableObject);
+                    }
+                    else
+                    {
+                        Debug.Log("No Path to Object Interaction :: " + newInteractableObject);
+                    }
+                }
+            }       
+        }
+    }
+
+    private void ManageObjectInteraction(Interactable newInteractableObject)
+    {
+        Debug.Log("Attempting Interaction with :: " + newInteractableObject.name);
+
+        switch (newInteractableObject.interactableObjectType)
+        {
+            case INTERACTABLE_OBJECT_TYPE.ACTOR:
+                newInteractableObject.Interact(gameObject);
+                break;
+
+            case INTERACTABLE_OBJECT_TYPE.PHYSICS:
+                newInteractableObject.Interact(gameObject);
+                break;
+
+            case INTERACTABLE_OBJECT_TYPE.PICKUP:
+                if (playerPickUpController.isPlayerHoldingObject)
+                {
+                    playerPickUpController.DropObject();
+
+                    playerPickUpController.PickUpObject(newInteractableObject);
+
                     newInteractableObject.Interact(gameObject);
                 }
                 else
                 {
-                    Debug.Log("No Path to Object Interaction :: " + newInteractableObject);
+                    if (playerPickUpController.CanPlayerPickUpObject())
+                    {
+                        playerPickUpController.PickUpObject(newInteractableObject);
+
+                        newInteractableObject.Interact(gameObject);
+                    }
                 }
-            }
+                break;
         }
     }
 
@@ -63,6 +111,11 @@ public class PlayerInteractionController : MonoBehaviour
         for (int i = 0; i < interactableObjectsInRange.Length; i++)
         {
             Interactable newInteractable = interactableObjectsInRange[i].GetComponent<Interactable>();
+
+            if (newInteractable.isBeingInteractedWith)
+            {
+                continue;
+            }
 
             float interactableObjectDistance = Vector3.Distance(transform.position, newInteractable.transform.position);
 
@@ -79,44 +132,49 @@ public class PlayerInteractionController : MonoBehaviour
 
     private bool CheckPathToInteractableObject(Interactable interactableObject, float playerDistanceFromInteractable)
     {
-        float verticalDistanceBetweenInteraction = Mathf.Abs(interactableObject.transform.position.y - transform.position.y);
-
-        if (verticalDistanceBetweenInteraction > playerInteractionAttributes.playerInteractionMaxVerticalHeight) //Check if Cover is on similar Y coordinates
+       if (interactableObject != null)
         {
-            Debug.Log("Object is too high :: " + verticalDistanceBetweenInteraction);
+            float verticalDistanceBetweenInteraction = Mathf.Abs(interactableObject.transform.position.y - transform.position.y);
 
-            return false;
-        }
-
-        Vector3 interceptVector = (interactableObject.transform.position - transform.position).normalized;
-
-        if (Physics.Raycast(transform.position, interceptVector, out interactRayHit, playerDistanceFromInteractable))
-        {
-            if (canShowDebug)
+            if (verticalDistanceBetweenInteraction > playerInteractionAttributes.playerInteractionMaxVerticalHeight) //Check if Cover is on similar Y coordinates
             {
-                Debug.DrawRay(transform.position, interceptVector * playerDistanceFromInteractable, Color.red, 1f);
-            }
-
-            if (interactRayHit.collider.gameObject != interactableObject.gameObject)
-            {
-                Debug.Log(interactRayHit.collider.gameObject.name);
+                Debug.Log("Object is too high :: " + verticalDistanceBetweenInteraction);
 
                 return false;
             }
+
+            Vector3 interceptVector = (interactableObject.transform.position - transform.position).normalized;
+
+            if (Physics.Raycast(transform.position, interceptVector, out interactRayHit, playerDistanceFromInteractable))
+            {
+                if (canShowDebug)
+                {
+                    Debug.DrawRay(transform.position, interceptVector * playerDistanceFromInteractable, Color.red, 1f);
+                }
+
+                if (interactRayHit.collider.gameObject != interactableObject.gameObject)
+                {
+                    Debug.Log(interactRayHit.collider.gameObject.name);
+
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
             else
             {
+                if (canShowDebug)
+                {
+                    Debug.DrawRay(transform.position, interceptVector * playerDistanceFromInteractable, Color.green, 1f);
+                }
+
                 return true;
             }
         }
-        else
-        {
-            if (canShowDebug)
-            {
-                Debug.DrawRay(transform.position, interceptVector * playerDistanceFromInteractable, Color.green, 1f);
-            }
 
-            return true;
-        }
+        return false;
     }
 
     private bool CheckForInteractAngle(Interactable interactableObject)

@@ -93,7 +93,8 @@ public enum INTERACTABLE_OBJECT_TYPE
 {
     NONE,
     PHYSICS,
-    ACTOR
+    ACTOR,
+    PICKUP
 }
 
 #endregion
