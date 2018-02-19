@@ -22,7 +22,15 @@ public class PlayerMoveToPosition_StageEvent : StageEvent
 
     public override void StageEventStart()
     {
-        targetPlayer = GameObject.FindGameObjectWithTag("Player").transform;
+        if (targetPlayer == null)
+        {
+            targetPlayer = ThirdPersonPlayerController.PlayerInstance;
+        }
+
+        if (desiredPosition == null)
+        {
+            desiredPosition = transform;
+        }
 
         base.StageEventStart();
     }
@@ -40,6 +48,11 @@ public class PlayerMoveToPosition_StageEvent : StageEvent
                 if (distanceToPosition <= minDistanceToPosition)
                 {
                     StageEventCompleted();
+                }
+
+                if (canShowDebug)
+                {
+                    Debug.DrawLine(targetPlayer.position, transform.position, Color.yellow);
                 }
             }
         }

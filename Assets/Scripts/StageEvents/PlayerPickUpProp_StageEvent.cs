@@ -3,13 +3,7 @@ using UnityEngine;
 
 public class PlayerPickUpProp_StageEvent : StageEvent
 {
-    [Header("Custom Stage Event Attributes")]
-    public Transform pickedUpByTransform;
-
-    private Transform targetTransform;
-
-    [Space(10)]
-    public bool isPickedUp = false;
+    private PlayerPickUpController playerPickUpController;
 
     private void Update()
     {
@@ -19,30 +13,22 @@ public class PlayerPickUpProp_StageEvent : StageEvent
     public override void StageEventStart()
     {
         base.StageEventStart();
+
+        playerPickUpController = ThirdPersonPlayerController.PlayerInstance.GetComponent<PlayerPickUpController>();
     }
 
     public override void StageEventAction()
     {
         if (isStageEventActive)
         {
-            if (isPickedUp)
+            if (playerPickUpController.isPlayerHoldingObject)
             {
-
+                if (playerPickUpController.currentInteractableObject == gameObject)
+                {
+                    StageEventCompleted();
+                }
             }
         }
-    }
-
-    public void GetPickedUp()
-    {
-        if (!isPickedUp)
-        {
-
-        }
-    }
-
-    private void PickedUp()
-    {
-
     }
 
     public override void StageEventCompleted()

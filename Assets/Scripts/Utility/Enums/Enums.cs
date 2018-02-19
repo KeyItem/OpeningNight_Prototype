@@ -94,7 +94,8 @@ public enum INTERACTABLE_OBJECT_TYPE
     NONE,
     PHYSICS,
     ACTOR,
-    PICKUP
+    PICKUP,
+    STAGE_EVENT
 }
 
 #endregion

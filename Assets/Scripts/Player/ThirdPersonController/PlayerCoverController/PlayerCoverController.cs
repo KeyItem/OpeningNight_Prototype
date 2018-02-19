@@ -16,7 +16,7 @@ public class PlayerCoverController : MonoBehaviour
     [Space(10)]
     public bool isPlayerInCover = false;
 
-    [Space(10)]
+    [Header("DEBUG")]
     public bool canShowDebug = false;
 
     private void Start()

@@ -25,7 +25,7 @@ public class ThirdPersonCameraLockOnController : MonoBehaviour
     [Space(10)]
     public bool isCameraLockedOn = false;
 
-    [Header("Debug Attributes")]
+    [Header("DEBUG")]
     public bool canShowDebug = false;
 
     private void Start()

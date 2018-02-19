@@ -14,8 +14,6 @@ public class BeatDetector : MonoBehaviour
 
     private float lastBeatTime = 0f;
 
-    private float intializedTime = 0f;
-    
 	void Start ()
 	{
         IntializeDetector();

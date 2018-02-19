@@ -25,7 +25,7 @@ public class PlayerClimbController : MonoBehaviour
     [Space(10)]
     private BezierSpline splineObject;
 
-    [Header("Climb System Debug")]
+    [Header("DEBUG")]
     public bool canShowDebug = false;
 
     private void Start()
@@ -33,7 +33,7 @@ public class PlayerClimbController : MonoBehaviour
         InitializeClimbSystem();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         WallCheck();
     }
@@ -89,8 +89,6 @@ public class PlayerClimbController : MonoBehaviour
 
             Vector3 objectDirection = (rayHitPoint - transform.position).normalized;
             Vector3 playerDirection = Vector3.zero;
-
-            float playerDistanceToObject = Vector3.Distance(transform.position, rayHitPoint);
 
             if (Mathf.Abs(objectDirection.x) > Mathf.Abs(objectDirection.z)) //Left or Right
             {

@@ -16,7 +16,7 @@ public class PlayerInteractionController : MonoBehaviour
     [Space(10)]
     private RaycastHit interactRayHit;
 
-    [Space(10)]
+    [Header("DEBUG")]
     public bool canShowDebug = false;
 
     private void Start()
@@ -40,7 +40,7 @@ public class PlayerInteractionController : MonoBehaviour
     {
         if (playerPickUpController.isPlayerHoldingObject)
         {
-            playerPickUpController.currentInteractableObject.Interact(gameObject);
+            playerPickUpController.currentInteractable.Interact(gameObject);
         }
 
         if (interactableObjectsInRange.Length > 0)
@@ -68,26 +68,45 @@ public class PlayerInteractionController : MonoBehaviour
 
     private void ManageObjectInteraction(Interactable newInteractableObject)
     {
-        Debug.Log("Attempting Interaction with :: " + newInteractableObject.name);
-
         switch (newInteractableObject.interactableObjectType)
         {
             case INTERACTABLE_OBJECT_TYPE.ACTOR:
-                newInteractableObject.Interact(gameObject);
+                if (playerPickUpController.isPlayerHoldingObject)
+                {
+                    newInteractableObject.InteractWith(playerPickUpController.currentInteractableObject);
+                }
+                else
+                {
+                    newInteractableObject.Interact(gameObject);
+                }
                 break;
 
             case INTERACTABLE_OBJECT_TYPE.PHYSICS:
-                newInteractableObject.Interact(gameObject);
+                if (playerPickUpController.isPlayerHoldingObject)
+                {
+                    newInteractableObject.InteractWith(playerPickUpController.currentInteractableObject);
+                }
+                else
+                {
+                    newInteractableObject.Interact(gameObject);
+                }
+                break;
+
+            case INTERACTABLE_OBJECT_TYPE.STAGE_EVENT:
+                if (playerPickUpController.isPlayerHoldingObject)
+                {
+                    newInteractableObject.InteractWith(playerPickUpController.currentInteractableObject);
+                }
+                else
+                {
+                    newInteractableObject.Interact(gameObject);
+                }
                 break;
 
             case INTERACTABLE_OBJECT_TYPE.PICKUP:
                 if (playerPickUpController.isPlayerHoldingObject)
                 {
-                    playerPickUpController.DropObject();
-
-                    playerPickUpController.PickUpObject(newInteractableObject);
-
-                    newInteractableObject.Interact(gameObject);
+                    newInteractableObject.InteractWith(playerPickUpController.currentInteractableObject);
                 }
                 else
                 {

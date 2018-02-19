@@ -19,9 +19,9 @@ public class PhysicsInteractable : Interactable
         objectRigidbody = GetComponent<Rigidbody>();
     }
 
-    public override void Interact(GameObject agentInteracting)
+    public override void Interact(GameObject playerInteracting)
     {
-        Vector3 interceptVec = (transform.position - agentInteracting.transform.position).normalized;
+        Vector3 interceptVec = (transform.position - playerInteracting.transform.position).normalized;
         interceptVec *= physicsForceMultiplier;
 
         objectRigidbody.AddForce(interceptVec, ForceMode.Impulse);

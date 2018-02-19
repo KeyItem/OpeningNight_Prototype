@@ -9,7 +9,12 @@ public class Interactable : MonoBehaviour
     [Space(10)]
     public bool isBeingInteractedWith = false;
 
-    public virtual void Interact(GameObject objectInteracting)
+    public virtual void Interact(GameObject playerInteracting)
+    {
+
+    }
+
+    public virtual void InteractWith(GameObject objectToInteractWith)
     {
 
     }

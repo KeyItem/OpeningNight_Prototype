@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class FirstPersonCameraController : CameraController
 {
-    private FirstPersonPlayerController firstPersonPlayerController;
-
     [Header("Player Values")]
     public float xAxisSensitivityMultiplier = 1;
     public float yAxisSensitivityMultiplier = 1;
@@ -69,8 +67,6 @@ public class FirstPersonCameraController : CameraController
     private void InitializeCamera()
     {
         playerCharacter = GameObject.FindGameObjectWithTag("Player");
-
-        firstPersonPlayerController = playerCharacter.GetComponent<FirstPersonPlayerController>();
 
         originalRotation = transform.localRotation;
 

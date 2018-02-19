@@ -9,8 +9,6 @@ public class ThirdPersonCameraController : CameraController
     [Space(10)]
     public Camera thirdPersonCamera;
 
-    private ThirdPersonPlayerController targetPlayerController;
-
     [Space(10)]
     public Transform targetPlayer;
     public Transform currentLockOnTarget;
@@ -44,8 +42,6 @@ public class ThirdPersonCameraController : CameraController
     private float cameraYaw;
     private float cameraPitch;
 
-    private float restingCameraYaw;
-
     private Vector3 cameraRotationSmoothVelocity;
     private Vector3 cameraCurrentRotation;
 
@@ -66,7 +62,7 @@ public class ThirdPersonCameraController : CameraController
     [Space(10)]
     public bool canCameraReset = true;
 
-    [Header("Camera Debug Attributes")]
+    [Header("DEBUG")]
     public bool canShowDebug = true;
 
     private void Start()
@@ -80,8 +76,6 @@ public class ThirdPersonCameraController : CameraController
 
         thirdPersonCameraCollisionController = GetComponent<ThirdPersonCameraCollisionController>();
         thirdPersonCameraLockOnController = GetComponent<ThirdPersonCameraLockOnController>();
-
-        targetPlayerController = targetPlayer.GetComponent<ThirdPersonPlayerController>();
 
         cameraCurrentPosition = transform.position;
 

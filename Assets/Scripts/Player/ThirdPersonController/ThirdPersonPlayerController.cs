@@ -6,9 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof (CharacterController))]
 public class ThirdPersonPlayerController : PlayerController
 {
-    public static Transform playerInstance;
-
-    private InputManager playerInputManager;
+    public static Transform PlayerInstance;
 
     private CharacterController playerCharacterController;
 
@@ -117,6 +115,9 @@ public class ThirdPersonPlayerController : PlayerController
     [Space(10)]
     public bool canPlayerInteract = true;
 
+    [Header("Player Pick Up Attributes")]
+    private PlayerPickUpController playerPickUpController;
+
     [Header("Player Conversation Attributes")]
     public Conversation playerCurrentConversation = null;
 
@@ -132,7 +133,7 @@ public class ThirdPersonPlayerController : PlayerController
     [Space(10)]
     public bool canPlayerInteractWithRigidbodies = true;
 
-    [Header("Player Debug Attributes")]
+    [Header("DEBUG")]
     public bool canShowDebug = false;
 
     private void Awake()
@@ -147,11 +148,14 @@ public class ThirdPersonPlayerController : PlayerController
 
     private void Update()
     {
-        ManageGround();
-
         ManageTurning();
 
         ManageMovement();
+    }
+
+    private void FixedUpdate()
+    {
+        ManageGround();
     }
 
     #region PLAYER_INPUT
@@ -174,9 +178,7 @@ public class ThirdPersonPlayerController : PlayerController
 
     private void InitializePlayer()
     {
-        playerInstance = transform;
-
-        playerInputManager = GetComponent<InputManager>();
+        PlayerInstance = transform;
 
         playerCharacterController = GetComponent<CharacterController>();
 
@@ -185,6 +187,8 @@ public class ThirdPersonPlayerController : PlayerController
         playerInteractionController = GetComponent<PlayerInteractionController>();
 
         playerCoverController = GetComponent<PlayerCoverController>();
+
+        playerPickUpController = GetComponent<PlayerPickUpController>();
 
         if (isUsingThirdPersonCam)
         {
@@ -841,6 +845,18 @@ public class ThirdPersonPlayerController : PlayerController
         if (playerInteractionController != null)
         {
             playerInteractionController.AttemptPlayerInteraction();
+        }
+    }
+
+    #endregion
+
+    #region PLAYER_PICKUP
+
+    public void PlayerDropItem()
+    {
+        if (playerPickUpController.isPlayerHoldingObject)
+        {
+            playerPickUpController.DropObject();
         }
     }
 

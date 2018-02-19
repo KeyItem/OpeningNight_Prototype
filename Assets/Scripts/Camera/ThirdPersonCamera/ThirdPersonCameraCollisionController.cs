@@ -25,7 +25,7 @@ public class ThirdPersonCameraCollisionController : MonoBehaviour
     [Space(10)]
     public bool isCameraColliding = false;
 
-    [Header("Camera Collision Debug")]
+    [Header("DEBUG")]
     public bool canShowDebug = false;
 
     private void Start()

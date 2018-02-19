@@ -843,6 +843,7 @@ GameObject:
   - component: {fileID: 114646630097331050}
   - component: {fileID: 114431520641467440}
   - component: {fileID: 114456786618894900}
+  - component: {fileID: 114036114227466968}
   m_Layer: 8
   m_Name: ThirdPersonPlayer_Controller
   m_TagString: Player
@@ -2263,6 +2264,22 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114036114227466968
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1791449070484742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61782a8278fe14e4f8a10cd06fc07a26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetAttachPointOnPlayer: {fileID: 4927295395613432}
+  currentInteractableObject: {fileID: 0}
+  currentInteractable: {fileID: 0}
+  canPlayerPickUpObject: 1
+  isPlayerHoldingObject: 0
 --- !u!114 &114154823324298186
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2319,7 +2336,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   isCameraLockedOn: 0
-  canShowDebug: 1
+  canShowDebug: 0
 --- !u!114 &114456786618894900
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2431,9 +2448,6 @@ MonoBehaviour:
     playerVaultingVerticalMin: 0.5
     playerVaultingVerticalMax: 3
     playerWallVaultingTime: 0.5
-  climbMask:
-    serializedVersion: 2
-    m_Bits: 5120
   canPlayerClimb: 1
   isPlayerClimbing: 0
   playerInteractionAttributes:
@@ -2460,9 +2474,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69f5e4b24afe7904b88ae55984ff01ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  climbCollisionMask:
+  climbObjectMask:
     serializedVersion: 2
     m_Bits: 5120
+  climbCollisionMask:
+    serializedVersion: 2
+    m_Bits: 1025
   newSplineGameObject: {fileID: 1378616230485766, guid: 21c79f7c35796144d87a74b0cf6fa242,
     type: 2}
   canShowDebug: 0
@@ -2508,7 +2525,7 @@ MonoBehaviour:
     cameraLockOnMoveSmoothTime: 0.05
     cameraLockOnRotateSmoothTime: 4
   canCameraReset: 1
-  canShowDebug: 1
+  canShowDebug: 0
 --- !u!114 &114946201646584084
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2528,7 +2545,7 @@ MonoBehaviour:
   cameraClipCollisionSize: 3.34
   collisionMask:
     serializedVersion: 2
-    m_Bits: 130561
+    m_Bits: 122369
   isCameraColliding: 0
   canShowDebug: 0
 --- !u!137 &137017460836834964

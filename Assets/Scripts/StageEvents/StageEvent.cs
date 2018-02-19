@@ -7,7 +7,13 @@ public class StageEvent : MonoBehaviour
     public string stageEventName;
 
     [Space(10)]
-    public bool isStageEventActive = true;
+    public GameObject[] stageObjects;
+
+    [Space(10)]
+    public bool isStageEventActive = false;
+
+    [Header("DEBUG")]
+    public bool canShowDebug = false;
 
     private void OnDisable() //OnDisable Unsubscribe from all events
     {
@@ -42,8 +48,30 @@ public class StageEvent : MonoBehaviour
     {
         StageEventManager.OnStageEventActive -= StageEventActive;
 
-        StageEventManager.instance.CompleteStageEvent();
+        StageEventManager.Instance.CompleteStageEvent();
 
         isStageEventActive = false;
+    }
+
+    public virtual void EnableStageObjects()
+    {
+        if (stageObjects.Length > 0)
+        {
+            for (int i = 0; i < stageObjects.Length; i++)
+            {
+                stageObjects[i].SetActive(true);
+            }
+        }
+    }
+
+    public virtual void DisableStageObjects()
+    {
+        if (stageObjects.Length > 0)
+        {
+            for (int i = 0; i < stageObjects.Length; i++)
+            {
+                stageObjects[i].SetActive(false);
+            }
+        }
     }
 }

@@ -8,7 +8,7 @@ public class StageEventManager : MonoBehaviour
      * It needs to know when to activate a stage event and when that stage event is completed.
     */
 
-    public static StageEventManager instance;
+    public static StageEventManager Instance;
 
     [Header("Stage Events Attributes")]
     public StageEvent[] stageEvents;
@@ -16,6 +16,9 @@ public class StageEventManager : MonoBehaviour
     [Space(10)]
     public int stageEventIndex = 0;
     public StageEvent currentStageEvent = null;
+
+    [Space(10)]
+    public bool isFinishedAllStageEvents = false;
 
     public delegate void StageEventStart();
     public delegate void StageEventActive();
@@ -42,7 +45,7 @@ public class StageEventManager : MonoBehaviour
 
     private void InstanceSetup()
     {
-        instance = this;
+        Instance = this;
     }
 
     private void DebugInput()
@@ -71,7 +74,7 @@ public class StageEventManager : MonoBehaviour
 
             if (OnStageEventStarted != null)
             {
-                Debug.Log("StageEvent :: Start");
+                Debug.Log("StageEvent :: Start :: Pulse");
 
                 OnStageEventStarted();
             }
@@ -79,10 +82,10 @@ public class StageEventManager : MonoBehaviour
     }
 
     public void ActivateStageEvent()
-    {     
+    {
         if (OnStageEventActive != null)
         {
-            Debug.Log("StageEvent :: Active");
+            Debug.Log("StageEvent :: Active :: Pulse");
 
             OnStageEventActive();
         }
@@ -92,12 +95,16 @@ public class StageEventManager : MonoBehaviour
     {
         if (OnStageEventCompleted != null)
         {
-            Debug.Log("StageEvent :: Completed");
+            Debug.Log("StageEvent :: Completed :: Pulse");
 
             OnStageEventCompleted();
         }
 
+        Debug.Log("StageEvent :: " + currentStageEvent.stageEventName + " Completed");
+
         currentStageEvent = null;
+
+        MoveToNextStageEvent();
     }
 
     private void StartFirstStageEvent()
@@ -122,7 +129,11 @@ public class StageEventManager : MonoBehaviour
 
                 StartStageEvent();
             }
-        }      
+        }
+        else
+        {
+            isFinishedAllStageEvents = true;
+        }
     }
 
     private bool CanMoveToNextStageEvent(int currentStageEventIndex, StageEvent[] stageEvents)

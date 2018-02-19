@@ -4,7 +4,7 @@ using Rewired;
 
 public class ThirdPersonInputManager : InputManager
 {
-    private PlayerController playerCharacterController;
+    private ThirdPersonPlayerController playerCharacterController;
     private CameraController playerCameraController;
 
     private Player playerInput;
@@ -39,7 +39,7 @@ public class ThirdPersonInputManager : InputManager
 
     private void InitializeInput()
     {
-        playerCharacterController = GetComponent<PlayerController>();
+        playerCharacterController = GetComponent<ThirdPersonPlayerController>();
 
         playerCameraController = Camera.main.GetComponent<CameraController>();
 
@@ -68,6 +68,11 @@ public class ThirdPersonInputManager : InputManager
             if (playerInput.GetButtonDown("Interact"))
             {
                 playerCharacterController.Interact();
+            }
+
+            if (playerInput.GetButtonLongPressDown("Interact"))
+            {
+                playerCharacterController.PlayerDropItem();
             }
 
             if (playerInput.GetButtonDown("Jump"))

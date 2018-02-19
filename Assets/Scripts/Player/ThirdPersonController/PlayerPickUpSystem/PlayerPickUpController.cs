@@ -7,7 +7,8 @@ public class PlayerPickUpController : MonoBehaviour
     public Transform targetAttachPointOnPlayer;
 
     [Space(10)]
-    public Interactable currentInteractableObject;
+    public GameObject currentInteractableObject;
+    public Interactable currentInteractable;
 
     private Transform currentlyPickedUpObject;
 
@@ -16,11 +17,14 @@ public class PlayerPickUpController : MonoBehaviour
 
     [Space(10)]
     public bool canPlayerPickUpObject = true;
+
+    [Space(10)]
     public bool isPlayerHoldingObject = false;
 
     public void PickUpObject(Interactable newObject)
     {
-        currentInteractableObject = newObject;
+        currentInteractable = newObject;
+        currentInteractableObject = newObject.gameObject;
         currentlyPickedUpObject = newObject.transform;
 
         currentObjectRigidbody = newObject.GetComponent<Rigidbody>();
@@ -41,7 +45,7 @@ public class PlayerPickUpController : MonoBehaviour
     {
         Physics.IgnoreCollision(currentObjectCollider, GetComponent<Collider>(), false);
 
-        currentInteractableObject.StopInteraction();
+        currentInteractable.StopInteraction();
 
         currentlyPickedUpObject.SetParent(null);
 

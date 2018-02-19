@@ -31,8 +31,6 @@ public class FirstPersonPlayerController : PlayerController
     [Space(10)]
     public float playerMoveSmoothTime = 0.25f;
 
-    private float playerSmoothVelocity;
-
     [Space(10)]
     [Range(0, 1)]
     public float airControlValue;
@@ -86,10 +84,6 @@ public class FirstPersonPlayerController : PlayerController
     public GameObject splinePrefab;
 
     private GameObject instantiatedSpline;
-
-    private BezierSpline currentSpline = null;
-
-    private float wallClimbProgress = 0f;
 
     [Space(10)]
     public float playerWallClimbGrabDistance = 1f;
