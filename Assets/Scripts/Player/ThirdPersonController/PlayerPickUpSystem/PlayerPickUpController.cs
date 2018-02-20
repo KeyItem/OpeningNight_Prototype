@@ -7,7 +7,9 @@ public class PlayerPickUpController : MonoBehaviour
     public Transform targetAttachPointOnPlayer;
 
     [Space(10)]
-    public GameObject currentInteractableObject;
+    public GameObject currentHeldProp;
+
+    [Space(10)]
     public Interactable currentInteractable;
 
     private Transform currentlyPickedUpObject;
@@ -24,7 +26,7 @@ public class PlayerPickUpController : MonoBehaviour
     public void PickUpObject(Interactable newObject)
     {
         currentInteractable = newObject;
-        currentInteractableObject = newObject.gameObject;
+        currentHeldProp = newObject.gameObject;
         currentlyPickedUpObject = newObject.transform;
 
         currentObjectRigidbody = newObject.GetComponent<Rigidbody>();
@@ -51,7 +53,7 @@ public class PlayerPickUpController : MonoBehaviour
 
         currentObjectRigidbody.isKinematic = false;
 
-        currentInteractableObject = null;
+        currentHeldProp = null;
         currentlyPickedUpObject = null;
         currentObjectRigidbody = null;
         currentObjectCollider = null;

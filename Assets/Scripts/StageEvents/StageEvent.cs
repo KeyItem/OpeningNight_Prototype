@@ -41,7 +41,10 @@ public class StageEvent : MonoBehaviour
 
     public virtual void StageEventAction() //Logic for during Event
     {
-
+        if (isStageEventActive)
+        {
+            StageEventCompleted();
+        }
     }
 
     public virtual void StageEventCompleted() //Called Once Event is completed
@@ -51,6 +54,11 @@ public class StageEvent : MonoBehaviour
         StageEventManager.Instance.CompleteStageEvent();
 
         isStageEventActive = false;
+    }
+
+    public virtual void InteractWithStageEventUsingProp(GameObject propInteraction)
+    {
+
     }
 
     public virtual void EnableStageObjects()

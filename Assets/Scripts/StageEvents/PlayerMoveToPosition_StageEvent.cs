@@ -12,7 +12,7 @@ public class PlayerMoveToPosition_StageEvent : StageEvent
     [Space(10)]
     public float minDistanceToPosition = 2f;
 
-    [Header("Debug Attributes")]
+    [Header("DEBUG")]
     public float currentDistanceToPosition = 0f;
 
     private void Update()
@@ -52,7 +52,7 @@ public class PlayerMoveToPosition_StageEvent : StageEvent
 
                 if (canShowDebug)
                 {
-                    Debug.DrawLine(targetPlayer.position, transform.position, Color.yellow);
+                    Debug.DrawLine(targetPlayer.position, desiredPosition.position, Color.yellow);
                 }
             }
         }
@@ -62,5 +62,4 @@ public class PlayerMoveToPosition_StageEvent : StageEvent
     {
         base.StageEventCompleted();
     }
-
 }

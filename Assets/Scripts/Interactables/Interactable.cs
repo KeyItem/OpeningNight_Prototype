@@ -14,7 +14,7 @@ public class Interactable : MonoBehaviour
 
     }
 
-    public virtual void InteractWith(GameObject objectToInteractWith)
+    public virtual void InteractWithProp(GameObject objectToInteractWith)
     {
 
     }

@@ -23,7 +23,7 @@ public class PlayerPickUpProp_StageEvent : StageEvent
         {
             if (playerPickUpController.isPlayerHoldingObject)
             {
-                if (playerPickUpController.currentInteractableObject == gameObject)
+                if (playerPickUpController.currentHeldProp == gameObject)
                 {
                     StageEventCompleted();
                 }

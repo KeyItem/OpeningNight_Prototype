@@ -3,5 +3,5 @@ using UnityEngine;
 
 public class PlayerInteract_StageEvent : StageEvent
 {
-
+    
 }

@@ -32,7 +32,7 @@ public class PropMoveToPosition_StageEvent : StageEvent
         {
             if (targetProp != null)
             {
-                if (playerPickUpController.currentInteractableObject == targetProp.gameObject)
+                if (playerPickUpController.currentHeldProp == targetProp.gameObject)
                 {
                     float distanceToPosition = Vector3.Distance(targetProp.position, transform.position);
 

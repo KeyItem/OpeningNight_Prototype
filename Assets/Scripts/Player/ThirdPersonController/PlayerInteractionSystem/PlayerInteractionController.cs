@@ -24,7 +24,7 @@ public class PlayerInteractionController : MonoBehaviour
         InitializePlayerInteraction();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         CheckForInteractableObjects();
     }
@@ -73,7 +73,7 @@ public class PlayerInteractionController : MonoBehaviour
             case INTERACTABLE_OBJECT_TYPE.ACTOR:
                 if (playerPickUpController.isPlayerHoldingObject)
                 {
-                    newInteractableObject.InteractWith(playerPickUpController.currentInteractableObject);
+                    newInteractableObject.InteractWithProp(playerPickUpController.currentHeldProp);
                 }
                 else
                 {
@@ -84,7 +84,7 @@ public class PlayerInteractionController : MonoBehaviour
             case INTERACTABLE_OBJECT_TYPE.PHYSICS:
                 if (playerPickUpController.isPlayerHoldingObject)
                 {
-                    newInteractableObject.InteractWith(playerPickUpController.currentInteractableObject);
+                    newInteractableObject.InteractWithProp(playerPickUpController.currentHeldProp);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ public class PlayerInteractionController : MonoBehaviour
             case INTERACTABLE_OBJECT_TYPE.STAGE_EVENT:
                 if (playerPickUpController.isPlayerHoldingObject)
                 {
-                    newInteractableObject.InteractWith(playerPickUpController.currentInteractableObject);
+                    newInteractableObject.InteractWithProp(playerPickUpController.currentHeldProp);
                 }
                 else
                 {
@@ -106,7 +106,7 @@ public class PlayerInteractionController : MonoBehaviour
             case INTERACTABLE_OBJECT_TYPE.PICKUP:
                 if (playerPickUpController.isPlayerHoldingObject)
                 {
-                    newInteractableObject.InteractWith(playerPickUpController.currentInteractableObject);
+                    newInteractableObject.InteractWithProp(playerPickUpController.currentHeldProp);
                 }
                 else
                 {
@@ -130,6 +130,11 @@ public class PlayerInteractionController : MonoBehaviour
         for (int i = 0; i < interactableObjectsInRange.Length; i++)
         {
             Interactable newInteractable = interactableObjectsInRange[i].GetComponent<Interactable>();
+   
+            if (newInteractable == null)
+            {
+                continue;
+            }
 
             if (newInteractable.isBeingInteractedWith)
             {
