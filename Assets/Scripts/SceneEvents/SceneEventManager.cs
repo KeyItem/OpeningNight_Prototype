@@ -29,6 +29,11 @@ public class SceneEventManager : MonoBehaviour
     private IEnumerator DialogWaitTime = null;
     private IEnumerator StageEventWaitTime = null;
 
+    [Header("DEBUG")]
+    public bool canShowDebug = false;
+
+    private string targetDebugString;
+
     private void Awake()
     {
         InitializeSceneEventManager();
@@ -91,8 +96,7 @@ public class SceneEventManager : MonoBehaviour
     {
         if (DoesSceneEventContainStageEvent(0))
         {
-            Debug.Log("Start Conversation :: StageEvent");
-            Debug.Log("Playing Line " + 0);
+            targetDebugString = "Start Conversation :: StageEvent";
 
             waitingOnStageEvent = true;
 
@@ -109,8 +113,7 @@ public class SceneEventManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Start Conversation :: Normal");
-            Debug.Log("Playing Line " + 0);
+            targetDebugString = "Start Conversation :: Normal";
 
             ConversationSystem.Instance.StartConversation();
 
@@ -146,10 +149,10 @@ public class SceneEventManager : MonoBehaviour
 
     private void NextLine(bool hasStageEvent)
     {
-        Debug.Log("Playing Line " + currentLineIndex);
-
         if (hasStageEvent)
         {
+            targetDebugString = "Line :: " + currentLineIndex + " :: StageEvent";
+
             waitingOnStageEvent = true;
 
             ConversationSystem.Instance.MoveToNextConversationDialog();
@@ -165,6 +168,8 @@ public class SceneEventManager : MonoBehaviour
         }
         else
         {
+            targetDebugString = "Line :: " + currentLineIndex;
+
             ConversationSystem.Instance.MoveToNextConversationDialog();
 
             if (DialogWaitTime != null)
@@ -262,204 +267,12 @@ public class SceneEventManager : MonoBehaviour
         yield return null;
     }
 
-    /*
-     *  private void StartSceneList()
+    private void OnGUI()
     {
-        StageEventManager.OnStageEventCompleted += StageEventFinished;
-
-        currentSceneIndex = 0;
-
-        ImportSceneEventData(sceneEvents[0]);
-
-        Debug.Log("Setting Up Scene");
-    }
-
-    public void ImportSceneEventData(SceneEventData newSceneEventData)
-    {
-        currentSceneEventData = newSceneEventData;
-        currentConversationData = newSceneEventData.sceneConversationData;
-        currentLineIndex = 0;
-
-        ConversationSystem.Instance.ImportConversation(currentConversationData);
-
-        Debug.Log("Importing Scene Event Data");
-    }
-
-    public void StartCurrentSceneEvent()
-    {
-        ConversationSystem.Instance.StartConversation();
-
-        currentLineIndex = -1;
-
-        NextLine();
-
-        Debug.Log("Starting Scene");
-    }
-
-    private void NextLine()
-    {
-        if (CanMoveToNextLine())
+        if (canShowDebug)
         {
-            RelayConversationLine();
-
-            Debug.Log("WTF");
-
-            if (DoesLineContainStageEvent(currentLineIndex))
-            {
-                if (StageEventDelay != null)
-                {
-                    StopCoroutine(StageEventDelay);
-                }
-
-                StageEventDelay = RequestStageEventAfterDelay(currentSceneEventData.sceneEvenLineTimings[currentLineIndex]);
-
-                StartCoroutine(StageEventDelay);
-            }
-            else
-            {
-                if (NextLineEventDelay != null)
-                {
-                    StopCoroutine(NextLineEventDelay);
-                }
-
-                NextLineEventDelay = RequestNextLineAfterDelay(currentSceneEventData.sceneEvenLineTimings[currentLineIndex]);
-
-                StartCoroutine(NextLineEventDelay);
-            }
-        }
-        else
-        {
-            CompleteCurrentScene();
+            GUI.Box(new Rect(Screen.width - 350, 0, 300, 25), "");
+            GUI.Label(new Rect(Screen.width - 350, 0, 300, 25), targetDebugString);
         }
     }
-
-    public void CompleteCurrentScene()
-    {
-        currentLineIndex = 0;
-
-        currentSceneEventData = null;
-        currentConversationData = null;
-
-        Debug.Log("Complete Scene");
-    }
-
-    private void CompleteAllScenes()
-    {
-        currentSceneIndex = 0;
-        currentLineIndex = 0;
-
-        currentSceneEventData = null;
-        currentConversationData = null;
-
-        StageEventManager.OnStageEventCompleted -= NextLine;
-
-        Debug.Log("Complete Scene List");
-    }
-
-    private void MoveToNextSceneEvent()
-    {
-        if (CanMoveToNextScene())
-        {
-            ImportSceneEventData(sceneEvents[currentSceneIndex]);
-        }
-        else
-        {
-            CompleteAllScenes();
-        }
-    }
-
-    private void RelayConversationLine()
-    {
-        Debug.Log("Send Line to Conversation System");
-
-        ConversationSystem.Instance.MoveToNextConversationDialog();
-    }
-
-    private void StageEventFinished()
-    {
-        NextLine();
-    }
-
-    private bool CanMoveToNextScene()
-    {
-        if (sceneEvents.Length > 0)
-        {
-            currentSceneIndex++;
-
-            if (currentSceneIndex <= sceneEvents.Length - 1)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private bool CanMoveToNextLine()
-    {
-        Debug.Log("True");
-
-        currentLineIndex++;
-
-        if (currentLineIndex <= currentSceneEventData.sceneConversationData.conversationDialogue.Length)
-        {
-            return true;
-        }
-
-        Debug.Log("False");
-
-        return false;
-    }
-
-    private bool DoesLineContainStageEvent(int sceneEventIndex)
-    {
-        if (currentSceneEventData.sceneEventHasStageEvent[sceneEventIndex])
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private IEnumerator RequestStageEventAfterDelay(float delayTime)
-    {
-        if (delayTime > 0)
-        {
-            yield return new WaitForSeconds(delayTime);
-        }
-
-        StageEventManager.Instance.RequestStageEvent();
-
-        StageEventDelay = null;
-
-        yield return null;
-    }
-
-    private IEnumerator RequestNextLineAfterDelay(float delayTime)
-    {
-        if (delayTime > 0)
-        {
-            yield return new WaitForSeconds(delayTime);
-        }
-
-        NextLineEventDelay = null;
-
-        NextLine();
-
-        yield return null;
-    }
-
-    private IEnumerator RequestStartDelay(float delayTime)
-    {
-        if (delayTime > 0)
-        {
-            yield return new WaitForSeconds(delayTime);
-        }
-
-        NextLine();
-
-        yield return null;
-
-    }
-     */
 }

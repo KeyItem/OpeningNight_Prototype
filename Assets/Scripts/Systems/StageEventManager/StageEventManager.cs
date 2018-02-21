@@ -38,11 +38,6 @@ public class StageEventManager : MonoBehaviour
         InstanceSetup();
     }
 
-    private void Start()
-    {
-        StartFirstStageEvent();
-    }
-
     private void InstanceSetup()
     {
         Instance = this;
@@ -92,8 +87,6 @@ public class StageEventManager : MonoBehaviour
 
         if (OnStageEventCompleted != null)
         {
-            Debug.Log("StageEvent :: Completed :: Event");
-
             OnStageEventCompleted();
         }
 
@@ -166,7 +159,10 @@ public class StageEventManager : MonoBehaviour
 
     private void OnGUI()
     {
-        GUI.Box(new Rect(0, 0, 300, 25), "");
-        GUI.Label(new Rect(0, 0, 300, 25), targetDebugString);
+        if (canShowDebug)
+        {
+            GUI.Box(new Rect(35, 0, 300, 25), "");
+            GUI.Label(new Rect(35, 0, 300, 25), targetDebugString);
+        }       
     }
 }

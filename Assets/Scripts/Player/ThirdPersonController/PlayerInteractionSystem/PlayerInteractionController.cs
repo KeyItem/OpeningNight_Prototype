@@ -178,8 +178,6 @@ public class PlayerInteractionController : MonoBehaviour
 
                 if (interactRayHit.collider.gameObject != interactableObject.gameObject)
                 {
-                    Debug.Log(interactRayHit.collider.gameObject.name);
-
                     return false;
                 }
                 else
