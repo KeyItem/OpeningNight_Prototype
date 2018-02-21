@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class PropController : MonoBehaviour
 {
+    private Interactable propInteractable;
+
+    private Rigidbody propRigidbody;
+
     [Header("Prop Controller Attributes")]
     public float propSetupTime = 2f;
 
@@ -13,8 +17,30 @@ public class PropController : MonoBehaviour
 
     private IEnumerator PropMoveToPosition;
 
+    private void Start()
+    {
+        PropSetup();
+    }
+
+    private void PropSetup()
+    {
+        propInteractable = GetComponent<Interactable>();
+
+        propRigidbody = GetComponent<Rigidbody>();
+    }
+
     public void StartSetup(PropPoints newPropPoints)
     {
+        if (propInteractable != null)
+        {
+            propInteractable.canBeInteractedWith = false;
+        }
+
+        if (propRigidbody != null)
+        {
+            propRigidbody.isKinematic = true;
+        }
+
         propPoints = newPropPoints;
 
         if (PropMoveToPosition != null)
@@ -63,5 +89,15 @@ public class PropController : MonoBehaviour
     private void PropFinshedMoving()
     {
         isPropInitialized = true;
+
+        if (propInteractable != null)
+        {
+            propInteractable.canBeInteractedWith = true;
+        }
+
+        if (propRigidbody != null)
+        {
+            propRigidbody.isKinematic = false;
+        }
     }
 }

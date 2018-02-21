@@ -13,14 +13,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneConversationData: {fileID: 11400000, guid: 38fe8cb5c27f6bf43a48883465e33cbe,
     type: 2}
-  sceneEventHasStageEvent: 000100010001000100
+  sceneEventHasStageEvent: 0000010100010101010000
   sceneEvenLineTimings:
-  - 2
   - 3
-  - 2
   - 3
-  - 2
-  - 2
   - 3
-  - 2
-  - 2
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3

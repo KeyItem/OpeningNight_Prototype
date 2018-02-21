@@ -12,23 +12,27 @@ MonoBehaviour:
   m_Name: TestConversationComplete
   m_EditorClassIdentifier: 
   conversationDialogue:
-  - 'Test #1'
-  - 'Test #2'
-  - 'Test #3'
-  - 'Test #4'
-  - 'Test #5'
-  - 'Test #6'
-  - 'Test #7'
-  - 'Test #8'
-  - 'Test #9'
+  - Welcome to the inner sanctum...
+  - I've brought you here for one reason... to claim your destiny!
+  - Now approach the pedestal. [SE]
+  - Now pull with all your might and unleash the god killing sword Norstrandmus! [SE]
+  - I feel the power! It's coursing through me!
+  - You are the chosen one! Now go approach the power spot! [SE]
+  - Now that you've awaken Norstrandmus, approach the sister sword Lio. [SE]
+  - Now grab your second birth right! [SE]
+  - Approach the other altar, and unlock Lio's power. [SE]
+  - I AM UNSTOPPABLE! ROAAAAR!
+  - You've done it, you've become the Legendary Super Barbarian
   conversationSpeakerName:
-  - Test
-  - Test
-  - Test
-  - Test
-  - Test
-  - Test
-  - Test
-  - Test
-  - Test
+  - Slovnak
+  - Slovnak
+  - Slovnak
+  - Slovnak
+  - Royin
+  - Slovnak
+  - Slovnak
+  - Slovnak
+  - Slovnak
+  - Royin
+  - Slovnak
   conversationCameraEvents: []

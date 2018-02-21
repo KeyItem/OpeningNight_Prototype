@@ -40,7 +40,10 @@ public class PlayerInteractionController : MonoBehaviour
     {
         if (playerPickUpController.isPlayerHoldingObject)
         {
-            playerPickUpController.currentInteractable.Interact(gameObject);
+            if (CheckIfObjectIsAvailableForInteraction(playerPickUpController.currentInteractable))
+            {
+                playerPickUpController.currentInteractable.Interact(gameObject);
+            }
         }
 
         if (interactableObjectsInRange.Length > 0)
@@ -55,7 +58,14 @@ public class PlayerInteractionController : MonoBehaviour
 
                     if (CheckPathToInteractableObject(newInteractableObject, distanceFromPlayer))
                     {
-                        ManageObjectInteraction(newInteractableObject);
+                        if (CheckIfObjectIsAvailableForInteraction(newInteractableObject))
+                        {
+                            ManageObjectInteraction(newInteractableObject);
+                        }
+                        else
+                        {
+                            Debug.Log("Object :: " + newInteractableObject.name + " Unavailable for Interaction");
+                        }
                     }
                     else
                     {
@@ -152,6 +162,16 @@ public class PlayerInteractionController : MonoBehaviour
         }
 
         return closestInteractableObject;
+    }
+
+    private bool CheckIfObjectIsAvailableForInteraction(Interactable newInteractableObject)
+    {
+        if (newInteractableObject.canBeInteractedWith)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private bool CheckPathToInteractableObject(Interactable interactableObject, float playerDistanceFromInteractable)
