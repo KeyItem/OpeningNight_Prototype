@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+[System.Serializable]
 public class StageEvent : MonoBehaviour
 {
     [Header("Base Stage Event Attributes")]

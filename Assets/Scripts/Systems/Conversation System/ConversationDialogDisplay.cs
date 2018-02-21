@@ -61,6 +61,7 @@ public class ConversationDialogDisplay : MonoBehaviour
     {
         Color[] newColor = new Color[2] { Color.black, Color.black };
 
+        /*
         switch (speakerName)
         {
             case "Matt":
@@ -78,6 +79,7 @@ public class ConversationDialogDisplay : MonoBehaviour
                 newColor[1] = dialogueSpeakerTextColors[2];
                 break;
         }
+        */
 
         return newColor;
     }
@@ -123,6 +125,12 @@ public class ConversationDialogDisplay : MonoBehaviour
     private void QuickDisplayText(string dialogText)
     {
         dialogueTextUI.text = dialogText;
+    }
+
+    public void ClearDialogBox()
+    {
+        dialogueTextUI.text = string.Empty;
+        dialogueSpeakerTextUI.text = string.Empty;
     }
 
     private IEnumerator ScrollTargetText(string targetText)

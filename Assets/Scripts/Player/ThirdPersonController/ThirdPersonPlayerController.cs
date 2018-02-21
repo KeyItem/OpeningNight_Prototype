@@ -119,7 +119,7 @@ public class ThirdPersonPlayerController : PlayerController
     private PlayerPickUpController playerPickUpController;
 
     [Header("Player Conversation Attributes")]
-    public Conversation playerCurrentConversation = null;
+    public ConversationSystem playerCurrentConversation = null;
 
     [Space(10)]
     public bool isPlayerInConversation = false;
@@ -864,7 +864,7 @@ public class ThirdPersonPlayerController : PlayerController
 
     #region PLAYER_CONVERSATION
 
-    public void PlayerEnterConversation(Conversation newConversation)
+    public void PlayerEnterConversation(ConversationSystem newConversation)
     {
         isPlayerInConversation = true;
         playerCurrentConversation = newConversation;

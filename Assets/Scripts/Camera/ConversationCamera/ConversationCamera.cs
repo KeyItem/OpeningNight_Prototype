@@ -6,7 +6,7 @@ public class ConversationCamera : MonoBehaviour
     private Camera conversationCam;
 
     [Header("Coversation Attributes")]
-    public Conversation currentConversation = null;
+    public ConversationSystem currentConversation = null;
 
     [Space(10)]
     public ConversationData currentConversationData = null;
@@ -28,7 +28,7 @@ public class ConversationCamera : MonoBehaviour
         conversationCam.enabled = false;
     }
 
-    public void ImportConversation(Conversation newConversation)
+    public void ImportConversation(ConversationSystem newConversation)
     {
         currentConversation = newConversation;
     }

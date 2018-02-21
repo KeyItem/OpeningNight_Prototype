@@ -15,26 +15,11 @@ MonoBehaviour:
   - 'Test #1'
   - 'Test #2'
   - 'Test #3'
-  - 'Test #4'
-  - 'Test #5'
-  - 'Test #6'
-  - 'Test #7'
-  - 'Test #8'
   conversationSpeakerName:
   - Matt
   - Ryon
   - Van
-  - Matt
-  - Ryon
-  - Van
-  - Matt
-  - Ryon
   conversationCameraEvents:
   - {fileID: 11400000, guid: 2590e4025a4089741b2e96443157ac24, type: 2}
   - {fileID: 11400000, guid: 2590e4025a4089741b2e96443157ac24, type: 2}
   - {fileID: 11400000, guid: 662dc3d50f227dd4a9fb4aa495074c98, type: 2}
-  - {fileID: 11400000, guid: 1ac36ca0226061741a7d0e74e749430f, type: 2}
-  - {fileID: 11400000, guid: 1ac36ca0226061741a7d0e74e749430f, type: 2}
-  - {fileID: 11400000, guid: 662dc3d50f227dd4a9fb4aa495074c98, type: 2}
-  - {fileID: 11400000, guid: 662dc3d50f227dd4a9fb4aa495074c98, type: 2}
-  - {fileID: 11400000, guid: 35325c4568648a547a7fcb32a78241f6, type: 2}

@@ -4,7 +4,7 @@ using UnityEngine;
 public class ActorInteractable : Interactable
 {
     [Header("Actor Interaction Attributes")]
-    public Conversation actorConversation;
+    public ConversationSystem actorConversation;
 
     [Space(10)]
     public bool isInConversation = false;

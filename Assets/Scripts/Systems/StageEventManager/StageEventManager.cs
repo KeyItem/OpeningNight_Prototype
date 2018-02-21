@@ -28,6 +28,11 @@ public class StageEventManager : MonoBehaviour
     public static event StageEventActive OnStageEventActive;
     public static event StageEventComplete OnStageEventCompleted;
 
+    [Header("DEBUG")]
+    public bool canShowDebug = false;
+
+    private string targetDebugString;
+
     private void Awake()
     {
         InstanceSetup();
@@ -38,32 +43,9 @@ public class StageEventManager : MonoBehaviour
         StartFirstStageEvent();
     }
 
-    private void Update()
-    {
-        DebugInput();
-    }
-
     private void InstanceSetup()
     {
         Instance = this;
-    }
-
-    private void DebugInput()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            MoveToNextStageEvent();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            ActivateStageEvent();
-        }
     }
 
     public void StartStageEvent()
@@ -72,9 +54,14 @@ public class StageEventManager : MonoBehaviour
         {
             currentStageEvent.StageEventStart();
 
+            if (canShowDebug)
+            {
+                targetDebugString = "SE :: " + currentStageEvent.stageEventName;
+            }
+
             if (OnStageEventStarted != null)
             {
-                Debug.Log("StageEvent :: Start :: Pulse");
+                Debug.Log("StageEvent :: Start :: Event");
 
                 OnStageEventStarted();
             }
@@ -83,9 +70,14 @@ public class StageEventManager : MonoBehaviour
 
     public void ActivateStageEvent()
     {
+        if (canShowDebug)
+        {
+
+        }
+
         if (OnStageEventActive != null)
         {
-            Debug.Log("StageEvent :: Active :: Pulse");
+            Debug.Log("StageEvent :: Active :: Event");
 
             OnStageEventActive();
         }
@@ -93,18 +85,19 @@ public class StageEventManager : MonoBehaviour
 
     public void CompleteStageEvent()
     {
+        if (canShowDebug)
+        {
+            targetDebugString = "";
+        }
+
         if (OnStageEventCompleted != null)
         {
-            Debug.Log("StageEvent :: Completed :: Pulse");
+            Debug.Log("StageEvent :: Completed :: Event");
 
             OnStageEventCompleted();
         }
 
-        Debug.Log("StageEvent :: " + currentStageEvent.stageEventName + " Completed");
-
         currentStageEvent = null;
-
-        MoveToNextStageEvent();
     }
 
     private void StartFirstStageEvent()
@@ -115,6 +108,11 @@ public class StageEventManager : MonoBehaviour
         currentStageEvent = firstStageEvent;
 
         StartStageEvent();
+    }
+
+    public void RequestStageEvent()
+    {
+        MoveToNextStageEvent();
     }
 
     private void MoveToNextStageEvent()
@@ -164,5 +162,11 @@ public class StageEventManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    private void OnGUI()
+    {
+        GUI.Box(new Rect(0, 0, 300, 25), "");
+        GUI.Label(new Rect(0, 0, 300, 25), targetDebugString);
     }
 }
