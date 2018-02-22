@@ -28,10 +28,10 @@ public class CurtainManager : MonoBehaviour
 
     private void Awake()
     {
-        InitializePropManager();
+        InitializeCurtainManager();
     }
 
-    private void InitializePropManager()
+    private void InitializeCurtainManager()
     {
         if (_instance != null && _instance != this)
         {

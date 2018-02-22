@@ -777,6 +777,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propSetupTime: 1
   isPropInitialized: 0
+--- !u!1 &122257785
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 122257786}
+  - component: {fileID: 122257787}
+  m_Layer: 0
+  m_Name: StageScorer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &122257786
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 122257785}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1939584269}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &122257787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 122257785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 462b4a5087222c847ac03558375677f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerEventTimes: []
+  sceneEventDesiredTimes: []
+  currentTrackedTime: 0
+  isTimerTracking: 0
 --- !u!1 &159597704
 GameObject:
   m_ObjectHideFlags: 0
@@ -19355,6 +19399,7 @@ Transform:
   - {fileID: 413544319}
   - {fileID: 1421408272}
   - {fileID: 1953092258}
+  - {fileID: 122257786}
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

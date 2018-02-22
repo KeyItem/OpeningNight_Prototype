@@ -202,6 +202,8 @@ public class SceneEventManager : MonoBehaviour
     {
         waitingOnStageEvent = false;
 
+        StageScorer.Instance.StopEventTimer();
+
         MoveToNextLineOfDialog();
     }
 
@@ -280,6 +282,8 @@ public class SceneEventManager : MonoBehaviour
         ConversationSystem.Instance.ClearDialogBox();
 
         StageEventManager.Instance.RequestStageEvent();
+
+        StageScorer.Instance.StartEventTimer();
 
         yield return null;
     }
