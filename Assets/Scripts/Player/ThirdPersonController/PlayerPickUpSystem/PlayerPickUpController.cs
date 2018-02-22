@@ -23,8 +23,19 @@ public class PlayerPickUpController : MonoBehaviour
     [Space(10)]
     public bool isPlayerHoldingObject = false;
 
+    public delegate void PlayerPickUp();
+    public delegate void PlayerDrop();
+
+    public static event PlayerPickUp OnPlayerPickup;
+    public static event PlayerDrop OnPlayerDrop;
+
     public void PickUpObject(Interactable newObject)
     {
+        if (OnPlayerPickup != null)
+        {
+            OnPlayerPickup();
+        }
+
         currentInteractable = newObject;
         currentHeldProp = newObject.gameObject;
         currentlyPickedUpObject = newObject.transform;
@@ -45,6 +56,11 @@ public class PlayerPickUpController : MonoBehaviour
 
     public void DropObject()
     {
+        if (OnPlayerDrop != null)
+        {
+            OnPlayerDrop();
+        }
+
         Physics.IgnoreCollision(currentObjectCollider, GetComponent<Collider>(), false);
 
         currentInteractable.StopInteraction();

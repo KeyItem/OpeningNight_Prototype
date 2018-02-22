@@ -742,7 +742,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageEventName: BlueSword_PickUp
+  stageEventTransform: {fileID: 0}
   stageObjects: []
+  stageLightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   isStageEventActive: 0
   canShowDebug: 0
 --- !u!114 &103238273
@@ -2525,11 +2527,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageEventName: 
+  stageEventTransform: {fileID: 0}
   stageObjects: []
+  stageLightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   isStageEventActive: 0
   canShowDebug: 0
   targetPlayer: {fileID: 0}
-  desiredPosition: {fileID: 0}
   minDistanceToPosition: 2
   currentDistanceToPosition: 0
 --- !u!43 &392824412
@@ -2662,6 +2665,51 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!1 &413544317
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 413544319}
+  - component: {fileID: 413544318}
+  m_Layer: 0
+  m_Name: ObjectPooler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &413544318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 413544317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae12c879af6b13740a16c8a86f31e3fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolList:
+  - poolTag: StageLight
+    poolPrefab: {fileID: 1614249149312984, guid: 8d5806a58da3a2748a8d6d35f225a833,
+      type: 2}
+    poolSize: 10
+--- !u!4 &413544319
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 413544317}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1939584269}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &421109100
 Mesh:
   m_ObjectHideFlags: 0
@@ -4232,6 +4280,29 @@ Transform:
   m_Father: {fileID: 887060989}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &576189758 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1791449070484742, guid: 0863ef934ef4ac046a8170692a030cf2,
+    type: 2}
+  m_PrefabInternal: {fileID: 1039454633}
+--- !u!114 &576189759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 576189758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 075cd635269e9344783e5d32cb76bbec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ThirdPersonInput: {fileID: 0}
+  ThirdPersonPlayerController: {fileID: 0}
+  ThirdPersonClimbController: {fileID: 0}
+  ThirdPersonCoverController: {fileID: 0}
+  ThirdPersonInteraction: {fileID: 0}
+  ThirdPersonPickUpController: {fileID: 0}
+  ThirdPersonCamera: {fileID: 0}
 --- !u!1 &596977805
 GameObject:
   m_ObjectHideFlags: 0
@@ -7074,11 +7145,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageEventName: 
+  stageEventTransform: {fileID: 0}
   stageObjects: []
+  stageLightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   isStageEventActive: 0
   canShowDebug: 0
   targetPropTransform: {fileID: 2055962580}
-  targetAreaTransform: {fileID: 0}
   targetInAreaWaitTime: 1
   targetMinDistance: 2
   propMustBeHeld: 1
@@ -10351,11 +10423,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageEventName: PlayerMoveToPedestal
+  stageEventTransform: {fileID: 0}
   stageObjects: []
+  stageLightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   isStageEventActive: 0
   canShowDebug: 0
   targetPlayer: {fileID: 0}
-  desiredPosition: {fileID: 0}
   minDistanceToPosition: 2
   currentDistanceToPosition: 0
 --- !u!1 &1185752201
@@ -12700,11 +12773,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageEventName: PlayerMoveToPedestal
+  stageEventTransform: {fileID: 0}
   stageObjects: []
+  stageLightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   isStageEventActive: 0
   canShowDebug: 0
   targetPlayer: {fileID: 0}
-  desiredPosition: {fileID: 0}
   minDistanceToPosition: 2
   currentDistanceToPosition: 0
 --- !u!1 &1237003478
@@ -12772,11 +12846,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageEventName: 
+  stageEventTransform: {fileID: 0}
   stageObjects: []
+  stageLightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   isStageEventActive: 0
   canShowDebug: 0
   targetPropTransform: {fileID: 103238268}
-  targetAreaTransform: {fileID: 0}
   targetInAreaWaitTime: 1
   targetMinDistance: 2
   propMustBeHeld: 1
@@ -15427,6 +15502,48 @@ Transform:
   m_PrefabParentObject: {fileID: 4654935385646934, guid: 7ed1fc6bf1dd9594581e841a2c753f92,
     type: 2}
   m_PrefabInternal: {fileID: 1426309700}
+--- !u!1 &1421408271
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1421408272}
+  - component: {fileID: 1421408273}
+  m_Layer: 0
+  m_Name: StageLightManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1421408272
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1421408271}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1939584269}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1421408273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1421408271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4a1739c23b6f3419269e302bf86d78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activeStageLights: []
+  lightRestingHeight: 10
 --- !u!1001 &1426309700
 Prefab:
   m_ObjectHideFlags: 0
@@ -15676,8 +15793,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_Father: {fileID: 1939584269}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1529544369
 MonoBehaviour:
@@ -15714,6 +15831,7 @@ MonoBehaviour:
   currentConversationData: {fileID: 0}
   currentLineIndex: 0
   waitingOnStageEvent: 0
+  playStartDelay: 1
   canShowDebug: 1
 --- !u!114 &1529544371
 MonoBehaviour:
@@ -18864,6 +18982,37 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7ed1fc6bf1dd9594581e841a2c753f92, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1939584268
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1939584269}
+  m_Layer: 0
+  m_Name: Systems
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1939584269
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1939584268}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1529544368}
+  - {fileID: 413544319}
+  - {fileID: 1421408272}
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1957500773
 GameObject:
   m_ObjectHideFlags: 0
@@ -19877,7 +20026,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageEventName: RedSword_PickUp
+  stageEventTransform: {fileID: 0}
   stageObjects: []
+  stageLightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   isStageEventActive: 0
   canShowDebug: 0
 --- !u!114 &2055962585

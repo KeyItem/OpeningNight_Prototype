@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class SceneEventManager : MonoBehaviour
 {
-    public static SceneEventManager Instance;
+    private static SceneEventManager _instance;
+    public static SceneEventManager Instance { get { return _instance; } }
 
     [Header("Scene Event Manager Attributes")]
     public SceneEventData[] sceneEvents;
@@ -30,6 +31,9 @@ public class SceneEventManager : MonoBehaviour
     private IEnumerator StageEventWaitTime = null;
 
     [Header("DEBUG")]
+    public float playStartDelay = 1f;
+
+    [Space(10)]
     public bool canShowDebug = false;
 
     private string targetDebugString;
@@ -46,7 +50,14 @@ public class SceneEventManager : MonoBehaviour
 
     private void InitializeSceneEventManager()
     {
-        Instance = this;
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
     }
 
     private void ImportSceneEventData(SceneEventData newSceneEventData)
@@ -59,7 +70,9 @@ public class SceneEventManager : MonoBehaviour
     {
         StageEventManager.OnStageEventCompleted += StageEventComplete;
 
-        PrepareScene(0);
+        PropManager.Instance.StartPropSetup();
+
+        StartCoroutine(StartPlayAfterDelay(playStartDelay));
     }
 
     public void PrepareScene(int targetSceneIndex)
@@ -263,6 +276,18 @@ public class SceneEventManager : MonoBehaviour
         ConversationSystem.Instance.ClearDialogBox();
 
         StageEventManager.Instance.RequestStageEvent();
+
+        yield return null;
+    }
+
+    private IEnumerator StartPlayAfterDelay(float delay)
+    {
+        if (delay > 0)
+        {
+            yield return new WaitForSeconds(delay);
+        }
+
+        PrepareScene(0);
 
         yield return null;
     }

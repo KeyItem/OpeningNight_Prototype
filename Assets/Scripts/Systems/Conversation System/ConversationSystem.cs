@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class ConversationSystem : MonoBehaviour
 {
-    public static ConversationSystem Instance;
+    private static ConversationSystem _instance;
+    public static ConversationSystem Instance { get { return _instance; } }
 
     private ConversationDialogDisplay conversationDialogDisplay;
     private ConversationCamera conversationCamera;
@@ -33,7 +34,14 @@ public class ConversationSystem : MonoBehaviour
 
     private void InitializeConversationSystem()
     {
-        Instance = this;
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
     }
 
     public void ImportConversation(ConversationData newConversationData)

@@ -8,7 +8,13 @@ public class StageEvent : MonoBehaviour
     public string stageEventName;
 
     [Space(10)]
+    public Transform stageEventTransform;
+
+    [Space(10)]
     public GameObject[] stageObjects;
+
+    [Space(10)]
+    public Color stageLightColor = Color.yellow;
 
     [Space(10)]
     public bool isStageEventActive = false;
@@ -24,6 +30,13 @@ public class StageEvent : MonoBehaviour
     public virtual void StageEventStart() //Called to Start the Stage Event and for it to start listening for Events
     {
         StageEventManager.OnStageEventActive += StageEventActive;
+
+        if (stageEventTransform == null)
+        {
+            stageEventTransform = transform;
+        }
+
+        StageLightManager.Instance.RequestStageLight(stageEventTransform.position, Quaternion.identity, stageLightColor);
 
         isStageEventActive = true;
     }
@@ -53,6 +66,8 @@ public class StageEvent : MonoBehaviour
         StageEventManager.OnStageEventActive -= StageEventActive;
 
         StageEventManager.Instance.CompleteStageEvent();
+
+        StageLightManager.Instance.ClearCurrentStageLights();
 
         isStageEventActive = false;
     }

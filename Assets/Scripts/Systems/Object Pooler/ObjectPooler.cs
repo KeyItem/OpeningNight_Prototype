@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class ObjectPooler : MonoBehaviour
 {
-    public static ObjectPooler Instance;
+    private static ObjectPooler _instance;
+
+    public static ObjectPooler Instance { get { return _instance; } }
 
     [Header("Pools")]
     public List<Pool> poolList = new List<Pool>();
@@ -24,7 +26,14 @@ public class ObjectPooler : MonoBehaviour
 
     private void InitializePooler()
     {
-        Instance = this; //Singleton Garbage
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
     }
 
     private void SetupDictionary()

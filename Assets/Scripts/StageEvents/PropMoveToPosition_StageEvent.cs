@@ -23,7 +23,7 @@ public class PropMoveToPosition_StageEvent : StageEvent
     {
         base.StageEventStart();
 
-        playerPickUpController = ThirdPersonPlayerController.PlayerInstance.GetComponent<PlayerPickUpController>();
+        playerPickUpController = ThirdPersonPlayerToolbox.Instance.ThirdPersonPickUpController; 
     }
 
     public override void StageEventAction()
@@ -34,7 +34,7 @@ public class PropMoveToPosition_StageEvent : StageEvent
             {
                 if (playerPickUpController.currentHeldProp == targetProp.gameObject)
                 {
-                    float distanceToPosition = Vector3.Distance(targetProp.position, transform.position);
+                    float distanceToPosition = Vector3.Distance(targetProp.position, stageEventTransform.position);
 
                     currentDistanceToPosition = distanceToPosition;
 

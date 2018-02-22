@@ -8,7 +8,8 @@ public class StageEventManager : MonoBehaviour
      * It needs to know when to activate a stage event and when that stage event is completed.
     */
 
-    public static StageEventManager Instance;
+    private static StageEventManager _instance;
+    public static StageEventManager Instance { get { return _instance; } }
 
     [Header("Stage Events Attributes")]
     public StageEvent[] stageEvents;
@@ -40,7 +41,14 @@ public class StageEventManager : MonoBehaviour
 
     private void InstanceSetup()
     {
-        Instance = this;
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
     }
 
     public void StartStageEvent()

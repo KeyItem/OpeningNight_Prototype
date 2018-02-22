@@ -7,9 +7,6 @@ public class PlayerMoveToPosition_StageEvent : StageEvent
     public Transform targetPlayer;
 
     [Space(10)]
-    public Transform desiredPosition;
-
-    [Space(10)]
     public float minDistanceToPosition = 2f;
 
     [Header("DEBUG")]
@@ -22,26 +19,21 @@ public class PlayerMoveToPosition_StageEvent : StageEvent
 
     public override void StageEventStart()
     {
+        base.StageEventStart();
+
         if (targetPlayer == null)
         {
-            targetPlayer = ThirdPersonPlayerController.PlayerInstance;
+            targetPlayer = ThirdPersonPlayerToolbox.Instance.transform;
         }
-
-        if (desiredPosition == null)
-        {
-            desiredPosition = transform;
-        }
-
-        base.StageEventStart();
     }
 
     public override void StageEventAction()
     {
         if (isStageEventActive)
         {
-            if (targetPlayer != null && desiredPosition != null)
+            if (targetPlayer != null && stageEventTransform != null)
             {
-                float distanceToPosition = Vector3.Distance(targetPlayer.position, desiredPosition.position);
+                float distanceToPosition = Vector3.Distance(targetPlayer.position, stageEventTransform.position);
 
                 currentDistanceToPosition = distanceToPosition;
 
@@ -52,7 +44,7 @@ public class PlayerMoveToPosition_StageEvent : StageEvent
 
                 if (canShowDebug)
                 {
-                    Debug.DrawLine(targetPlayer.position, desiredPosition.position, Color.yellow);
+                    Debug.DrawLine(targetPlayer.position, stageEventTransform.position, Color.yellow);
                 }
             }
         }

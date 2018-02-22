@@ -2,12 +2,10 @@
 using UnityEngine;
 
 [RequireComponent(typeof (ThirdPersonInputManager))]
-[RequireComponent(typeof (PlayerClimbController))]
 [RequireComponent(typeof (CharacterController))]
+[RequireComponent(typeof (ThirdPersonPlayerToolbox))]
 public class ThirdPersonPlayerController : PlayerController
 {
-    public static Transform PlayerInstance;
-
     private CharacterController playerCharacterController;
 
     private ThirdPersonCameraController playerCamera;
@@ -178,8 +176,6 @@ public class ThirdPersonPlayerController : PlayerController
 
     private void InitializePlayer()
     {
-        PlayerInstance = transform;
-
         playerCharacterController = GetComponent<CharacterController>();
 
         playerClimbController = GetComponent<PlayerClimbController>();

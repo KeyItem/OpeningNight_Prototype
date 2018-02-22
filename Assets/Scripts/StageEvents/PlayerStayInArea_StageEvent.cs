@@ -7,9 +7,6 @@ public class PlayerStayInArea_StageEvent : StageEvent
     public Transform targetPlayerTransform;
 
     [Space(10)]
-    public Transform targetAreaTransform;
-
-    [Space(10)]
     public float targetInAreaWaitTime = 1f;
 
     [Space(10)]
@@ -33,28 +30,23 @@ public class PlayerStayInArea_StageEvent : StageEvent
 
     public override void StageEventStart()
     {
+        base.StageEventStart();
+
         targetWaitTime = targetInAreaWaitTime;
 
         if (targetPlayerTransform == null)
         {
-            targetPlayerTransform = ThirdPersonPlayerController.PlayerInstance;
+            targetPlayerTransform = ThirdPersonPlayerToolbox.Instance.transform;
         }
-
-        if (targetAreaTransform == null)
-        {
-            targetAreaTransform = transform;
-        }
-
-        base.StageEventStart();
     }
 
     public override void StageEventAction()
     {
         if (isStageEventActive)
         {
-            if (targetPlayerTransform != null && targetAreaTransform != null)
+            if (targetPlayerTransform != null && stageEventTransform != null)
             {
-                float distanceToPosition = Vector3.Distance(targetPlayerTransform.position, targetAreaTransform.position);
+                float distanceToPosition = Vector3.Distance(targetPlayerTransform.position, stageEventTransform.position);
 
                 currentDistanceToPosition = distanceToPosition;
 
@@ -69,7 +61,7 @@ public class PlayerStayInArea_StageEvent : StageEvent
 
                 if (canShowDebug)
                 {
-                    Debug.DrawLine(targetPlayerTransform.position, targetAreaTransform.position, Color.yellow);
+                    Debug.DrawLine(targetPlayerTransform.position, stageEventTransform.position, Color.yellow);
                 }
             }
         }

@@ -9,9 +9,6 @@ public class PropStayInArea_StageEvent : StageEvent
     public Transform targetPropTransform;
 
     [Space(10)]
-    public Transform targetAreaTransform;
-
-    [Space(10)]
     public float targetInAreaWaitTime = 1f;
 
     [Space(10)]
@@ -38,6 +35,8 @@ public class PropStayInArea_StageEvent : StageEvent
 
     public override void StageEventStart()
     {
+        base.StageEventStart();
+
         targetWaitTime = targetInAreaWaitTime;
 
         if (targetPropTransform == null)
@@ -45,23 +44,16 @@ public class PropStayInArea_StageEvent : StageEvent
             Debug.LogError("Prop is not assigned :: " + this);
         }
 
-        if (targetAreaTransform == null)
-        {
-            targetAreaTransform = transform;
-        }
-
-        playerPickUpController = ThirdPersonPlayerController.PlayerInstance.GetComponent<PlayerPickUpController>();
-
-        base.StageEventStart();
+        playerPickUpController = ThirdPersonPlayerToolbox.Instance.ThirdPersonPickUpController; 
     }
 
     public override void StageEventAction()
     {
         if (isStageEventActive)
         {
-            if (targetPropTransform != null && targetAreaTransform != null)
+            if (targetPropTransform != null && stageEventTransform != null)
             {
-                float distanceToPosition = Vector3.Distance(targetPropTransform.position, targetAreaTransform.position);
+                float distanceToPosition = Vector3.Distance(targetPropTransform.position, stageEventTransform.position);
 
                 currentDistanceToPosition = distanceToPosition;
 
@@ -86,7 +78,7 @@ public class PropStayInArea_StageEvent : StageEvent
 
                 if (canShowDebug)
                 {
-                    Debug.DrawLine(targetPropTransform.position, targetAreaTransform.position, Color.yellow);
+                    Debug.DrawLine(targetPropTransform.position, stageEventTransform.position, Color.yellow);
                 }
             }
         }

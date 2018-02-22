@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class PropManager : MonoBehaviour
 {
-    public static PropManager propManager;
+    private static PropManager _instance;
+    public static PropManager Instance { get { return _instance; } }
 
     [Header("Prop Manager Attributes")]
     public PropController[] propsToSetup;
@@ -27,21 +28,15 @@ public class PropManager : MonoBehaviour
         PrepareProps();
     }
 
-    private void Update()
-    {
-        DebugInput();
-    }
-
     private void InitializePropManager()
     {
-        propManager = this;
-    }
-
-    private void DebugInput()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (_instance != null && _instance != this)
         {
-            SetupAllProps();
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
         }
     }
 
@@ -55,7 +50,7 @@ public class PropManager : MonoBehaviour
         }
     }
 
-    public void SetupAllProps()
+    public void StartPropSetup()
     {
         for (int i = 0; i < propsToSetup.Length; i++)
         {
