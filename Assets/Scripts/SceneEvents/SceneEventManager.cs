@@ -72,6 +72,8 @@ public class SceneEventManager : MonoBehaviour
 
         PropManager.Instance.StartPropSetup();
 
+        CurtainManager.Instance.MoveCurtain();
+
         StartCoroutine(StartPlayAfterDelay(playStartDelay));
     }
 
@@ -240,6 +242,8 @@ public class SceneEventManager : MonoBehaviour
     private void CompleteAllScenes()
     {
         StageEventManager.OnStageEventCompleted += StageEventComplete;
+
+        CurtainManager.Instance.MoveCurtain();
 
         currentSceneIndex = 0;
         currentLineIndex = 0;

@@ -21,9 +21,15 @@ public class PhysicsInteractable : Interactable
 
     public override void Interact(GameObject playerInteracting)
     {
-        Vector3 interceptVec = (transform.position - playerInteracting.transform.position).normalized;
-        interceptVec *= physicsForceMultiplier;
+        if (isPlaced)
+        {
+            if (canBeInteractedWith)
+            {
+                Vector3 interceptVec = (transform.position - playerInteracting.transform.position).normalized;
+                interceptVec *= physicsForceMultiplier;
 
-        objectRigidbody.AddForce(interceptVec, ForceMode.Impulse);
+                objectRigidbody.AddForce(interceptVec, ForceMode.Impulse);
+            }
+        }     
     }
 }

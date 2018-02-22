@@ -4,7 +4,6 @@ using UnityEngine;
 public class PropController : MonoBehaviour
 {
     private Interactable propInteractable;
-
     private Rigidbody propRigidbody;
 
     [Header("Prop Controller Attributes")]
@@ -25,7 +24,6 @@ public class PropController : MonoBehaviour
     private void PropSetup()
     {
         propInteractable = GetComponent<Interactable>();
-
         propRigidbody = GetComponent<Rigidbody>();
     }
 
@@ -33,7 +31,7 @@ public class PropController : MonoBehaviour
     {
         if (propInteractable != null)
         {
-            propInteractable.canBeInteractedWith = false;
+            propInteractable.isPlaced = false;
         }
 
         if (propRigidbody != null)
@@ -92,7 +90,7 @@ public class PropController : MonoBehaviour
 
         if (propInteractable != null)
         {
-            propInteractable.canBeInteractedWith = true;
+            propInteractable.isPlaced = true;
         }
 
         if (propRigidbody != null)

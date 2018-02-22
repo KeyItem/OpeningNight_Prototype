@@ -166,10 +166,13 @@ public class PlayerInteractionController : MonoBehaviour
 
     private bool CheckIfObjectIsAvailableForInteraction(Interactable newInteractableObject)
     {
-        if (newInteractableObject.canBeInteractedWith)
+        if (newInteractableObject.isPlaced)
         {
-            return true;
-        }
+            if (newInteractableObject.canBeInteractedWith)
+            {
+                return true;
+            }
+        }    
 
         return false;
     }

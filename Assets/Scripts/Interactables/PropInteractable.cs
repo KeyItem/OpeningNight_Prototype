@@ -8,7 +8,13 @@ public class PropInteractable : Interactable
 
     public override void Interact(GameObject playerInteracting)
     {
-        isBeingInteractedWith = true;
+        if (isPlaced)
+        {
+            if (canBeInteractedWith)
+            {
+                isBeingInteractedWith = true;
+            }
+        }
     }
 
     public override void StopInteraction()
