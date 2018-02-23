@@ -74,6 +74,8 @@ public class SceneEventManager : MonoBehaviour
 
         CurtainManager.Instance.MoveCurtain();
 
+        CrowdManager.Instance.StartCrowd();
+
         StartCoroutine(StartPlayAfterDelay(playStartDelay));
     }
 

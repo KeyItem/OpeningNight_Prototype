@@ -64,8 +64,6 @@ public class CurtainManager : MonoBehaviour
         }
 
         StartCoroutine(CurtainMover);
-
-        Debug.Log("Starting Curtain Mover");
     }
 
     private IEnumerator StartMovingCurtains(float moveTime, bool isOpen)

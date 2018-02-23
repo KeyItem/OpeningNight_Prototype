@@ -1,5 +1,5 @@
 ﻿
-#region
+#region PLAYER
     
 public enum PLAYER_NUMBER
 {
@@ -25,25 +25,6 @@ public enum PLAYER_STATE
     STAND,
     IN_COVER,
     IS_VAULTING
-}
-
-public enum DIRECTION
-{
-    NONE,
-    LEFT,
-    RIGHT,
-    UP,
-    DOWN,
-    FORWARD,
-    BACK
-}
-
-public enum AXIS
-{
-    NONE,
-    X,
-    Y,
-    Z
 }
 
 #endregion
@@ -98,5 +79,35 @@ public enum INTERACTABLE_OBJECT_TYPE
     STAGE_EVENT
 }
 
+#endregion
+
+#region ABSTRACT
+
+public enum STRENGTH
+{
+    NONE,
+    LOW,
+    MEDIUM,
+    HIGH
+}
+
+public enum DIRECTION
+{
+    NONE,
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN,
+    FORWARD,
+    BACK
+}
+
+public enum AXIS
+{
+    NONE,
+    X,
+    Y,
+    Z
+}
 #endregion
 
