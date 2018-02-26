@@ -7,7 +7,7 @@ public class SceneEventManager : MonoBehaviour
     public static SceneEventManager Instance { get { return _instance; } }
 
     [Header("Scene Event Manager Attributes")]
-    public SceneEventData[] sceneEvents;
+    public SceneData[] sceneData;
 
     [Space(10)]
     public int currentSceneIndex;
@@ -16,13 +16,22 @@ public class SceneEventManager : MonoBehaviour
     public bool allFinishedSceneEvents = false;
 
     [Header("Current Scene Event Attributes")]
-    public SceneEventData currentSceneEventData;
+    public SceneEvent[] sceneEvents;
+    
+    [Space(10)]
+    public SceneEvent currentSceneEvent;
 
     [Space(10)]
-    public ConversationData currentConversationData;
+    public StageEvent currentStageEvent;
 
     [Space(10)]
-    public int currentLineIndex;
+    public SceneData currentSceneData;
+
+    [Space(10)]
+    public DialogData currentDialogData;
+
+    [Space(10)]
+    public int currentSceneEventIndex;
 
     [Space(10)]
     public bool waitingOnStageEvent = false;
@@ -60,10 +69,11 @@ public class SceneEventManager : MonoBehaviour
         }
     }
 
-    private void ImportSceneEventData(SceneEventData newSceneEventData)
+    private void ImportSceneEventData(SceneData newSceneEventData)
     {
-        currentSceneEventData = newSceneEventData;
-        currentConversationData = newSceneEventData.sceneConversationData;
+        currentSceneData = newSceneEventData;
+        currentDialogData = newSceneEventData.sceneConversationData;
+        //currentSceneEvent = sceneEvent[0];
     }
 
     public void PrepareStartingScene()
@@ -81,12 +91,12 @@ public class SceneEventManager : MonoBehaviour
 
     public void PrepareScene(int targetSceneIndex)
     {
-        ImportSceneEventData(sceneEvents[targetSceneIndex]);
+        ImportSceneEventData(sceneData[targetSceneIndex]);
 
-        currentLineIndex = 0;
+        currentSceneEventIndex = 0;
         currentSceneIndex = targetSceneIndex;
 
-        ConversationSystem.Instance.ImportConversation(currentConversationData);
+        ConversationSystem.Instance.ImportConversation(currentDialogData);
 
         StartScene();
     }
@@ -95,11 +105,11 @@ public class SceneEventManager : MonoBehaviour
     {
         if (CanMoveToNextScene())
         {
-            ImportSceneEventData(sceneEvents[currentSceneIndex]);
+            ImportSceneEventData(sceneData[currentSceneIndex]);
 
-            currentLineIndex = 0;
+            currentSceneEventIndex = 0;
 
-            ConversationSystem.Instance.ImportConversation(currentConversationData);
+            ConversationSystem.Instance.ImportConversation(currentDialogData);
 
             StartScene();
         }
@@ -111,11 +121,22 @@ public class SceneEventManager : MonoBehaviour
 
     private void StartScene()
     {
-        if (DoesSceneEventContainStageEvent(0))
+        if (DoesSceneEventContainActorEvent(sceneEvents[0]))
         {
-            targetDebugString = "Start Conversation :: StageEvent";
+            Debug.Log("Sending Actor Instructions");
+
+            ActorManager.Instance.PassOffActorMovement(sceneEvents[0].actorsInvolvedInScene, sceneEvents[0].actorMoveData);
+        }
+
+        if (DoesSceneEventContainStageEvent(sceneEvents[0]))
+        {           
+            targetDebugString = "Start Scene :: StageEvent";
 
             waitingOnStageEvent = true;
+
+            currentStageEvent = sceneEvents[0].targetStageEvent;
+
+            StageEventManager.Instance.PrepareNewStageEvent(currentStageEvent);
 
             ConversationSystem.Instance.StartConversation();
 
@@ -124,13 +145,13 @@ public class SceneEventManager : MonoBehaviour
                 StopCoroutine(StageEventWaitTime);
             }
 
-            StageEventWaitTime = EnableStageEventAfterDelay(currentSceneEventData.sceneEvenLineTimings[0]);
+            StageEventWaitTime = EnableStageEventAfterDelay(currentSceneData.sceneEvenLineTimings[0]);
 
             StartCoroutine(StageEventWaitTime);
         }
         else
-        {
-            targetDebugString = "Start Conversation :: Normal";
+        {     
+            targetDebugString = "Start Scene :: Normal";
 
             ConversationSystem.Instance.StartConversation();
 
@@ -139,7 +160,7 @@ public class SceneEventManager : MonoBehaviour
                 StopCoroutine(DialogWaitTime);
             }
 
-            DialogWaitTime = NextLineAfterDelay(currentSceneEventData.sceneEvenLineTimings[0]);
+            DialogWaitTime = NextLineAfterDelay(currentSceneData.sceneEvenLineTimings[0]);
 
             StartCoroutine(DialogWaitTime);
         }
@@ -147,16 +168,9 @@ public class SceneEventManager : MonoBehaviour
 
     private void MoveToNextLineOfDialog()
     {
-        if (CanMoveToNextLineOfDialogue())
+        if (CanMoveToNextSceneEvent())
         {
-            if (DoesSceneEventContainStageEvent(currentLineIndex))
-            {
-                NextLine(true);
-            }
-            else
-            {
-                NextLine(false);
-            }
+            NextLine(DoesSceneEventContainStageEvent(currentSceneEvent), DoesSceneEventContainActorEvent(currentSceneEvent));       
         }
         else
         {
@@ -164,13 +178,22 @@ public class SceneEventManager : MonoBehaviour
         }
     }
 
-    private void NextLine(bool hasStageEvent)
+    private void NextLine(bool hasStageEvent, bool hasActor)
     {
+        if (hasActor)
+        {
+            ActorManager.Instance.PassOffActorMovement(currentSceneEvent.actorsInvolvedInScene, currentSceneEvent.actorMoveData);
+        }
+
         if (hasStageEvent)
         {
-            targetDebugString = "Line :: " + currentLineIndex + " :: StageEvent";
+            currentStageEvent = currentSceneEvent.targetStageEvent;
+
+            targetDebugString = "Scene :: " + currentSceneEvent.sceneEventName + " :: StageEvent";
 
             waitingOnStageEvent = true;
+
+            StageEventManager.Instance.PrepareNewStageEvent(currentStageEvent);
 
             ConversationSystem.Instance.MoveToNextConversationDialog();
 
@@ -179,13 +202,13 @@ public class SceneEventManager : MonoBehaviour
                 StopCoroutine(StageEventWaitTime);
             }
 
-            StageEventWaitTime = EnableStageEventAfterDelay(currentSceneEventData.sceneEvenLineTimings[currentLineIndex]);
+            StageEventWaitTime = EnableStageEventAfterDelay(currentSceneData.sceneEvenLineTimings[currentSceneEventIndex]);
 
             StartCoroutine(StageEventWaitTime);
         }
         else
         {
-            targetDebugString = "Line :: " + currentLineIndex;
+            targetDebugString = "Scene :: " + currentSceneEvent.sceneEventName + " :: Normal";
 
             ConversationSystem.Instance.MoveToNextConversationDialog();
 
@@ -194,7 +217,7 @@ public class SceneEventManager : MonoBehaviour
                 StopCoroutine(DialogWaitTime);
             }
 
-            DialogWaitTime = NextLineAfterDelay(currentSceneEventData.sceneEvenLineTimings[currentLineIndex]);
+            DialogWaitTime = NextLineAfterDelay(currentSceneData.sceneEvenLineTimings[currentSceneEventIndex]);
 
             StartCoroutine(DialogWaitTime);
         }
@@ -209,12 +232,14 @@ public class SceneEventManager : MonoBehaviour
         MoveToNextLineOfDialog();
     }
 
-    private bool CanMoveToNextLineOfDialogue()
+    private bool CanMoveToNextSceneEvent()
     {
-        currentLineIndex++;
+        currentSceneEventIndex++;
 
-        if (currentLineIndex <= currentConversationData.conversationDialogue.Length - 1)
+        if (currentSceneEventIndex <= sceneEvents.Length - 1)
         {
+            currentSceneEvent = sceneEvents[currentSceneEventIndex];
+
             return true;
         }
 
@@ -225,7 +250,7 @@ public class SceneEventManager : MonoBehaviour
     {
         currentSceneIndex++;
 
-        if (currentSceneIndex <= sceneEvents.Length - 1)
+        if (currentSceneIndex <= sceneData.Length - 1)
         {
             return true;
         }
@@ -233,9 +258,19 @@ public class SceneEventManager : MonoBehaviour
         return false;
     }
 
-    private bool DoesSceneEventContainStageEvent(int currentLineIndex)
+    private bool DoesSceneEventContainStageEvent(SceneEvent targetSceneEvent)
     {
-        if (currentSceneEventData.sceneEventHasStageEvent[currentLineIndex])
+        if (targetSceneEvent.targetStageEvent != null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool DoesSceneEventContainActorEvent(SceneEvent targetSceneEvent)
+    {
+        if (targetSceneEvent.actorMoveData.Length > 0)
         {
             return true;
         }
@@ -250,21 +285,27 @@ public class SceneEventManager : MonoBehaviour
         CurtainManager.Instance.MoveCurtain();
 
         currentSceneIndex = 0;
-        currentLineIndex = 0;
+        currentSceneEventIndex = 0;
 
-        currentSceneEventData = null;
-        currentConversationData = null;
+        currentStageEvent = null;
+        currentSceneData = null;
+        currentDialogData = null;
 
         Debug.Log("All Scenes Complete");
 
         allFinishedSceneEvents = true;
     }
 
-    private IEnumerator NextLineAfterDelay(float delay)
+    private IEnumerator NextLineAfterDelay(float delayTime)
     {
-        if (delay > 0)
+        if (delayTime > 0)
         {
-            yield return new WaitForSeconds(delay);
+            float startTime = Time.time;
+
+            while (Time.time < startTime + delayTime)
+            {
+                yield return null;
+            }
         }
 
         ConversationSystem.Instance.ClearDialogBox();
@@ -274,27 +315,37 @@ public class SceneEventManager : MonoBehaviour
         yield return null;
     }
 
-    private IEnumerator EnableStageEventAfterDelay(float delay)
+    private IEnumerator EnableStageEventAfterDelay(float delayTime)
     {
-        if (delay > 0)
+        if (delayTime > 0)
         {
-            yield return new WaitForSeconds(delay);
+            float startTime = Time.time;
+
+            while (Time.time < startTime + delayTime)
+            {
+                yield return null;
+            }
         }
 
         ConversationSystem.Instance.ClearDialogBox();
 
-        StageEventManager.Instance.RequestStageEvent();
+        StageEventManager.Instance.StartStageEvent(currentStageEvent);
 
         StageScorer.Instance.StartEventTimer();
 
         yield return null;
     }
 
-    private IEnumerator StartPlayAfterDelay(float delay)
+    private IEnumerator StartPlayAfterDelay(float delayTime)
     {
-        if (delay > 0)
+        if (delayTime > 0)
         {
-            yield return new WaitForSeconds(delay);
+            float startTime = Time.time;
+
+            while (Time.time < startTime + delayTime)
+            {
+                yield return null;
+            }
         }
 
         PrepareScene(0);

@@ -10,7 +10,7 @@ public class ConversationSystem : MonoBehaviour
     private ConversationCamera conversationCamera;
 
     [Header("Conversation Attributes")]
-    public ConversationData currentConversationData;
+    public DialogData currentConversationData;
 
     [Space(10)]
     public int currentConversationIndex = 0;
@@ -44,7 +44,7 @@ public class ConversationSystem : MonoBehaviour
         }
     }
 
-    public void ImportConversation(ConversationData newConversationData)
+    public void ImportConversation(DialogData newConversationData)
     {
         PrepareConversation();
 

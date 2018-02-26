@@ -10,10 +10,7 @@ public class StageEvent : MonoBehaviour
     [Space(10)]
     public Transform stageEventTransform;
 
-    [Space(10)]
-    public GameObject[] stageObjects;
-
-    [Space(10)]
+    [Header("Stage Event Light Attributes")]
     public Color stageLightColor = Color.yellow;
 
     [Space(10)]
@@ -27,14 +24,17 @@ public class StageEvent : MonoBehaviour
         StageEventManager.OnStageEventActive -= StageEventActive;
     }
 
-    public virtual void StageEventStart() //Called to Start the Stage Event and for it to start listening for Events
+    public virtual void StageEventPrepare()
     {
-        StageEventManager.OnStageEventActive += StageEventActive;
-
         if (stageEventTransform == null)
         {
             stageEventTransform = transform;
         }
+    }
+
+    public virtual void StageEventStart() //Called to Start the Stage Event and for it to start listening for Events
+    {
+        StageEventManager.OnStageEventActive += StageEventActive;
 
         StageLightManager.Instance.RequestStageLight(stageEventTransform.position, Quaternion.identity, stageLightColor);
 
@@ -75,27 +75,5 @@ public class StageEvent : MonoBehaviour
     public virtual void InteractWithStageEventUsingProp(GameObject propInteraction)
     {
 
-    }
-
-    public virtual void EnableStageObjects()
-    {
-        if (stageObjects.Length > 0)
-        {
-            for (int i = 0; i < stageObjects.Length; i++)
-            {
-                stageObjects[i].SetActive(true);
-            }
-        }
-    }
-
-    public virtual void DisableStageObjects()
-    {
-        if (stageObjects.Length > 0)
-        {
-            for (int i = 0; i < stageObjects.Length; i++)
-            {
-                stageObjects[i].SetActive(false);
-            }
-        }
     }
 }

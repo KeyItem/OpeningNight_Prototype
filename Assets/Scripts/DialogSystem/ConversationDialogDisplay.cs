@@ -17,7 +17,7 @@ public class ConversationDialogDisplay : MonoBehaviour
     public bool isDialogBoxActive = false;
 
     [Header("Dialogue Attributes")]
-    private ConversationData currentConversationData;
+    private DialogData currentConversationData;
 
     [Header("Dialogue Display Attributes")]
     public float dialogueDisplaySpeed = 0.02f;
@@ -40,14 +40,14 @@ public class ConversationDialogDisplay : MonoBehaviour
         dialogBoxObject.SetActive(false);
     }
 
-    public void ImportConversationData(ConversationData newConversationData)
+    public void ImportConversationData(DialogData newConversationData)
     {
         currentConversationData = newConversationData;
     }
 
     private void SetConversationSpeaker(int conversationIndex)
     {
-        string currentSpeaker = currentConversationData.conversationSpeakerName[conversationIndex];
+        string currentSpeaker = ActorInfo.Instance.ReturnActorName(currentConversationData.conversationSpeakerName[conversationIndex]);
 
         Color[] speakerColors = ReturnSpeakerColor(currentSpeaker);
 

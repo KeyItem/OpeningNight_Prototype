@@ -3,11 +3,6 @@ using UnityEngine;
 
 public class StageEventManager : MonoBehaviour
 {
-    /*Alright, let's break it down.
-     * The System needs to have a list of stage events in each scene, with their timings and relevant triggers.
-     * It needs to know when to activate a stage event and when that stage event is completed.
-    */
-
     private static StageEventManager _instance;
     public static StageEventManager Instance { get { return _instance; } }
 
@@ -51,11 +46,13 @@ public class StageEventManager : MonoBehaviour
         }
     }
 
-    public void StartStageEvent()
+    public void StartStageEvent(StageEvent newStageStageEvent)
     {
-        if (currentStageEvent != null)
+        if (newStageStageEvent != null)
         {
-            currentStageEvent.StageEventStart();
+            currentStageEvent = newStageStageEvent;
+
+            newStageStageEvent.StageEventStart();
 
             if (canShowDebug)
             {
@@ -64,7 +61,7 @@ public class StageEventManager : MonoBehaviour
 
             if (OnStageEventStarted != null)
             {
-                Debug.Log("StageEvent :: Start :: Event");
+                Debug.Log("StageEvent :: Start :: {Event}");
 
                 OnStageEventStarted();
             }
@@ -101,35 +98,16 @@ public class StageEventManager : MonoBehaviour
         currentStageEvent = null;
     }
 
-    private void StartFirstStageEvent()
+    public void PrepareNewStageEvent(StageEvent newStageEvent)
     {
-        StageEvent firstStageEvent = stageEvents[0];
-        stageEventIndex = 0;
-
-        currentStageEvent = firstStageEvent;
-
-        StartStageEvent();
-    }
-
-    public void RequestStageEvent()
-    {
-        MoveToNextStageEvent();
-    }
-
-    private void MoveToNextStageEvent()
-    {
-        if (CanMoveToNextStageEvent(stageEventIndex, stageEvents))
+        if (newStageEvent != null)
         {
-            StageEvent newStageEvent = ReturnNextStageEvent(stageEvents);
+            stageEventIndex++;
 
-            if (newStageEvent != null)
-            {
-                currentStageEvent = newStageEvent;
-
-                StartStageEvent();
-            }
+            newStageEvent.StageEventPrepare();
         }
-        else
+
+        if (!CanMoveToNextStageEvent(stageEventIndex, stageEvents))
         {
             isFinishedAllStageEvents = true;
         }
@@ -149,22 +127,7 @@ public class StageEventManager : MonoBehaviour
 
         return false;
     }
-
-    private StageEvent ReturnNextStageEvent(StageEvent[] stageEvents)
-    {
-        return stageEvents[++stageEventIndex];
-    }
-
-    private StageEvent ReturnRequestedStageEvent(int stageEventIndex, StageEvent[] stageEvents)
-    {
-        if (stageEvents.Length - 1 >= stageEventIndex)
-        {
-            return stageEvents[stageEventIndex];
-        }
-
-        return null;
-    }
-
+    
     private void OnGUI()
     {
         if (canShowDebug)

@@ -9,7 +9,7 @@ public class ConversationCamera : MonoBehaviour
     public ConversationSystem currentConversation = null;
 
     [Space(10)]
-    public ConversationData currentConversationData = null;
+    public DialogData currentConversationData = null;
 
     [Header("Conversation Camera Attributes")]
     public ConversationCameraEvent currentCameraAction = null;
@@ -33,7 +33,7 @@ public class ConversationCamera : MonoBehaviour
         currentConversation = newConversation;
     }
 
-    public void ImportCoversationData(ConversationData newConversationData)
+    public void ImportCoversationData(DialogData newConversationData)
     {
         currentConversationData = newConversationData;
     }
