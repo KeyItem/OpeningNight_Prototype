@@ -36,7 +36,7 @@ public class StageEvent : MonoBehaviour
     {
         StageEventManager.OnStageEventActive += StageEventActive;
 
-        StageLightManager.Instance.RequestStageLight(stageEventTransform.position, Quaternion.identity, stageLightColor);
+        StageLightManager.Instance.RequestEventStageLight(stageEventTransform.position, Quaternion.identity, stageLightColor);
 
         isStageEventActive = true;
     }
@@ -67,7 +67,7 @@ public class StageEvent : MonoBehaviour
 
         StageEventManager.Instance.CompleteStageEvent();
 
-        StageLightManager.Instance.ClearCurrentStageLights();
+        StageLightManager.Instance.ClearCurrentEventStageLights();
 
         isStageEventActive = false;
     }

@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [System.Serializable]
-[CreateAssetMenu(fileName = "New Scene Event Data", menuName = "Scene/Scene Event Data", order = 1301)]
+[CreateAssetMenu(fileName = "New Scene Data", menuName = "Scene/Scene Data", order = 1301)]
 public class SceneData : ScriptableObject
 {
     [Header("Scene Events")]
