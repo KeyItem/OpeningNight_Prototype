@@ -62,6 +62,18 @@ public class ThirdPersonPlayerController : PlayerController
     public bool canPlayerRoll = true;
     public bool isPlayerRolling = false;
 
+    [Header("Player Collision Attributes")]
+    public float[] playerWallDetectionPadding = new float[3] { -0.4f, 0, 0.4f };
+
+    [Space(10)]
+    public float wallDetectionRayLength = 1;
+
+    [Space(10)]
+    public LayerMask moveCollisionMask;
+
+    [Space(10)]
+    public bool canPlayerDetectWalls = true;
+
     [Header("Player Grounding Values")]
     public PlayerGroundingAttributes playerGroundingAttributes;
 
@@ -153,7 +165,7 @@ public class ThirdPersonPlayerController : PlayerController
 
     private void FixedUpdate()
     {
-        ManageGround();
+        ManageCollision();
     }
 
     #region PLAYER_INPUT
@@ -253,12 +265,26 @@ public class ThirdPersonPlayerController : PlayerController
         {
             desiredMove = ReturnPlayerForward() * playerCurrentSpeed;
 
-            playerCharacterController.Move(desiredMove * Time.deltaTime);
+           if (CanPlayerMoveForward(desiredMove))
+           {
+                playerCharacterController.Move(desiredMove * Time.deltaTime);
 
-            if (canShowDebug)
-            {
-                Debug.DrawRay(transform.position, desiredMove, Color.blue);
+                if (canShowDebug)
+                {
+                    Debug.DrawRay(transform.position, desiredMove, Color.blue);
+                }
             }
+            else
+            {
+                playerCurrentSpeed = 0;
+
+                playerAnimator.SetFloat("moveSpeed", playerCurrentSpeed);
+
+                if (canShowDebug)
+                {
+                    Debug.DrawRay(transform.position, desiredMove, Color.red);
+                }
+            }        
         }
     }
 
@@ -644,9 +670,9 @@ public class ThirdPersonPlayerController : PlayerController
 
     #endregion
 
-    #region PLAYER_GROUND
+    #region PLAYER_COLLISION
 
-    private void ManageGround()
+    private void ManageCollision()
     {
         GroundCheck();
 
@@ -657,6 +683,31 @@ public class ThirdPersonPlayerController : PlayerController
         CalculateGroundAngle();
 
         ManageSlopeRotation();
+    }
+
+    private bool CanPlayerMoveForward(Vector3 moveDirection)
+    {
+        if (canPlayerDetectWalls)
+        {
+            for (int i = 0; i < playerWallDetectionPadding.Length; i++)
+            {
+                if (Physics.Raycast(transform.position - (Vector3.up * playerWallDetectionPadding[i]), moveDirection, wallDetectionRayLength, moveCollisionMask))
+                {
+                    if (canShowDebug)
+                    {
+                        Debug.DrawRay(transform.position - (Vector3.up * playerWallDetectionPadding[i]), (moveDirection * wallDetectionRayLength), Color.red);
+                    }
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     private void GroundCheck()
