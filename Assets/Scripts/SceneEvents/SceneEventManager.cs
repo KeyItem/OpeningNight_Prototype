@@ -39,6 +39,18 @@ public class SceneEventManager : MonoBehaviour
     private IEnumerator DialogWaitTime = null;
     private IEnumerator StageEventWaitTime = null;
 
+    [Header("Scene Event Helper Attributes")]
+    public int currentSceneEventHelpIndex;
+
+    private int maxSceneEventHelpIndex;
+
+    [Space(10)]
+    public float currentSceneEventTime = 0f;
+    private float maxSceneEventTime = 0f;
+
+    [Space(10)]
+    public bool isSceneEventHelpActive = false;
+
     [Header("DEBUG")]
     public float playStartDelay = 1f;
 
@@ -69,11 +81,15 @@ public class SceneEventManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        ManageSceneEventHelp();
+    }
+
     private void ImportSceneEventData(SceneData newSceneEventData)
     {
         currentSceneData = newSceneEventData;
         currentDialogData = newSceneEventData.sceneConversationData;
-        //currentSceneEvent = sceneEvent[0];
     }
 
     public void PrepareStartingScene()
@@ -232,6 +248,40 @@ public class SceneEventManager : MonoBehaviour
         MoveToNextLineOfDialog();
     }
 
+    private void ManageSceneEventHelp()
+    {
+        if (isSceneEventHelpActive)
+        {
+            currentSceneEventTime -= Time.deltaTime;
+
+            if (currentSceneEventTime <= 0)
+            {
+                isSceneEventHelpActive = false;
+
+                NextSceneEventHelp();
+            }
+        }
+    }
+
+    private void StartSceneEventHelp()
+    {
+        currentSceneEventHelpIndex = 0;
+
+        maxSceneEventTime = currentSceneEvent.stageEventActiveTime;
+        currentSceneEventTime = maxSceneEventTime;
+    }
+
+    private void NextSceneEventHelp()
+    {
+        if (CanMoveToNextSceneEventHelp())
+        {
+            maxSceneEventTime = currentSceneEvent.stageEventActiveTime;
+            currentSceneEventTime = maxSceneEventTime;
+
+            isSceneEventHelpActive = true;
+        }    
+    }
+
     private bool CanMoveToNextSceneEvent()
     {
         currentSceneEventIndex++;
@@ -276,6 +326,22 @@ public class SceneEventManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    private bool CanMoveToNextSceneEventHelp()
+    {
+        currentSceneEventHelpIndex++;
+
+        if (currentSceneEventHelpIndex <= maxSceneEventHelpIndex - 1)
+        {
+            return true;
+        }
+        else
+        {
+            currentSceneEventIndex = maxSceneEventHelpIndex;
+
+            return false;
+        }
     }
 
     private void CompleteAllScenes()
@@ -328,6 +394,11 @@ public class SceneEventManager : MonoBehaviour
         }
 
         ConversationSystem.Instance.ClearDialogBox();
+
+        if (currentSceneEvent.stageEventHasActiveTime)
+        {
+            ConversationSystem.Instance.ReceiveConversationLine(currentDialogData.dialogHelp[currentSceneEventIndex].helperDialog[currentSceneEventHelpIndex], currentDialogData.dialogHelp[currentSceneEventIndex].speakerNames[currentSceneEventHelpIndex], currentDialogData.dialogHelp[currentSceneEventIndex].helperDialogTime[currentSceneEventHelpIndex]);
+        }
 
         StageEventManager.Instance.StartStageEvent(currentStageEvent);
 

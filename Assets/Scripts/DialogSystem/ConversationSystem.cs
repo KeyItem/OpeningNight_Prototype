@@ -51,7 +51,7 @@ public class ConversationSystem : MonoBehaviour
         currentConversationData = newConversationData;
 
         currentConversationIndex = 0;
-        maxConversationIndex = newConversationData.conversationDialogue.Length;
+        maxConversationIndex = newConversationData.dialogLines.Length;
 
         conversationDialogDisplay.ImportConversationData(currentConversationData);
     }
@@ -62,6 +62,11 @@ public class ConversationSystem : MonoBehaviour
         {
             conversationDialogDisplay = GameObject.FindGameObjectWithTag("ConversationUI").GetComponent<ConversationDialogDisplay>();
         }
+    }
+
+    public void ReceiveConversationLine(string conversationLine, ACTOR_NAME speakerName, float conversationWaitTime)
+    {
+
     }
 
     public void StartConversation()

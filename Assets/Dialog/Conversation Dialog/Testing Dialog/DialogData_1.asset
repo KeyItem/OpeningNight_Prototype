@@ -11,18 +11,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8b338efafec3b144a74c0394d0aa212, type: 3}
   m_Name: DialogData_1
   m_EditorClassIdentifier: 
-  conversationDialogue:
-  - I have reached the Inner Sanctum!
-  - I've brought you here for one reason... to claim your destiny!
-  - Now approach the pedestal. [SE]
-  - Now follow me to the sword altar [SE]
-  - Now pull with all your might and unleash the god killing sword Norstrandmus! [SE]
-  - I feel the power! It's coursing through me!
-  - You are the chosen one! Now go approach the power spot! [SE]
-  - Now that you've awaken Norstrandmus, approach the sister sword Lio. [SE]
-  - Now grab your second birth right! [SE]
-  - Approach the other altar, and unlock Lio's power. [SE]
-  - I AM UNSTOPPABLE! ROAAAAR!
-  - You've done it, you've become the Legendary Super Barbarian
-  conversationSpeakerName: 010000000200000002000000020000000200000001000000020000000200000002000000020000000100000002000000
+  dialogLines:
+  - dialogLine: I have reached the Inner Sanctum!
+    speakerName: 1
+  - dialogLine: I've brought you here for one reason... to claim your destiny!
+    speakerName: 2
+  - dialogLine: Now approach the pedestal. [SE]
+    speakerName: 2
+  - dialogLine: Now follow me to the sword altar [SE]
+    speakerName: 2
+  - dialogLine: Now pull with all your might and unleash the god killing sword Norstrandmus!
+      [SE]
+    speakerName: 2
+  - dialogLine: I feel the power! It's coursing through me!
+    speakerName: 1
+  - dialogLine: You are the chosen one! Now go approach the power spot! [SE]
+    speakerName: 2
+  - dialogLine: Now that you've awaken Norstrandmus, approach the sister sword Lio.
+      [SE]
+    speakerName: 2
+  - dialogLine: Now grab your second birth right! [SE]
+    speakerName: 2
+  - dialogLine: Approach the other altar, and unlock Lio's power. [SE]
+    speakerName: 2
+  - dialogLine: I AM UNSTOPPABLE! ROAAAAR!
+    speakerName: 1
+  - dialogLine: You've done it, you've become the Legendary Super Barbarian
+    speakerName: 2
+  dialogHelp:
+  - helperDialog: []
+    speakerNames: 
+  - helperDialog: []
+    speakerNames: 
+  - helperDialog:
+    - '*cough* Uhh... Approach the Pedestal!'
+    - Over here!
+    - Seriously dude, just walk over to where I'm at.
+    speakerNames: 020000000200000002000000
+  - helperDialog: []
+    speakerNames: 
+  - helperDialog: []
+    speakerNames: 
+  - helperDialog: []
+    speakerNames: 
+  - helperDialog: []
+    speakerNames: 
+  - helperDialog: []
+    speakerNames: 
+  - helperDialog: []
+    speakerNames: 
+  - helperDialog: []
+    speakerNames: 
+  - helperDialog: []
+    speakerNames: 
+  - helperDialog: []
+    speakerNames: 
   conversationCameraEvents: []

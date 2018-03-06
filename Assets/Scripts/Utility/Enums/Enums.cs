@@ -107,7 +107,8 @@ public enum AXIS
     NONE,
     X,
     Y,
-    Z
+    Z,
+    X_AND_Y
 }
 #endregion
 

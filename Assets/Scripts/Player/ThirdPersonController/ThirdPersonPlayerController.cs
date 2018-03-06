@@ -63,13 +63,17 @@ public class ThirdPersonPlayerController : PlayerController
     public bool isPlayerRolling = false;
 
     [Header("Player Collision Attributes")]
-    public float[] playerWallDetectionPadding = new float[3] { -0.4f, 0, 0.4f };
+    public float playerClosestDistanceToWall = 0.25f;
 
     [Space(10)]
     public float wallDetectionRayLength = 1;
 
     [Space(10)]
     public LayerMask moveCollisionMask;
+
+    private float[] playerWallDetectionPadding = new float[3] { -0.4f, 0, 0.4f };
+
+    private RaycastHit wallRayHit;
 
     [Space(10)]
     public bool canPlayerDetectWalls = true;
@@ -689,10 +693,14 @@ public class ThirdPersonPlayerController : PlayerController
     {
         if (canPlayerDetectWalls)
         {
+            float distanceToWall = 0;
+
             for (int i = 0; i < playerWallDetectionPadding.Length; i++)
             {
-                if (Physics.Raycast(transform.position - (Vector3.up * playerWallDetectionPadding[i]), moveDirection, wallDetectionRayLength, moveCollisionMask))
+                if (Physics.Raycast(transform.position - (Vector3.up * playerWallDetectionPadding[i]), moveDirection, out wallRayHit, wallDetectionRayLength, moveCollisionMask))
                 {
+                    distanceToWall = wallRayHit.distance;
+
                     if (canShowDebug)
                     {
                         Debug.DrawRay(transform.position - (Vector3.up * playerWallDetectionPadding[i]), (moveDirection * wallDetectionRayLength), Color.red);
@@ -704,7 +712,16 @@ public class ThirdPersonPlayerController : PlayerController
                 }
             }
 
-            return false;
+            Debug.Log(distanceToWall);
+
+            if (distanceToWall > playerClosestDistanceToWall)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         return true;

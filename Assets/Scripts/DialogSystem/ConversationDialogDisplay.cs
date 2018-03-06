@@ -47,7 +47,7 @@ public class ConversationDialogDisplay : MonoBehaviour
 
     private void SetConversationSpeaker(int conversationIndex)
     {
-        string currentSpeaker = ActorInfo.Instance.ReturnActorName(currentConversationData.conversationSpeakerName[conversationIndex]);
+        string currentSpeaker = ActorInfo.Instance.ReturnActorName(currentConversationData.dialogLines[conversationIndex].speakerName);
 
         Color[] speakerColors = ReturnSpeakerColor(currentSpeaker);
 
@@ -106,7 +106,7 @@ public class ConversationDialogDisplay : MonoBehaviour
 
     private void ReadTargetDialogueIndex(int conversationIndex)
     {
-        string newDialogText = currentConversationData.conversationDialogue[conversationIndex];
+        string newDialogText = currentConversationData.dialogLines[conversationIndex].dialogLine;
 
         if (CurrentScrollingText != null)
         {

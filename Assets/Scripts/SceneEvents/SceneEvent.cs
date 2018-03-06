@@ -14,4 +14,10 @@ public class SceneEvent : MonoBehaviour
 
     [Header("Scene Event Stage Event Attributes")]
     public StageEvent targetStageEvent;
+
+    [Space(10)]
+    public float stageEventActiveTime = 3f;
+
+    [Space(10)]
+    public bool stageEventHasActiveTime = false;
 }
