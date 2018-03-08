@@ -5,6 +5,7 @@ public class PlayerController2D : RaycastController2D
 {
     [Header("Player Input Values")]
     public Vector2 playerInput;
+    public Vector2 playerInputDirection;
 
     [Header("Player Movement Attributes")]
     public float playerBaseMoveSpeed;
@@ -17,24 +18,54 @@ public class PlayerController2D : RaycastController2D
 
     private float playerMoveSmoothVelocity;
 
-    private Vector3 playerVelocity;
+    [Space(10)]
+    public Vector3 playerVelocity;
 
     [Header("Player Jumping Attributes")]
-    public float playerJumpHeight;
+    public float playerMinJumpHeight = 1f;
+    public float playerMaxJumpHeight;
+
+    [Space(10)]
     public float playerJumpTime;
 
-    public Vector2 playerJumpVelocity;
+    private Vector2 playerMinJumpVelocity;
+    private Vector2 playerMaxJumpVelocity;
+
+    [Header("Player Wall Jump Attributes")]
+    public Vector2 wallJumpClimb;
+    public Vector2 wallJumpOff;
+    public Vector2 wallLeap;
+
+    [Space(10)]
+    public int wallDirectionX = 0;
+
+    [Space(10)]
+    public float playerWallStickTime = 0.2f;
+
+    private float timeToWallUnstick;
+
+    [Space(10)]
+    public float playerWallSlideMaxMoveSpeed;
+
+    [Space(10)]
+    public bool isPlayerWallSliding = false;
 
     [Header("Player Gravity Attributes")]
     public float playerGravity;
-
-    public Vector2 playerGravityVelocity;
 
     [Header("Player Collision Attributes")]
     public PlayerCollisionInfo playerCollisionData;
 
     [Space(10)]
+    public bool isGrounded = false;
+    public bool isClimbingSlope = false;
+    public bool isDesendingSlope = false;
+    public bool isNextToWall = false;
+
+    [Space(10)]
+    public LayerMask collisionMask;
     public LayerMask groundMask;
+    public LayerMask wallMask;
 
     [Header("Player Slope Attributes")]
     public float maxClimbAngle = 75f;
@@ -49,48 +80,149 @@ public class PlayerController2D : RaycastController2D
     private void Start()
     {
         base.RaycastSetup();
-        
+
+        PlayerCollisionsSetup();
         PlayerGravitySetup();
+    }
+
+    private void PlayerCollisionsSetup()
+    {
+        playerCollisionData.faceDirection = 1;
     }
 
     private void PlayerGravitySetup()
     {
-        playerGravity = -(2 * playerJumpHeight / Mathf.Pow(playerJumpTime, 2));
-        playerJumpVelocity.y = Mathf.Abs(playerGravity) * playerJumpTime;
+        playerGravity = -(2 * playerMaxJumpHeight / Mathf.Pow(playerJumpTime, 2));
+
+        playerMinJumpVelocity.y = Mathf.Sqrt(2 * Mathf.Abs(playerGravity) * playerMinJumpHeight);
+        playerMaxJumpVelocity.y = Mathf.Abs(playerGravity) * playerJumpTime;
     }
 
-    public void ReceiveInput(Vector2 receivedPlayerInput, bool hasJumped)
+    public void ReceiveInput(Vector2 receivedPlayerInput, RegisteredInput registeredInput)
     {
         playerInput = receivedPlayerInput;
 
-        CalculateVelocity(receivedPlayerInput, hasJumped);
-    }
-
-    private void CalculateVelocity(Vector2 receivedPlayerInput, bool hasJumped)
-    {
-        playerTargetMoveSpeed = receivedPlayerInput.x * playerBaseMoveSpeed;
-
-        playerVelocity.x = Mathf.SmoothDamp(playerVelocity.x, playerTargetMoveSpeed, ref playerMoveSmoothVelocity, ReturnMovementSmoothing());
-
-        if (playerCollisionData.isCollisionAbove || playerCollisionData.isCollisionBelow)
+        if (playerInput.x != 0)
         {
-            playerVelocity.y = 0;
+            playerInputDirection.x = (receivedPlayerInput.x < 0) ? -1 : 1;
+        }
+        else
+        {
+            playerInputDirection.x = 0;
         }
 
-        if (hasJumped)
+        if (playerInput.y != 0)
         {
-            if (playerCollisionData.isCollisionBelow)
+            playerInputDirection.y = (receivedPlayerInput.y < 0) ? -1 : 1;
+        }
+        else
+        {
+            playerInputDirection.y = 0;
+        }
+
+        CalculateVelocity(receivedPlayerInput, registeredInput);
+    }
+
+    private void CalculateVelocity(Vector2 receivedPlayerInput, RegisteredInput registeredInput)
+    {
+        playerTargetMoveSpeed = receivedPlayerInput.x * playerBaseMoveSpeed;
+        playerVelocity.x = Mathf.SmoothDamp(playerVelocity.x, playerTargetMoveSpeed, ref playerMoveSmoothVelocity, ReturnMovementSmoothing());
+
+        isPlayerWallSliding = false;
+
+        wallDirectionX = 0;
+
+        if (playerCollisionData.isCollisionLeft ||  playerCollisionData.isCollisionRight)
+        {
+            wallDirectionX = (playerCollisionData.isCollisionLeft) ? -1 : 1;
+
+            if (playerVelocity.y < 0)
             {
-                playerVelocity.y = playerJumpVelocity.y;
+                if (!playerCollisionData.isCollisionBelow)
+                {
+                    isPlayerWallSliding = true;
+                }
+
+                if (playerVelocity.y < -playerWallSlideMaxMoveSpeed)
+                {
+                    playerVelocity.y = -playerWallSlideMaxMoveSpeed;
+                }
+
+                if (timeToWallUnstick > 0)
+                {
+                    playerMoveSmoothVelocity = 0;
+                    playerVelocity.x = 0;
+
+                    if (playerInputDirection.x != wallDirectionX && playerInput.x != 0)
+                    {
+                        timeToWallUnstick -= Time.deltaTime;
+                    }
+                    else
+                    {
+                        timeToWallUnstick = playerWallStickTime;
+                    }
+                }
+                else
+                {
+                    timeToWallUnstick = playerWallStickTime;
+                }
+            }
+        }
+
+        if (registeredInput.hasPressedJump)
+        {
+            if (isPlayerWallSliding)
+            {
+                if (wallDirectionX == playerInputDirection.x)
+                {
+                    playerVelocity.x -= wallDirectionX * wallJumpClimb.x;
+                    playerVelocity.y = wallJumpClimb.y;
+
+                    Debug.Log("Climb :: " + playerVelocity);
+                }     
+                else if (wallDirectionX != playerInputDirection.x && playerInputDirection.x != 0)
+                {
+                    playerVelocity.x -= wallDirectionX * wallLeap.x;
+                    playerVelocity.y = wallLeap.y;
+
+                    Debug.Log("Leap :: " + playerVelocity);
+                }
+                else if (playerInputDirection.x == 0)
+                {
+                    playerVelocity.x -= wallDirectionX * wallJumpOff.x;
+                    playerVelocity.y = wallJumpOff.y;
+
+                    Debug.Log("Off :: " + playerVelocity);
+                }
+            }
+            else
+            {
+                if (playerCollisionData.isCollisionBelow)
+                {
+                    playerVelocity.y = playerMaxJumpVelocity.y;
+                }
+            }         
+        }
+
+        if (registeredInput.hasReleasedJump)
+        {
+            if (playerVelocity.y > playerMinJumpVelocity.y)
+            {
+                playerVelocity.y = playerMinJumpVelocity.y;
             }
         }
 
         playerVelocity.y += playerGravity * Time.deltaTime;
 
-        PlayerMove(playerVelocity * Time.deltaTime);
+        PlayerMove(playerVelocity * Time.deltaTime, false);
+
+        if (playerCollisionData.isCollisionAbove || playerCollisionData.isCollisionBelow)
+        {
+            playerVelocity.y = 0;
+        }
     }
 
-    public void PlayerMove(Vector2 finalPlayerVelocity)
+    public void PlayerMove(Vector2 finalPlayerVelocity, bool isStandingOnPlatform)
     {
         UpdateObjectBounds();
 
@@ -104,16 +236,6 @@ public class PlayerController2D : RaycastController2D
         transform.Translate(finalPlayerVelocity);
     }
 
-    public void PlayerJump()
-    {
-        if (playerCollisionData.isCollisionBelow)
-        {
-            playerVelocity.y = playerJumpVelocity.y;
-
-            Debug.Log("Jump");
-        }
-    }
-
     private void ManageCollisions(ref Vector2 playerVelocity)
     {
         playerCollisionData.ResetCollisions();
@@ -122,8 +244,10 @@ public class PlayerController2D : RaycastController2D
 
         if (playerVelocity.x != 0)
         {
-            DetectHorizontalCollisions(ref playerVelocity);
+            playerCollisionData.faceDirection = (int)Mathf.Sign(playerVelocity.x);
         }
+
+        DetectHorizontalCollisions(ref playerVelocity);
 
         if (playerVelocity.y != 0)
         {
@@ -153,7 +277,7 @@ public class PlayerController2D : RaycastController2D
 
         Vector2 rayOrigin = (directionX == -1) ? objectBounds.bottomRight : objectBounds.bottomLeft;
 
-        RaycastHit2D descentHit = Physics2D.Raycast(rayOrigin, Vector2.down, Mathf.Infinity, groundMask);
+        RaycastHit2D descentHit = Physics2D.Raycast(rayOrigin, Vector2.down, Mathf.Infinity, collisionMask);
 
         if (descentHit)
         {
@@ -182,18 +306,28 @@ public class PlayerController2D : RaycastController2D
 
     private void DetectHorizontalCollisions(ref Vector2 playerVelocity)
     {
-        float directionX = Mathf.Sign(playerVelocity.x);
+        float directionX = playerCollisionData.faceDirection;
         float rayLength = Mathf.Abs(playerVelocity.x) + skinWidth;
+
+        if (Mathf.Abs(playerVelocity.x) < skinWidth)
+        {
+            rayLength = 2 * skinWidth;
+        }
 
         for (int i = 0; i < playerCollisionHorizontalRayCount; i++)
         {
             Vector2 rayOrigin = (directionX == -1) ? rayOrigin = objectBounds.bottomLeft : objectBounds.bottomRight;
             rayOrigin += Vector2.up * (playerCollisionHorizontalRaySpacing * i);
 
-            RaycastHit2D horizontalHit2D = Physics2D.Raycast(rayOrigin, Vector2.right * directionX, rayLength, groundMask);
+            RaycastHit2D horizontalHit2D = Physics2D.Raycast(rayOrigin, Vector2.right * directionX, rayLength, collisionMask);
 
             if (horizontalHit2D)
-            {
+            {   
+                if (horizontalHit2D.distance == 0)
+                {
+                    continue;
+                }
+
                 float slopeAngle = Vector2.Angle(horizontalHit2D.normal, Vector2.up);
 
                 if (i == 0)
@@ -242,6 +376,9 @@ public class PlayerController2D : RaycastController2D
             }
             else
             {
+                isGrounded = false;
+                isNextToWall = false;
+
                 if (canShowDebug)
                 {
                     Debug.DrawRay(rayOrigin, (Vector2.right * directionX) * 2, Color.green);
@@ -260,10 +397,37 @@ public class PlayerController2D : RaycastController2D
             Vector2 rayOrigin = (directionY == -1) ? objectBounds.bottomLeft : objectBounds.topLeft;
             rayOrigin += Vector2.right * (playerCollisionVerticalRaySpacing * i + playerVelocity.x);
 
-            RaycastHit2D verticalHit2D = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, groundMask);
+            RaycastHit2D verticalHit2D = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, collisionMask);
 
             if (verticalHit2D)
             {
+                Platform hitPlatform = verticalHit2D.collider.GetComponent<Platform>();
+
+                if (hitPlatform != null)
+                {
+                    if (hitPlatform.platformCollisionType == PLATFORM_COLLISION_TYPE.THROUGH)
+                    {
+                        if (directionY == 1 || verticalHit2D.distance == 0)
+                        {
+                            continue;
+                        }
+
+                        if (playerCollisionData.isFallingThroughPlatform)
+                        {
+                            continue;
+                        }
+
+                        if (playerInputDirection.y == -1)
+                        {
+                            playerCollisionData.isFallingThroughPlatform = true;
+
+                            Invoke("ResetFallingThroughPlatform", 0.5f);
+
+                            continue;
+                        }
+                    }
+                }
+
                 playerVelocity.y = (verticalHit2D.distance - skinWidth) * directionY;
                 rayLength = verticalHit2D.distance;
 
@@ -296,7 +460,7 @@ public class PlayerController2D : RaycastController2D
 
                 Vector2 newRayOrigin = ((directionX == -1) ? objectBounds.bottomLeft : objectBounds.bottomRight) + Vector2.up * playerVelocity.y;
 
-                RaycastHit2D newHit = Physics2D.Raycast(newRayOrigin, Vector2.right * directionX, rayLength, groundMask);
+                RaycastHit2D newHit = Physics2D.Raycast(newRayOrigin, Vector2.right * directionX, rayLength, collisionMask);
 
                 if (newHit)
                 {
@@ -311,6 +475,11 @@ public class PlayerController2D : RaycastController2D
                 }
             }
         }
+    }
+
+    private void ResetFallingThroughPlatform()
+    {
+        playerCollisionData.isFallingThroughPlatform = false;
     }
 
     private float ReturnMovementSmoothing()
@@ -336,6 +505,10 @@ public struct PlayerCollisionInfo
 
     public bool isClimbingSlope;
     public bool isDescendingSlope;
+
+    public int faceDirection;
+
+    public bool isFallingThroughPlatform;
 
     public float currentSlopeAngle;
     public float slopeAngleOld;

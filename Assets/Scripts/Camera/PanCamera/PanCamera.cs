@@ -10,7 +10,7 @@ public class PanCamera : MonoBehaviour
     public Transform cameraTransform;
 
     [Space(10)]
-    public Transform trackedObject;
+    public Transform followObject;
 
     [Space(10)]
     public bool isCameraEnabled = true;
@@ -20,7 +20,7 @@ public class PanCamera : MonoBehaviour
     private Vector3 cameraNextPosition;
 
     [Header("Camera Movement Attributes")]
-    public float cameraSmoothingValue;
+    public float cameraSmoothingValue = 1f;
 
     [Space(10)]
     public float cameraMovePercent = 0f;
@@ -33,12 +33,24 @@ public class PanCamera : MonoBehaviour
     public float cameraMaxEndPercent = 1f;
 
     [Space(10)]
-    public Transform cameraMinRange;
-    public Transform cameraMaxRange;
+    public Transform cameraStartPosition;
+    public Transform cameraEndPosition;
+
+    private void Start()
+    {
+        CameraSetup();
+    }
 
     private void LateUpdate()
     {
         MoveCamera();
+    }
+
+    private void CameraSetup()
+    {
+        cameraTransform.position = new Vector3(cameraStartPosition.position.x, cameraStartPosition.position.y, cameraTransform.position.z);
+
+        cameraMovePercent = 0;
     }
 
     private void MoveCamera()
@@ -51,7 +63,7 @@ public class PanCamera : MonoBehaviour
 
             if (cameraMovePercent > cameraMinStartPercent && cameraMovePercent < cameraMaxEndPercent)
             {
-                float cameraNewPositionAxisPosition = Mathf.Lerp(cameraMinRange.position.x, cameraMaxRange.position.x, cameraMovePercent);
+                float cameraNewPositionAxisPosition = Mathf.Lerp(cameraStartPosition.position.x, cameraEndPosition.position.x, cameraMovePercent);
 
                 Vector3 newCameraPosition = new Vector3(cameraNewPositionAxisPosition, cameraCurrentPosition.y, cameraCurrentPosition.z);
 
@@ -77,7 +89,7 @@ public class PanCamera : MonoBehaviour
             switch(cameraAxis)
             {
                 case AXIS.X:
-                    cameraAnchorPointAxis = Mathf.Lerp(cameraMinRange.position.x, cameraMaxRange.position.x, cameraMinStartPercent);
+                    cameraAnchorPointAxis = Mathf.Lerp(cameraStartPosition.position.x, cameraEndPosition.position.x, cameraMinStartPercent);
 
                     newCameraPosition = new Vector3(cameraAnchorPointAxis, cameraCurrentPosition.y, cameraCurrentPosition.z);
 
@@ -85,7 +97,7 @@ public class PanCamera : MonoBehaviour
                     break;
 
                 case AXIS.Y:
-                    cameraAnchorPointAxis = Mathf.Lerp(cameraMinRange.position.y, cameraMaxRange.position.y, cameraMinStartPercent);
+                    cameraAnchorPointAxis = Mathf.Lerp(cameraStartPosition.position.y, cameraEndPosition.position.y, cameraMinStartPercent);
 
                     newCameraPosition = new Vector3(cameraCurrentPosition.x, cameraAnchorPointAxis, cameraCurrentPosition.z);
 
@@ -93,7 +105,7 @@ public class PanCamera : MonoBehaviour
                     break;
 
                 case AXIS.Z:
-                    cameraAnchorPointAxis = Mathf.Lerp(cameraMinRange.position.z, cameraMaxRange.position.z, cameraMinStartPercent);
+                    cameraAnchorPointAxis = Mathf.Lerp(cameraStartPosition.position.z, cameraEndPosition.position.z, cameraMinStartPercent);
 
                     newCameraPosition = new Vector3(cameraCurrentPosition.x, cameraCurrentPosition.y, cameraAnchorPointAxis);
 
@@ -106,7 +118,7 @@ public class PanCamera : MonoBehaviour
             switch (cameraAxis)
             {
                 case AXIS.X:
-                    cameraAnchorPointAxis = Mathf.Lerp(cameraMinRange.position.x, cameraMaxRange.position.x, cameraMaxEndPercent);
+                    cameraAnchorPointAxis = Mathf.Lerp(cameraStartPosition.position.x, cameraEndPosition.position.x, cameraMaxEndPercent);
 
                     newCameraPosition = new Vector3(cameraAnchorPointAxis, cameraCurrentPosition.y, cameraCurrentPosition.z);
 
@@ -114,7 +126,7 @@ public class PanCamera : MonoBehaviour
                     break;
 
                 case AXIS.Y:
-                    cameraAnchorPointAxis = Mathf.Lerp(cameraMinRange.position.y, cameraMaxRange.position.y, cameraMaxEndPercent);
+                    cameraAnchorPointAxis = Mathf.Lerp(cameraStartPosition.position.y, cameraEndPosition.position.y, cameraMaxEndPercent);
 
                     newCameraPosition = new Vector3(cameraCurrentPosition.x, cameraAnchorPointAxis, cameraCurrentPosition.z);
 
@@ -122,7 +134,7 @@ public class PanCamera : MonoBehaviour
                     break;
 
                 case AXIS.Z:
-                    cameraAnchorPointAxis = Mathf.Lerp(cameraMinRange.position.z, cameraMaxRange.position.z, cameraMaxEndPercent);
+                    cameraAnchorPointAxis = Mathf.Lerp(cameraStartPosition.position.z, cameraEndPosition.position.z, cameraMaxEndPercent);
 
                     newCameraPosition = new Vector3(cameraCurrentPosition.x, cameraCurrentPosition.y, cameraAnchorPointAxis);
 
@@ -139,15 +151,15 @@ public class PanCamera : MonoBehaviour
         switch (cameraAxis)
         {
             case AXIS.X:
-                newCameraMovePercent = (trackedObject.position.x - cameraMinRange.position.x) / (cameraMaxRange.position.x - cameraMinRange.position.x);
+                newCameraMovePercent = (followObject.position.x - cameraStartPosition.position.x) / (cameraEndPosition.position.x - cameraStartPosition.position.x);
                 break;
 
             case AXIS.Y:
-                newCameraMovePercent = (trackedObject.position.y - cameraMinRange.position.y) / (cameraMaxRange.position.y - cameraMinRange.position.y);
+                newCameraMovePercent = (followObject.position.y - cameraStartPosition.position.y) / (cameraEndPosition.position.y - cameraStartPosition.position.y);
                 break;
 
             case AXIS.Z:
-                newCameraMovePercent = (trackedObject.position.z - cameraMinRange.position.z) / (cameraMaxRange.position.z - cameraMinRange.position.z);
+                newCameraMovePercent = (followObject.position.z - cameraStartPosition.position.z) / (cameraEndPosition.position.z - cameraStartPosition.position.z);
                 break;
         }
 

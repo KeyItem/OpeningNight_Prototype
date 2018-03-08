@@ -16,7 +16,8 @@ public class InputManager2D : InputManager
     [Space(10)]
     public Vector2 inputVector;
 
-    private bool hasJumped = false;
+    [Header("Registered Input")]
+    public RegisteredInput registeredInput = new RegisteredInput();
 
     private void Start()
     {
@@ -44,14 +45,30 @@ public class InputManager2D : InputManager
 
         if (playerInput.GetButtonDown("Jump"))
         {
-            if (playerController2D.playerCollisionData.isCollisionBelow)
-            {
-                hasJumped = true;
-            }
+            registeredInput.hasPressedJump = true;
         }
 
-        playerController2D.ReceiveInput(inputVector, hasJumped);
+        if (playerInput.GetButtonUp("Jump"))
+        {
+            registeredInput.hasReleasedJump = true;
+        }
 
-        hasJumped = false;
+        playerController2D.ReceiveInput(inputVector, registeredInput);
+
+        registeredInput.ResetRegisteredInput();
+    }
+}
+
+[System.Serializable]
+public class RegisteredInput
+{
+    [Header("Registered Input")]
+    public bool hasPressedJump = false;
+    public bool hasReleasedJump = false;
+
+    public void ResetRegisteredInput()
+    {
+        hasPressedJump = false;
+        hasReleasedJump = false;
     }
 }
