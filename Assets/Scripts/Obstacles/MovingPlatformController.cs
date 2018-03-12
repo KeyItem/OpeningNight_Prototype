@@ -44,8 +44,6 @@ public class MovingPlatformController : RaycastController2D
 
     private void Update()
     {
-        UpdateObjectBounds();
-
         MovePlatform();
     }
 
@@ -61,6 +59,8 @@ public class MovingPlatformController : RaycastController2D
 
     private void MovePlatform()
     {
+        UpdateObjectBounds();
+
         Vector2 velocity = ReturnPlatformMovement();
 
         CalculatePassengerMovement(velocity);
@@ -126,8 +126,6 @@ public class MovingPlatformController : RaycastController2D
             if (passengerData.movePassengerBeforePlatform == beforeMovePlatform)
             {
                 passengerData.transform.GetComponent<PlayerController2D>().PlayerMove(passengerData.desiredVelocity, passengerData.isStandingOnPlatform);
-
-                Debug.Log("Passenger :: " + passengerData.transform.name + " :: Velocity :: " + passengerData.desiredVelocity);
             }
         }
     }
@@ -139,8 +137,6 @@ public class MovingPlatformController : RaycastController2D
 
         float directionX = Mathf.Sign(velocity.x);
         float directionY = Mathf.Sign(velocity.y);
-
-        Debug.Log(velocity);
 
         //Vertical Platform
         if (velocity.y != 0)
@@ -191,8 +187,6 @@ public class MovingPlatformController : RaycastController2D
                 {
                     if (!movedPassengers.Contains(horizontalHit2D.transform))
                     {
-                        Debug.Log("Horizontal Movement");
-
                         movedPassengers.Add(horizontalHit2D.transform);
 
                         float pushX = velocity.x - (horizontalHit2D.distance - skinWidth) * directionX;
@@ -219,7 +213,7 @@ public class MovingPlatformController : RaycastController2D
                 Vector2 rayOrigin = objectBounds.topLeft + Vector2.right * (playerCollisionVerticalRaySpacing * i);
                 RaycastHit2D hit2D = Physics2D.Raycast(rayOrigin, Vector2.up, verticalRayLength, passengerMask);
 
-                if (hit2D && hit2D.distance == 0)
+                if (hit2D && hit2D.distance != 0)
                 {
                     if (!movedPassengers.Contains(hit2D.transform))
                     {

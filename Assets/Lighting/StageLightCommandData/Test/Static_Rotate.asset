@@ -9,15 +9,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 581d2e26afb99f0498bf85c366c33859, type: 3}
-  m_Name: LightCommandDataTest
+  m_Name: Static_Rotate
   m_EditorClassIdentifier: 
+  lightType: 01000000010000000100000001000000
   lightCommands: 02000000020000000200000002000000
   targetLights: 00000000010000000200000003000000
-  targetLightColors: []
-  targetLightRotateTimes: []
-  targetLightPositions: []
-  lightPulseAttributes:
-  - {fileID: 11400000, guid: 0f725677767b74a419f2a68e76d2b453, type: 2}
-  - {fileID: 11400000, guid: 0f725677767b74a419f2a68e76d2b453, type: 2}
-  - {fileID: 11400000, guid: 0f725677767b74a419f2a68e76d2b453, type: 2}
-  - {fileID: 11400000, guid: 0f725677767b74a419f2a68e76d2b453, type: 2}
+  targetLightColors:
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  targetStageLightTimes:
+  - 1
+  - 1
+  - 1
+  - 1
+  lightPulseAttributes: []

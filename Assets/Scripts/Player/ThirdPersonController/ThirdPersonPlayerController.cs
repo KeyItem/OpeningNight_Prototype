@@ -712,8 +712,6 @@ public class ThirdPersonPlayerController : PlayerController
                 }
             }
 
-            Debug.Log(distanceToWall);
-
             if (distanceToWall > playerClosestDistanceToWall)
             {
                 return true;

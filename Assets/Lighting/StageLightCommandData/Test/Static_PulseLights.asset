@@ -9,27 +9,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 581d2e26afb99f0498bf85c366c33859, type: 3}
-  m_Name: LightCommandDataTestPulse
+  m_Name: Static_PulseLights
   m_EditorClassIdentifier: 
-  lightCommands: 02000000020000000200000002000000
+  lightType: 01000000010000000100000001000000
+  lightCommands: 04000000040000000400000004000000
   targetLights: 00000000010000000200000003000000
   targetLightColors:
   - {r: 0, g: 0, b: 0, a: 0}
   - {r: 0, g: 0, b: 0, a: 0}
   - {r: 0, g: 0, b: 0, a: 0}
   - {r: 0, g: 0, b: 0, a: 0}
-  targetLightRotateTimes:
+  targetStageLightTimes:
   - 0
   - 0
   - 0
   - 0
-  targetLightPositions:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
   lightPulseAttributes:
-  - {fileID: 11400000, guid: 0f725677767b74a419f2a68e76d2b453, type: 2}
-  - {fileID: 11400000, guid: 0f725677767b74a419f2a68e76d2b453, type: 2}
-  - {fileID: 11400000, guid: 0f725677767b74a419f2a68e76d2b453, type: 2}
-  - {fileID: 11400000, guid: 0f725677767b74a419f2a68e76d2b453, type: 2}
+  - {fileID: 11400000, guid: 92a7f588a04b8d547aef239c22e22662, type: 2}
+  - {fileID: 11400000, guid: 92a7f588a04b8d547aef239c22e22662, type: 2}
+  - {fileID: 11400000, guid: 92a7f588a04b8d547aef239c22e22662, type: 2}
+  - {fileID: 11400000, guid: 92a7f588a04b8d547aef239c22e22662, type: 2}

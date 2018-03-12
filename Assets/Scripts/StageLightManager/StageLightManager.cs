@@ -10,19 +10,17 @@ public class StageLightManager : MonoBehaviour
     private const string lightIdentifier = "StageLight";
 
     [Header("Stage Light Manager Attributes")]
-    public Light[] staticStageLights;
+    public StageLight[] staticStageLights;
 
     [Space(10)]
+    public List<StageLight> activeStaticStageLights = new List<StageLight>(4);
     public List<GameObject> activeEventStageLights;
 
     [Space(10)]
     public float lightRestingHeight = 10f;
 
     [Header("Light Command Data Attributes")]
-    public LightingCommandData currentLightCommandData;
-
-    [Space(10)]
-    public List<LightPulseAttributes> lightPulseAttributes;
+    public StageLightCommandData currentLightCommandData;
 
     private void Awake()
     {
@@ -33,7 +31,7 @@ public class StageLightManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            ParseStageLightingCommandData(currentLightCommandData);
+            ParseStageLightingCommandData(currentLightCommandData, null);
         }
     }
 
@@ -49,43 +47,91 @@ public class StageLightManager : MonoBehaviour
         }
     }
 
-    public void ParseStageLightingCommandData(LightingCommandData newLightingCommandData)
+    public void ParseStageLightingCommandData(StageLightCommandData newLightingCommandData, StageLightTargets[] stageLightTargets)
     {
         if (newLightingCommandData != null)
         {
             currentLightCommandData = newLightingCommandData;
 
-            List <LightPulseAttributes> newPulseAttributesList = new List<LightPulseAttributes>(newLightingCommandData.lightCommands.Length);
-
             for (int i = 0; i < newLightingCommandData.lightCommands.Length; i++)
             {
-                Light targetLight = staticStageLights[newLightingCommandData.targetLights[i]];
+                if (newLightingCommandData.lightCommands[i] == STAGELIGHT_ACTION.NONE)
+                {
+                    continue;
+                }
+
+                StageLight targetStageLight = null;
+
+                if (newLightingCommandData.lightType[i] == STAGELIGHT_TYPE.STATIC)
+                {
+                    targetStageLight = staticStageLights[newLightingCommandData.targetLights[i]];
+
+                    activeStaticStageLights.Add(targetStageLight);
+                }
+                else if (newLightingCommandData.lightType[i] == STAGELIGHT_TYPE.DYNAMIC)
+                {
+                    targetStageLight = RequestEventStageLight();
+                }
+
+                StageLightTargets targetTransformData = stageLightTargets[i];
+
+                Light targetLight = targetStageLight.stageLight;
+
                 Color newColor = newLightingCommandData.targetLightColors[i];
 
                 switch (newLightingCommandData.lightCommands[i])
                 {
-                    case LIGHTCOMMAND_ACTION.PULSE:
-                        newPulseAttributesList.Add(newLightingCommandData.lightPulseAttributes[i]);
+                    case STAGELIGHT_ACTION.PULSE:
+                        targetStageLight.ResetStageLight();
+
+                        targetStageLight.StartStageLightPulse(newLightingCommandData.lightPulseAttributes[i]);
                         break;
 
-                    case LIGHTCOMMAND_ACTION.ROTATE:
+                    case STAGELIGHT_ACTION.LOOKAT:
+                        targetStageLight.ResetStageLight();
+
+                        if (targetTransformData.targets != null)
+                        {
+                            targetStageLight.SetNewStageLightFollowTarget(targetTransformData.targets[0], newLightingCommandData.targetLightColors[i]);
+                        }
                         break;
 
-                    case LIGHTCOMMAND_ACTION.TURN_OFF:
-                        DisableStaticStageLight(targetLight);
+                    case STAGELIGHT_ACTION.MOVETO:
+                        targetStageLight.ResetStageLight();
+
+                        if (targetTransformData.targets != null)
+                        {
+                            targetStageLight.StageLightMoveToPosition(targetTransformData.targets[0].position, targetTransformData.targets[0].rotation, newLightingCommandData.targetLightColors[i]);
+                        }
                         break;
 
-                    case LIGHTCOMMAND_ACTION.TURN_ON:
-                        EnableStaticStageLight(targetLight, newColor);
+                    case STAGELIGHT_ACTION.ROTATE:
+                        targetStageLight.ResetStageLight();
+
+                        if (targetTransformData.targets != null)
+                        {
+                            targetStageLight.SetNewStageLightRotatePoints(targetTransformData.targets, newLightingCommandData.targetStageLightTimes[i], newLightingCommandData.targetLightColors[i]);
+                        }              
+                        break;
+
+                    case STAGELIGHT_ACTION.CHANGE_COLOR:
+                        targetStageLight.ResetStageLight();
+
+                        targetStageLight.StageLightChangeColor(newLightingCommandData.targetLightColors[i]);
+                        break;
+
+                    case STAGELIGHT_ACTION.TURN_OFF:
+                        targetStageLight.ResetStageLight();
+
+                        targetStageLight.TurnOffStageLight();
+                        break;
+
+                    case STAGELIGHT_ACTION.TURN_ON:
+                        targetStageLight.ResetStageLight();
+
+                        targetStageLight.TurnOnStageLight(newLightingCommandData.targetLightColors[i]);
                         break;
                 }
-            }
-
-            if (newPulseAttributesList.Count > 0)
-            {
-                lightPulseAttributes = newPulseAttributesList;
-
-                ManageStageLightPulse(newPulseAttributesList);
             }
         }
     }
@@ -105,7 +151,7 @@ public class StageLightManager : MonoBehaviour
     {
         for (int i = 0; i < staticStageLights.Length; i++)
         {
-            staticStageLights[i].enabled = false;
+            staticStageLights[i].TurnOffStageLight();
         }
     }
 
@@ -113,92 +159,43 @@ public class StageLightManager : MonoBehaviour
     {
         for (int i = 0; i < staticStageLights.Length; i++)
         {
-            staticStageLights[i].enabled = true;
+            staticStageLights[i].TurnOnStageLight(Color.clear);
         }
     }
 
-    public void RequestEventStageLight(Vector3 lightPosition, Quaternion lightRotation, Color lightColor)
+    private StageLight RequestEventStageLight()
     {
-        Vector3 modifiedLightPosition = lightPosition;
-        modifiedLightPosition.y = lightRestingHeight;
-
-        if (lightRotation == Quaternion.identity)
-        {
-            lightRotation = Quaternion.Euler(90, 0, 0);
-        }
-
-        GameObject newLightObject = ObjectPooler.Instance.CreateObjectFromPool_Reuseable(lightIdentifier, modifiedLightPosition, lightRotation);
+        GameObject newLightObject = ObjectPooler.Instance.CreateObjectFromPool_Reuseable(lightIdentifier, Vector3.zero, Quaternion.identity);
         activeEventStageLights.Add(newLightObject);
 
-        Light newLight = newLightObject.GetComponent<Light>();
-        newLight.color = lightColor;
-        newLight.enabled = true;
+        StageLight newStageLight = newLightObject.GetComponent<StageLight>();
+
+        return newStageLight;
+    }
+
+    public void ClearCurrentStaticStageLights()
+    {
+        for (int i = 0; i < activeStaticStageLights.Count; i++)
+        {
+            StageLight currentActiveStageLight = activeStaticStageLights[i];
+
+            currentActiveStageLight.ResetStageLight();
+        }
+
+        activeStaticStageLights.Clear();
     }
 
     public void ClearCurrentEventStageLights()
     {
         for (int i = 0; i < activeEventStageLights.Count; i++)
         {
+            StageLight currentActiveStageLight = activeEventStageLights[i].GetComponent<StageLight>();
+
+            currentActiveStageLight.ResetStageLight();
+
             ObjectPooler.Instance.ReturnObjectToQueue(lightIdentifier, activeEventStageLights[i]);
         }
 
         activeEventStageLights.Clear();
-    }
-
-    private void ManageStageLightPulse(List<LightPulseAttributes> lightPulseAttributes)
-    {
-        for (int i = 0; i < lightPulseAttributes.Count; i++)
-        {
-            StartCoroutine(StageLightPulser(lightPulseAttributes[i], i));
-        }
-    }
-
-    private IEnumerator RotateStageLights(Light targetLight, Color targetColor)
-    {
-        yield return null;
-    }
-
-    private IEnumerator StageLightPulser(LightPulseAttributes lightPulseAttributes, int targetIndex)
-    {
-        int pulseCount = lightPulseAttributes.newColors.Length;
-
-        Light targetLight = staticStageLights[targetIndex];
-
-        Color initialLightColor = targetLight.color;
-
-        for (int i = 0; i < pulseCount; i++)
-        {
-            float startTime = Time.time;
-
-            Color newColor = lightPulseAttributes.newColors[i];
-            float waitTime = lightPulseAttributes.pulseTimes[i];
-            float inbetweenTime = lightPulseAttributes.pulseInbetweenTimes[i];
-
-            targetLight.color = newColor;
-
-            if (waitTime > 0)
-            {
-                while (Time.time < startTime + waitTime)
-                {
-                    yield return null;
-                }
-            }
-
-            if (inbetweenTime > 0)
-            {
-                startTime = Time.time;
-
-                targetLight.color = Color.black;
-
-                while (Time.time < startTime + inbetweenTime)
-                {
-                    yield return null;
-                }
-            }
-        }
-
-        targetLight.color = initialLightColor;
-
-        yield return null;
     }
 }

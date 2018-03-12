@@ -137,20 +137,24 @@ public class SceneEventManager : MonoBehaviour
 
     private void StartScene()
     {
-        if (DoesSceneEventContainActorEvent(sceneEvents[0]))
+        currentSceneEvent = sceneEvents[0];
+
+        currentSceneEvent.SceneEventStart();
+
+        if (DoesSceneEventContainActorEvent(currentSceneEvent))
         {
             Debug.Log("Sending Actor Instructions");
 
-            ActorManager.Instance.PassOffActorMovement(sceneEvents[0].actorsInvolvedInScene, sceneEvents[0].actorMoveData);
+            ActorManager.Instance.PassOffActorMovement(currentSceneEvent.actorsInvolvedInScene, currentSceneEvent.actorMoveData);
         }
 
-        if (DoesSceneEventContainStageEvent(sceneEvents[0]))
+        if (DoesSceneEventContainStageEvent(currentSceneEvent))
         {           
             targetDebugString = "Start Scene :: StageEvent";
 
             waitingOnStageEvent = true;
 
-            currentStageEvent = sceneEvents[0].targetStageEvent;
+            currentStageEvent = currentSceneEvent.targetStageEvent;
 
             StageEventManager.Instance.PrepareNewStageEvent(currentStageEvent);
 
@@ -166,7 +170,7 @@ public class SceneEventManager : MonoBehaviour
             StartCoroutine(StageEventWaitTime);
         }
         else
-        {     
+        {
             targetDebugString = "Start Scene :: Normal";
 
             ConversationSystem.Instance.StartConversation();
@@ -196,6 +200,8 @@ public class SceneEventManager : MonoBehaviour
 
     private void NextLine(bool hasStageEvent, bool hasActor)
     {
+        currentSceneEvent.SceneEventStart();
+
         if (hasActor)
         {
             ActorManager.Instance.PassOffActorMovement(currentSceneEvent.actorsInvolvedInScene, currentSceneEvent.actorMoveData);
@@ -242,6 +248,8 @@ public class SceneEventManager : MonoBehaviour
     private void StageEventComplete()
     {
         waitingOnStageEvent = false;
+
+        currentSceneEvent.SceneEventCompleted();
 
         StageScorer.Instance.StopEventTimer();
 
@@ -346,7 +354,7 @@ public class SceneEventManager : MonoBehaviour
 
     private void CompleteAllScenes()
     {
-        StageEventManager.OnStageEventCompleted += StageEventComplete;
+        StageEventManager.OnStageEventCompleted -= StageEventComplete;
 
         CurtainManager.Instance.MoveCurtain();
 
@@ -373,6 +381,8 @@ public class SceneEventManager : MonoBehaviour
                 yield return null;
             }
         }
+
+        currentSceneEvent.SceneEventCompleted();
 
         ConversationSystem.Instance.ClearDialogBox();
 

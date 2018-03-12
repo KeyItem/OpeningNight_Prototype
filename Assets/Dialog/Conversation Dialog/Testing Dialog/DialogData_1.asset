@@ -38,32 +38,49 @@ MonoBehaviour:
     speakerName: 1
   - dialogLine: You've done it, you've become the Legendary Super Barbarian
     speakerName: 2
+  - dialogLine: Follow the Light!
+    speakerName: 2
   dialogHelp:
   - helperDialog: []
+    helperDialogTime: []
     speakerNames: 
   - helperDialog: []
+    helperDialogTime: []
     speakerNames: 
   - helperDialog:
     - '*cough* Uhh... Approach the Pedestal!'
     - Over here!
     - Seriously dude, just walk over to where I'm at.
+    helperDialogTime: []
     speakerNames: 020000000200000002000000
   - helperDialog: []
+    helperDialogTime: []
     speakerNames: 
   - helperDialog: []
+    helperDialogTime: []
     speakerNames: 
   - helperDialog: []
+    helperDialogTime: []
     speakerNames: 
   - helperDialog: []
+    helperDialogTime: []
     speakerNames: 
   - helperDialog: []
+    helperDialogTime: []
     speakerNames: 
   - helperDialog: []
+    helperDialogTime: []
     speakerNames: 
   - helperDialog: []
+    helperDialogTime: []
     speakerNames: 
   - helperDialog: []
+    helperDialogTime: []
     speakerNames: 
   - helperDialog: []
+    helperDialogTime: []
+    speakerNames: 
+  - helperDialog: []
+    helperDialogTime: []
     speakerNames: 
   conversationCameraEvents: []

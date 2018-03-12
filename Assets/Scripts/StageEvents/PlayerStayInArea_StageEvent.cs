@@ -30,23 +30,23 @@ public class PlayerStayInArea_StageEvent : StageEvent
 
     public override void StageEventStart()
     {
-        base.StageEventStart();
-
         targetWaitTime = targetInAreaWaitTime;
 
         if (targetPlayerTransform == null)
         {
             targetPlayerTransform = ThirdPersonPlayerToolbox.Instance.transform;
         }
+
+        base.StageEventStart();
     }
 
     public override void StageEventAction()
     {
         if (isStageEventActive)
         {
-            if (targetPlayerTransform != null && stageEventTransform != null)
+            if (targetPlayerTransform != null && stageEventTarget != null)
             {
-                float distanceToPosition = Vector3.Distance(targetPlayerTransform.position, stageEventTransform.position);
+                float distanceToPosition = Vector3.Distance(targetPlayerTransform.position, stageEventTarget.position);
 
                 currentDistanceToPosition = distanceToPosition;
 
@@ -61,7 +61,7 @@ public class PlayerStayInArea_StageEvent : StageEvent
 
                 if (canShowDebug)
                 {
-                    Debug.DrawLine(targetPlayerTransform.position, stageEventTransform.position, Color.yellow);
+                    Debug.DrawLine(targetPlayerTransform.position, stageEventTarget.position, Color.yellow);
                 }
             }
         }
@@ -86,10 +86,4 @@ public class PlayerStayInArea_StageEvent : StageEvent
             }
         }
     }
-
-    public override void StageEventCompleted()
-    {
-        base.StageEventCompleted();
-    }
-
 }

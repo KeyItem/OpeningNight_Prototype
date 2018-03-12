@@ -26,6 +26,37 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1045605063201102
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4370043723739284}
+  - component: {fileID: 114584397370557630}
+  m_Layer: 0
+  m_Name: SceneEvent_12
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1081423645927526
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4984091294018376}
+  m_Layer: 0
+  m_Name: ActorPoint_2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1130868028093668
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,6 +291,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1713906143602966
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4275388245926262}
+  m_Layer: 0
+  m_Name: ActorPoint_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1716835126481656
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,9 +314,24 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4629151524635036}
-  - component: {fileID: 114584397370557630}
+  - component: {fileID: 114574850526071580}
   m_Layer: 0
   m_Name: SceneEvent_11
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1824038925360670
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4960691377750554}
+  m_Layer: 0
+  m_Name: ActorPoint_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -283,7 +344,7 @@ GameObject:
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4960691377750554}
+  - component: {fileID: 4664642872141206}
   m_Layer: 0
   m_Name: ActorPoint_1
   m_TagString: Untagged
@@ -374,7 +435,7 @@ GameObject:
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4984091294018376}
+  - component: {fileID: 4467964374803670}
   m_Layer: 0
   m_Name: ActorPoint_1
   m_TagString: Untagged
@@ -491,6 +552,19 @@ Transform:
   m_Father: {fileID: 4633000138839748}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4275388245926262
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1713906143602966}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4370043723739284}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4285121925959798
 Transform:
   m_ObjectHideFlags: 1
@@ -559,6 +633,20 @@ Transform:
   m_Father: {fileID: 4486512024787464}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4370043723739284
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1045605063201102}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2, z: 7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4275388245926262}
+  m_Father: {fileID: 4486512024787464}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4395991046122336
 Transform:
   m_ObjectHideFlags: 1
@@ -571,6 +659,19 @@ Transform:
   m_Children:
   - {fileID: 4757312212338230}
   m_Father: {fileID: 4486512024787464}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4467964374803670
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1971368432652736}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2, y: 0, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4723574159022672}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4486512024787464
@@ -595,6 +696,7 @@ Transform:
   - {fileID: 4334656894862066}
   - {fileID: 4742853104662690}
   - {fileID: 4629151524635036}
+  - {fileID: 4370043723739284}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -608,6 +710,7 @@ Transform:
   m_LocalPosition: {x: 5, y: 2, z: 11.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 4664642872141206}
   - {fileID: 4960691377750554}
   m_Father: {fileID: 4486512024787464}
   m_RootOrder: 7
@@ -640,6 +743,19 @@ Transform:
   m_Father: {fileID: 4486512024787464}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4664642872141206
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1894480426867820}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4495329096854590}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4704164176582278
 Transform:
   m_ObjectHideFlags: 1
@@ -664,6 +780,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 2, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 4467964374803670}
   - {fileID: 4984091294018376}
   m_Father: {fileID: 4486512024787464}
   m_RootOrder: 1
@@ -726,26 +843,26 @@ Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1894480426867820}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2}
+  m_GameObject: {fileID: 1824038925360670}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4495329096854590}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4984091294018376
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1971368432652736}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 1081423645927526}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2, y: 0, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4723574159022672}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114032053709868636
 MonoBehaviour:
@@ -762,6 +879,10 @@ MonoBehaviour:
   actorsInvolvedInScene: 
   actorMoveData: []
   targetStageEvent: {fileID: 0}
+  stageEventActiveTime: 3
+  stageEventHasActiveTime: 0
+  stageLightCommands: {fileID: 0}
+  stageLightTargets: []
 --- !u!114 &114058075247496464
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -777,6 +898,10 @@ MonoBehaviour:
   actorsInvolvedInScene: 
   actorMoveData: []
   targetStageEvent: {fileID: 0}
+  stageEventActiveTime: 3
+  stageEventHasActiveTime: 0
+  stageLightCommands: {fileID: 0}
+  stageLightTargets: []
 --- !u!114 &114125591535976102
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -789,9 +914,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneEventName: Scene_Event1
-  actorsInvolvedInScene: 
-  actorMoveData: []
+  actorsInvolvedInScene: 0200000003000000
+  actorMoveData:
+  - actorMovePointTransform:
+    - {fileID: 4467964374803670}
+    actorMovePointSpeeds:
+    - 5
+  - actorMovePointTransform:
+    - {fileID: 4984091294018376}
+    actorMovePointSpeeds:
+    - 5
   targetStageEvent: {fileID: 0}
+  stageEventActiveTime: 3
+  stageEventHasActiveTime: 0
+  stageLightCommands: {fileID: 0}
+  stageLightTargets: []
 --- !u!114 &114180738739427796
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -807,6 +944,10 @@ MonoBehaviour:
   actorsInvolvedInScene: 
   actorMoveData: []
   targetStageEvent: {fileID: 0}
+  stageEventActiveTime: 3
+  stageEventHasActiveTime: 0
+  stageLightCommands: {fileID: 0}
+  stageLightTargets: []
 --- !u!114 &114303290124741456
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -826,6 +967,10 @@ MonoBehaviour:
     actorMovePointSpeeds:
     - 5
   targetStageEvent: {fileID: 0}
+  stageEventActiveTime: 3
+  stageEventHasActiveTime: 0
+  stageLightCommands: {fileID: 0}
+  stageLightTargets: []
 --- !u!114 &114309460400238926
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -841,6 +986,10 @@ MonoBehaviour:
   actorsInvolvedInScene: 
   actorMoveData: []
   targetStageEvent: {fileID: 0}
+  stageEventActiveTime: 3
+  stageEventHasActiveTime: 0
+  stageLightCommands: {fileID: 0}
+  stageLightTargets: []
 --- !u!114 &114562387648062172
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -860,7 +1009,11 @@ MonoBehaviour:
     actorMovePointSpeeds:
     - 5
   targetStageEvent: {fileID: 0}
---- !u!114 &114584397370557630
+  stageEventActiveTime: 3
+  stageEventHasActiveTime: 0
+  stageLightCommands: {fileID: 0}
+  stageLightTargets: []
+--- !u!114 &114574850526071580
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -871,7 +1024,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ab43a9c8ba7cc841a502d87b2106e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneEventName: Scene_Event10
+  sceneEventName: Scene_Event11
   actorsInvolvedInScene: 02000000
   actorMoveData:
   - actorMovePointTransform:
@@ -879,6 +1032,33 @@ MonoBehaviour:
     actorMovePointSpeeds:
     - 5
   targetStageEvent: {fileID: 0}
+  stageEventActiveTime: 3
+  stageEventHasActiveTime: 0
+  stageLightCommands: {fileID: 0}
+  stageLightTargets: []
+--- !u!114 &114584397370557630
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1045605063201102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ab43a9c8ba7cc841a502d87b2106e84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneEventName: Scene_Event12
+  actorsInvolvedInScene: 02000000
+  actorMoveData:
+  - actorMovePointTransform:
+    - {fileID: 4275388245926262}
+    actorMovePointSpeeds:
+    - 5
+  targetStageEvent: {fileID: 0}
+  stageEventActiveTime: 3
+  stageEventHasActiveTime: 0
+  stageLightCommands: {fileID: 0}
+  stageLightTargets: []
 --- !u!114 &114653655659086544
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -894,6 +1074,10 @@ MonoBehaviour:
   actorsInvolvedInScene: 02000000
   actorMoveData: []
   targetStageEvent: {fileID: 0}
+  stageEventActiveTime: 3
+  stageEventHasActiveTime: 0
+  stageLightCommands: {fileID: 0}
+  stageLightTargets: []
 --- !u!114 &114696251938826456
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -906,13 +1090,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneEventName: Scene_Event7
-  actorsInvolvedInScene: 02000000
+  actorsInvolvedInScene: 0200000003000000
   actorMoveData:
   - actorMovePointTransform:
+    - {fileID: 4664642872141206}
     - {fileID: 4960691377750554}
     actorMovePointSpeeds:
     - 5
+    - 5
+  - actorMovePointTransform:
+    - {fileID: 4960691377750554}
+    - {fileID: 4664642872141206}
+    actorMovePointSpeeds:
+    - 5
+    - 5
   targetStageEvent: {fileID: 0}
+  stageEventActiveTime: 3
+  stageEventHasActiveTime: 0
+  stageLightCommands: {fileID: 0}
+  stageLightTargets: []
 --- !u!114 &114841288323932938
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -928,6 +1124,10 @@ MonoBehaviour:
   actorsInvolvedInScene: 02000000
   actorMoveData: []
   targetStageEvent: {fileID: 0}
+  stageEventActiveTime: 3
+  stageEventHasActiveTime: 0
+  stageLightCommands: {fileID: 0}
+  stageLightTargets: []
 --- !u!114 &114927520924060464
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -947,3 +1147,7 @@ MonoBehaviour:
     actorMovePointSpeeds:
     - 5
   targetStageEvent: {fileID: 0}
+  stageEventActiveTime: 3
+  stageEventHasActiveTime: 0
+  stageLightCommands: {fileID: 0}
+  stageLightTargets: []

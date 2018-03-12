@@ -234,6 +234,11 @@ public class PlayerController2D : RaycastController2D
         ManageCollisions(ref finalPlayerVelocity);
 
         transform.Translate(finalPlayerVelocity);
+
+        if (isStandingOnPlatform)
+        {
+            playerCollisionData.isCollisionBelow = true;
+        }
     }
 
     private void ManageCollisions(ref Vector2 playerVelocity)
@@ -365,8 +370,8 @@ public class PlayerController2D : RaycastController2D
                         playerVelocity.y = Mathf.Tan(playerCollisionData.currentSlopeAngle * Mathf.Deg2Rad * Mathf.Abs(playerVelocity.x));
                     }
 
-                    playerCollisionData.isCollisionRight = directionX == 1;
                     playerCollisionData.isCollisionLeft = directionX == -1;
+                    playerCollisionData.isCollisionRight = directionX == 1;
                 }
 
                 if (canShowDebug)

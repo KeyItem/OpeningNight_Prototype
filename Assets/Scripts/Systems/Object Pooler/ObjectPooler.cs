@@ -14,6 +14,9 @@ public class ObjectPooler : MonoBehaviour
     [Header("Pool Dictionaries")]
     public Dictionary<string, Queue<GameObject>> poolDictionary;
 
+    [Header("Pool Locations")]
+    public Dictionary<string, Transform> poolLocations;
+
     private void Awake()
     {
         InitializePooler();
@@ -44,9 +47,20 @@ public class ObjectPooler : MonoBehaviour
         {
             Queue<GameObject> objectPool = new Queue<GameObject>();
 
+            Transform poolLocation = null;
+
+            if (targetPool.poolLocation == null)
+            {
+                poolLocation = transform;
+            }
+            else
+            {
+                poolLocation = targetPool.poolLocation;
+            }
+
             for (int i = 0; i < targetPool.poolSize; i++)
             {
-                GameObject newObject = Instantiate(targetPool.poolPrefab, Vector3.zero, Quaternion.identity, transform) as GameObject;
+                GameObject newObject = Instantiate(targetPool.poolPrefab, Vector3.zero, Quaternion.identity, poolLocation) as GameObject;
                 newObject.SetActive(false);
 
                 objectPool.Enqueue(newObject);
@@ -137,6 +151,9 @@ public class ObjectPooler : MonoBehaviour
 public class Pool
 {
     public string poolTag;
+
+    [Space(10)]
+    public Transform poolLocation;
 
     [Space(10)]
     public GameObject poolPrefab;

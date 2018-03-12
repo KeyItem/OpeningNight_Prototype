@@ -19,21 +19,21 @@ public class PlayerMoveToPosition_StageEvent : StageEvent
 
     public override void StageEventStart()
     {
-        base.StageEventStart();
-
         if (targetPlayer == null)
         {
             targetPlayer = ThirdPersonPlayerToolbox.Instance.transform;
         }
+
+        base.StageEventStart();
     }
 
     public override void StageEventAction()
     {
         if (isStageEventActive)
         {
-            if (targetPlayer != null && stageEventTransform != null)
+            if (targetPlayer != null && stageEventTarget != null)
             {
-                float distanceToPosition = Vector3.Distance(targetPlayer.position, stageEventTransform.position);
+                float distanceToPosition = Vector3.Distance(targetPlayer.position, stageEventTarget.position);
 
                 currentDistanceToPosition = distanceToPosition;
 
@@ -44,14 +44,9 @@ public class PlayerMoveToPosition_StageEvent : StageEvent
 
                 if (canShowDebug)
                 {
-                    Debug.DrawLine(targetPlayer.position, stageEventTransform.position, Color.yellow);
+                    Debug.DrawLine(targetPlayer.position, stageEventTarget.position, Color.yellow);
                 }
             }
         }
-    }
-
-    public override void StageEventCompleted()
-    {
-        base.StageEventCompleted();
     }
 }

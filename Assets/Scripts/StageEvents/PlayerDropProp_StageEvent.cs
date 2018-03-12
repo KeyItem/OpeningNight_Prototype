@@ -7,11 +7,11 @@ public class PlayerDropProp_StageEvent : StageEvent
 
     public override void StageEventStart()
     {
-        base.StageEventStart();
-
         playerPickUpController = ThirdPersonPlayerToolbox.Instance.ThirdPersonPickUpController;
 
         PlayerPickUpController.OnPlayerDrop += StageEventCompleted;
+
+        base.StageEventStart();
     }
 
     public override void StageEventAction()
