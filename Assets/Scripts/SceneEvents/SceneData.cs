@@ -9,5 +9,8 @@ public class SceneData : ScriptableObject
     public DialogData sceneConversationData;
 
     [Space(10)]
+    public AudioClip sceneMusic;
+
+    [Space(10)]
     public float[] sceneEvenLineTimings;
 }

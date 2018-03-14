@@ -13,17 +13,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneConversationData: {fileID: 11400000, guid: 38fe8cb5c27f6bf43a48883465e33cbe,
     type: 2}
+  sceneMusic: {fileID: 8300000, guid: aa50b03d41242834bbcbb4063f1591a2, type: 3}
   sceneEvenLineTimings:
-  - 3
-  - 3
-  - 3
-  - 3
-  - 3
-  - 3
-  - 3
-  - 3
-  - 3
-  - 3
-  - 3
-  - 3
-  - 3
+  - 2.5
+  - 6.5
+  - 4.7
+  - 5
+  - 6
+  - 5
+  - 10
+  - 6
+  - 4
+  - 6
+  - 5
+  - 6
+  - 4

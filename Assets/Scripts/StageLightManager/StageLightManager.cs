@@ -79,26 +79,29 @@ public class StageLightManager : MonoBehaviour
 
                 Color newColor = newLightingCommandData.targetLightColors[i];
 
+                targetStageLight.ResetStageLight();
+
                 switch (newLightingCommandData.lightCommands[i])
                 {
                     case STAGELIGHT_ACTION.PULSE:
-                        targetStageLight.ResetStageLight();
-
                         targetStageLight.StartStageLightPulse(newLightingCommandData.lightPulseAttributes[i]);
                         break;
 
                     case STAGELIGHT_ACTION.LOOKAT:
-                        targetStageLight.ResetStageLight();
-
                         if (targetTransformData.targets != null)
                         {
                             targetStageLight.SetNewStageLightFollowTarget(targetTransformData.targets[0], newLightingCommandData.targetLightColors[i]);
                         }
                         break;
 
-                    case STAGELIGHT_ACTION.MOVETO:
-                        targetStageLight.ResetStageLight();
+                    case STAGELIGHT_ACTION.FOLLOW_AND_LOOKAT:
+                        if (targetTransformData.targets != null)
+                        {
+                            targetStageLight.SetNewFollowAndLookAtTarget(targetTransformData.targets[0], newLightingCommandData.targetLightColors[i]);
+                        }
+                        break;
 
+                    case STAGELIGHT_ACTION.MOVETO:
                         if (targetTransformData.targets != null)
                         {
                             targetStageLight.StageLightMoveToPosition(targetTransformData.targets[0].position, targetTransformData.targets[0].rotation, newLightingCommandData.targetLightColors[i]);
@@ -106,8 +109,6 @@ public class StageLightManager : MonoBehaviour
                         break;
 
                     case STAGELIGHT_ACTION.ROTATE:
-                        targetStageLight.ResetStageLight();
-
                         if (targetTransformData.targets != null)
                         {
                             targetStageLight.SetNewStageLightRotatePoints(targetTransformData.targets, newLightingCommandData.targetStageLightTimes[i], newLightingCommandData.targetLightColors[i]);
@@ -115,20 +116,14 @@ public class StageLightManager : MonoBehaviour
                         break;
 
                     case STAGELIGHT_ACTION.CHANGE_COLOR:
-                        targetStageLight.ResetStageLight();
-
                         targetStageLight.StageLightChangeColor(newLightingCommandData.targetLightColors[i]);
                         break;
 
                     case STAGELIGHT_ACTION.TURN_OFF:
-                        targetStageLight.ResetStageLight();
-
                         targetStageLight.TurnOffStageLight();
                         break;
 
                     case STAGELIGHT_ACTION.TURN_ON:
-                        targetStageLight.ResetStageLight();
-
                         targetStageLight.TurnOnStageLight(newLightingCommandData.targetLightColors[i]);
                         break;
                 }

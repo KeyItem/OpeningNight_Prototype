@@ -32,6 +32,7 @@ public enum STAGELIGHT_ACTION
     CHANGE_COLOR,
     PULSE,
     LOOKAT,
+    FOLLOW_AND_LOOKAT,
     TURN_ON,
     TURN_OFF
 }

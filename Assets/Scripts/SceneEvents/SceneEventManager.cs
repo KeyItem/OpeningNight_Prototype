@@ -86,10 +86,10 @@ public class SceneEventManager : MonoBehaviour
         ManageSceneEventHelp();
     }
 
-    private void ImportSceneEventData(SceneData newSceneEventData)
+    private void ImportSceneData(SceneData newSceneData)
     {
-        currentSceneData = newSceneEventData;
-        currentDialogData = newSceneEventData.sceneConversationData;
+        currentSceneData = newSceneData;
+        currentDialogData = newSceneData.sceneConversationData;
     }
 
     public void PrepareStartingScene()
@@ -107,7 +107,7 @@ public class SceneEventManager : MonoBehaviour
 
     public void PrepareScene(int targetSceneIndex)
     {
-        ImportSceneEventData(sceneData[targetSceneIndex]);
+        ImportSceneData(sceneData[targetSceneIndex]);
 
         currentSceneEventIndex = 0;
         currentSceneIndex = targetSceneIndex;
@@ -121,7 +121,7 @@ public class SceneEventManager : MonoBehaviour
     {
         if (CanMoveToNextScene())
         {
-            ImportSceneEventData(sceneData[currentSceneIndex]);
+            ImportSceneData(sceneData[currentSceneIndex]);
 
             currentSceneEventIndex = 0;
 
@@ -139,12 +139,14 @@ public class SceneEventManager : MonoBehaviour
     {
         currentSceneEvent = sceneEvents[0];
 
+        AudioManager.Instance.RequestNewAudioSource(AUDIO_SOURCE_TYPE.MUSIC, currentSceneData.sceneMusic);
+
+        AudioManager.Instance.RequestNewAudioSource(AUDIO_SOURCE_TYPE.DIALOGUE, currentDialogData.dialogLines[0].targetAudioClip);
+
         currentSceneEvent.SceneEventStart();
 
         if (DoesSceneEventContainActorEvent(currentSceneEvent))
         {
-            Debug.Log("Sending Actor Instructions");
-
             ActorManager.Instance.PassOffActorMovement(currentSceneEvent.actorsInvolvedInScene, currentSceneEvent.actorMoveData);
         }
 
@@ -201,6 +203,8 @@ public class SceneEventManager : MonoBehaviour
     private void NextLine(bool hasStageEvent, bool hasActor)
     {
         currentSceneEvent.SceneEventStart();
+
+        AudioManager.Instance.RequestNewAudioSource(AUDIO_SOURCE_TYPE.DIALOGUE, currentDialogData.dialogLines[currentSceneEventIndex].targetAudioClip);
 
         if (hasActor)
         {

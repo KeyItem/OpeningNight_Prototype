@@ -49,7 +49,7 @@ public class StageLight : MonoBehaviour
 
     private void ManageStageLight()
     {
-        if (stageLightAction == STAGELIGHT_ACTION.LOOKAT)
+        if (stageLightAction == STAGELIGHT_ACTION.LOOKAT || stageLightAction == STAGELIGHT_ACTION.FOLLOW_AND_LOOKAT)
         {
             StageLightFollowTarget();
         }
@@ -89,6 +89,18 @@ public class StageLight : MonoBehaviour
         stageLightAction = STAGELIGHT_ACTION.TURN_OFF;
 
         stageLight.enabled = false;
+    }
+
+    public void SetNewFollowAndLookAtTarget(Transform newTarget, Color newColor)
+    {
+        stageLightAction = STAGELIGHT_ACTION.FOLLOW_AND_LOOKAT;
+
+        if (newColor != Color.clear)
+        {
+            stageLight.color = newColor;
+        }
+
+        followTransform = newTarget;
     }
 
     public void SetNewStageLightFollowTarget(Transform newTarget, Color newColor)
@@ -142,7 +154,16 @@ public class StageLight : MonoBehaviour
 
     private void StageLightFollowTarget()
     {
-        transform.LookAt(followTransform);
+        if (stageLightAction == STAGELIGHT_ACTION.LOOKAT)
+        {
+            transform.LookAt(followTransform);
+        }
+        else if (stageLightAction  == STAGELIGHT_ACTION.FOLLOW_AND_LOOKAT)
+        {
+            transform.position = followTransform.position + (Vector3.up * 5f);
+
+            transform.LookAt(followTransform);
+        }
     }
 
     private IEnumerator StageLightPulser(LightPulseAttributes lightPulseAttributes)

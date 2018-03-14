@@ -22,6 +22,9 @@ public class DialogLine
 
     [Space(10)]
     public ACTOR_NAME speakerName;
+
+    [Space(10)]
+    public AudioClip targetAudioClip;
 }
 
 [System.Serializable]
@@ -34,4 +37,7 @@ public class DialogHelp
 
     [Space(10)]
     public ACTOR_NAME[] speakerNames;
+
+    [Space(10)]
+    public AudioClip[] helperDialogueAudioClips;
 }

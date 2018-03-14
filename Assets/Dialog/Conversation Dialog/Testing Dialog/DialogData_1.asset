@@ -14,73 +14,100 @@ MonoBehaviour:
   dialogLines:
   - dialogLine: I have reached the Inner Sanctum!
     speakerName: 1
+    targetAudioClip: {fileID: 8300000, guid: 85bf48f212d85e54daf869aea17e68c8, type: 3}
   - dialogLine: I've brought you here for one reason... to claim your destiny!
     speakerName: 2
-  - dialogLine: Now approach the pedestal. [SE]
+    targetAudioClip: {fileID: 8300000, guid: 9fa783b6ee8d7da4597ade379228a567, type: 3}
+  - dialogLine: Now then approach the pedestal. [SE]
     speakerName: 2
-  - dialogLine: Now follow me to the sword altar [SE]
+    targetAudioClip: {fileID: 8300000, guid: 6e4611afc12557c4c8163e942db22b17, type: 3}
+  - dialogLine: Now follow me to the sword altar so that we can begin the trial [SE]
     speakerName: 2
-  - dialogLine: Now pull with all your might and unleash the god killing sword Norstrandmus!
+    targetAudioClip: {fileID: 8300000, guid: 287e1fe7d5851cd4892bfbce38f59805, type: 3}
+  - dialogLine: Now pull with all your might and unleash the god killing sword Keanuu!
       [SE]
     speakerName: 2
-  - dialogLine: I feel the power! It's coursing through me!
+    targetAudioClip: {fileID: 8300000, guid: 0d08f010f2dfec74ba72c146cb866f42, type: 3}
+  - dialogLine: I feel the power! It's coursing through me! Hwahhh
     speakerName: 1
-  - dialogLine: You are the chosen one! Now go approach the power spot! [SE]
-    speakerName: 2
-  - dialogLine: Now that you've awaken Norstrandmus, approach the sister sword Lio.
+    targetAudioClip: {fileID: 8300000, guid: d0b9a36ce2904f842a3b48bfd4f842e8, type: 3}
+  - dialogLine: I knew it, you are the chosen one! Now go approach the power spot!
       [SE]
     speakerName: 2
-  - dialogLine: Now grab your second birth right! [SE]
+    targetAudioClip: {fileID: 8300000, guid: fe186fac002f35e4b91fdf8d234f6ddc, type: 3}
+  - dialogLine: Now that you've awaken Keanuu, approach the other sword the Legendary
+      Rheeves. [SE]
     speakerName: 2
-  - dialogLine: Approach the other altar, and unlock Lio's power. [SE]
+    targetAudioClip: {fileID: 8300000, guid: 13c8fd6884f14a447a50816779a0ef72, type: 3}
+  - dialogLine: Now go and grab your second birth right! [SE]
     speakerName: 2
-  - dialogLine: I AM UNSTOPPABLE! ROAAAAR!
+    targetAudioClip: {fileID: 8300000, guid: 05c760d5a0b627645899f966c5241fa8, type: 3}
+  - dialogLine: Approach the final altar, and unlock swords' true power. [SE]
+    speakerName: 2
+    targetAudioClip: {fileID: 8300000, guid: 3b968b3f265d75a40a32375f93232611, type: 3}
+  - dialogLine: I feel it, it's coursing through me!
     speakerName: 1
+    targetAudioClip: {fileID: 8300000, guid: bd742b18685382f48b4a8b64d3800231, type: 3}
   - dialogLine: You've done it, you've become the Legendary Super Barbarian
     speakerName: 2
-  - dialogLine: Follow the Light!
+    targetAudioClip: {fileID: 8300000, guid: 6687b56f3b212b54292e9f7b980d25fa, type: 3}
+  - dialogLine: Now follow the light out of the temple.
     speakerName: 2
+    targetAudioClip: {fileID: 8300000, guid: 1df3c22ab1b91264abd2e09f9144ba9d, type: 3}
   dialogHelp:
   - helperDialog: []
     helperDialogTime: []
     speakerNames: 
+    helperDialogueAudioClips: []
   - helperDialog: []
     helperDialogTime: []
     speakerNames: 
+    helperDialogueAudioClips: []
   - helperDialog:
     - '*cough* Uhh... Approach the Pedestal!'
     - Over here!
     - Seriously dude, just walk over to where I'm at.
     helperDialogTime: []
     speakerNames: 020000000200000002000000
+    helperDialogueAudioClips: []
   - helperDialog: []
     helperDialogTime: []
     speakerNames: 
+    helperDialogueAudioClips: []
   - helperDialog: []
     helperDialogTime: []
     speakerNames: 
+    helperDialogueAudioClips: []
   - helperDialog: []
     helperDialogTime: []
     speakerNames: 
+    helperDialogueAudioClips: []
   - helperDialog: []
     helperDialogTime: []
     speakerNames: 
+    helperDialogueAudioClips: []
   - helperDialog: []
     helperDialogTime: []
     speakerNames: 
+    helperDialogueAudioClips: []
   - helperDialog: []
     helperDialogTime: []
     speakerNames: 
+    helperDialogueAudioClips: []
   - helperDialog: []
     helperDialogTime: []
     speakerNames: 
+    helperDialogueAudioClips: []
   - helperDialog: []
     helperDialogTime: []
     speakerNames: 
+    helperDialogueAudioClips: []
   - helperDialog: []
     helperDialogTime: []
     speakerNames: 
+    helperDialogueAudioClips: []
   - helperDialog: []
     helperDialogTime: []
     speakerNames: 
+    helperDialogueAudioClips: []
   conversationCameraEvents: []
