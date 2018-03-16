@@ -15,6 +15,12 @@ public class SceneEventManager : MonoBehaviour
     [Space(10)]
     public bool allFinishedSceneEvents = false;
 
+    public delegate void SceneEventStart();
+    public delegate void SceneEventFinished();
+
+    public static event SceneEventStart OnSceneEventStart;
+    public static event SceneEventFinished OnSceneEventFinished;
+
     [Header("Current Scene Event Attributes")]
     public SceneEvent[] sceneEvents;
     
@@ -139,6 +145,11 @@ public class SceneEventManager : MonoBehaviour
     {
         currentSceneEvent = sceneEvents[0];
 
+        if (OnSceneEventStart != null)
+        {
+            OnSceneEventStart();
+        }
+
         AudioManager.Instance.RequestNewAudioSource(AUDIO_SOURCE_TYPE.MUSIC, currentSceneData.sceneMusic);
 
         AudioManager.Instance.RequestNewAudioSource(AUDIO_SOURCE_TYPE.DIALOGUE, currentDialogData.dialogLines[0].targetAudioClip);
@@ -188,8 +199,13 @@ public class SceneEventManager : MonoBehaviour
         }
     }
 
-    private void MoveToNextLineOfDialog()
+    private void MoveToNextSceneEvent()
     {
+        if (OnSceneEventFinished != null)
+        {
+            OnSceneEventFinished();
+        }
+
         if (CanMoveToNextSceneEvent())
         {
             NextLine(DoesSceneEventContainStageEvent(currentSceneEvent), DoesSceneEventContainActorEvent(currentSceneEvent));       
@@ -202,6 +218,11 @@ public class SceneEventManager : MonoBehaviour
 
     private void NextLine(bool hasStageEvent, bool hasActor)
     {
+        if (OnSceneEventStart != null)
+        {
+            OnSceneEventStart();
+        }
+
         currentSceneEvent.SceneEventStart();
 
         AudioManager.Instance.RequestNewAudioSource(AUDIO_SOURCE_TYPE.DIALOGUE, currentDialogData.dialogLines[currentSceneEventIndex].targetAudioClip);
@@ -257,7 +278,7 @@ public class SceneEventManager : MonoBehaviour
 
         StageScorer.Instance.StopEventTimer();
 
-        MoveToNextLineOfDialog();
+        MoveToNextSceneEvent();
     }
 
     private void ManageSceneEventHelp()
@@ -390,7 +411,7 @@ public class SceneEventManager : MonoBehaviour
 
         ConversationSystem.Instance.ClearDialogBox();
 
-        MoveToNextLineOfDialog();
+        MoveToNextSceneEvent();
 
         yield return null;
     }

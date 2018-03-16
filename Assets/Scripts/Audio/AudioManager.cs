@@ -72,13 +72,16 @@ public class AudioManager : MonoBehaviour
 
     public void RequestNewAudioSource(AUDIO_SOURCE_TYPE audioSourceType, AudioClip targetAudioClip)
     {
-        AudioSourceController newAudioSourceController = ReturnNewAudioSourceController(audioSourceType);
+        if (targetAudioClip != null)
+        {
+            AudioSourceController newAudioSourceController = ReturnNewAudioSourceController(audioSourceType);
 
-        newAudioSourceController.LoadNewAudioData(audioSourceType, targetAudioClip);
+            newAudioSourceController.LoadNewAudioData(audioSourceType, targetAudioClip);
 
-        newAudioSourceController.StartClip();
+            newAudioSourceController.StartClip();
 
-        AddNewActiveAudioSource(newAudioSourceController);
+            AddNewActiveAudioSource(newAudioSourceController);
+        }      
     }
 
     private AudioSourceController ReturnNewAudioSourceController(AUDIO_SOURCE_TYPE audioSourceType)

@@ -79,6 +79,14 @@ public enum INTERACTABLE_OBJECT_TYPE
     STAGE_EVENT
 }
 
+public enum INTERACTION_TYPE
+{
+    NONE,
+    PICKUP,
+    DROP,
+    USE
+}
+
 #endregion
 
 #region ABSTRACT

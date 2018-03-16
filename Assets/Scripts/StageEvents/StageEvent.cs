@@ -17,12 +17,47 @@ public class StageEvent : MonoBehaviour
     [Space(10)]
     public bool isStageEventActive = false;
 
+    [Header("Stage Event Timing Attributes")]
+    public float stageEventCompleteTime = 3f;
+    private float stageEventCompleteCurrentTime;
+
+    [HideInInspector]
+    public bool isCountingEventTime = false;
+
+    [Space(10)]
+    public bool doesStageEventHaveTiming = false;
+
     [Header("DEBUG")]
     public bool canShowDebug = false;
+
+    public virtual void Update()
+    {
+        ManageStageEventTiming();
+    }
 
     private void OnDisable() //OnDisable Unsubscribe from all events
     {
         StageEventManager.OnStageEventActive -= StageEventActive;
+    }
+
+    public virtual void ManageStageEventTiming()
+    {
+        if (doesStageEventHaveTiming)
+        {
+            if (isCountingEventTime)
+            {
+                stageEventCompleteCurrentTime -= Time.deltaTime;
+
+                if (stageEventCompleteCurrentTime <= 0)
+                {
+                    StageEventFail();
+                }
+            }
+            else
+            {
+                stageEventCompleteCurrentTime = stageEventCompleteTime;
+            }
+        }
     }
 
     public virtual void StageEventPrepare()
@@ -31,6 +66,8 @@ public class StageEvent : MonoBehaviour
         {
             stageEventTarget = transform;
         }
+
+        stageEventCompleteCurrentTime = stageEventCompleteTime;
     }
 
     public virtual void StageEventStart() //Called to Start the Stage Event and for it to start listening for Events
@@ -75,9 +112,19 @@ public class StageEvent : MonoBehaviour
         isStageEventActive = false;
     }
 
+    public virtual void StageEventFail()
+    {
+        StageEventReset();
+    }
+
     public virtual void StageEventReset()
     {
+        stageEventCompleteCurrentTime = stageEventCompleteTime;
 
+        isCountingEventTime = false;
+
+        transform.position = stageEventStartPosition;
+        transform.rotation = Quaternion.Euler(stageEventStartRotation);
     }
 
     public virtual void InteractWithStageEventUsingProp(GameObject propInteraction)

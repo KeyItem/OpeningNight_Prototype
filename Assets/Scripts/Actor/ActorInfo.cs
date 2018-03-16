@@ -59,6 +59,12 @@ public class ActorMovementData
     public float[] actorMovePointSpeeds;
 }
 
+[System.Serializable]
+public class ActorAnimationData
+{
+    public AnimationClip[] actorTargetClips;
+}
+
 #region ACTOR_NAMES
 
 public enum ACTOR_NAME

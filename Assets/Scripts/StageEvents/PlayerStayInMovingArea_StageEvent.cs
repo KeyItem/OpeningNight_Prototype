@@ -40,20 +40,17 @@ public class PlayerStayInMovingArea_StageEvent : StageEvent
     public float targetMaxDistanceFromArea = 2f;
 
     [Space(10)]
-    public float targetMaxTimeOutsideArea = 2f;
-
-    private float currentTimeOutsideArea;
-
-    [Space(10)]
     public bool isTargetInArea = false;
 
     [Space(10)]
     public bool hasReachedFinalPosition = false;
 
-    private void Update()
+    public override void Update()
     {
         ManageTargetInArea();
         StageEventAction();
+
+        base.Update();
     }
 
     public override void StageEventStart()
@@ -62,8 +59,6 @@ public class PlayerStayInMovingArea_StageEvent : StageEvent
 
         currentWaypoint = targetWaypoints[0];
         nextWaypoint = targetWaypoints[1];
-
-        currentTimeOutsideArea = targetMaxTimeOutsideArea;
 
         if (targetPlayerTransform == null)
         {
@@ -105,24 +100,14 @@ public class PlayerStayInMovingArea_StageEvent : StageEvent
             if (playerDistanceToPosition <= targetMaxDistanceFromArea)
             {
                 isTargetInArea = true;
+
+                isCountingEventTime = false;
             }
             else
             {
                 isTargetInArea = false;
-            }
 
-            if (isTargetInArea)
-            {
-                currentTimeOutsideArea = targetMaxTimeOutsideArea;
-            }
-            else
-            {
-                currentTimeOutsideArea -= Time.deltaTime;
-
-                if (currentTimeOutsideArea <= 0)
-                {
-                    Debug.Log("Player was outside area for too long");
-                }
+                isCountingEventTime = true;
             }
         }
     }
@@ -197,7 +182,7 @@ public class PlayerStayInMovingArea_StageEvent : StageEvent
         hasReachedFinalPosition = true;
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         if (canShowDebug)
         {

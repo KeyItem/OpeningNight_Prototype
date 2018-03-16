@@ -36,7 +36,7 @@ public class ActorManager : MonoBehaviour
 
                 if (newActorController != null)
                 {
-                    newActorController.ReceiveNewActorMovementData(actorMovementData[i]);
+                    newActorController.ReceiveNewMovementCommand(actorMovementData[i]);
                 }
             }
         }  

@@ -14,9 +14,11 @@ public class PropMoveToPosition_StageEvent : StageEvent
     [Header("DEBUG")]
     public float currentDistanceToPosition = 0f;
 
-    private void Update()
+    public override void Update()
     {
         StageEventAction();
+
+        base.Update();
     }
 
     public override void StageEventStart()
@@ -40,7 +42,13 @@ public class PropMoveToPosition_StageEvent : StageEvent
 
                     if (distanceToPosition <= minDistanceToPosition)
                     {
+                        isCountingEventTime = false;
+
                         StageEventCompleted();
+                    }
+                    else
+                    {
+                        isCountingEventTime = true;
                     }
 
                     if (canShowDebug)

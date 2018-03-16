@@ -19,10 +19,12 @@ public class StageEventManager : MonoBehaviour
     public delegate void StageEventStart();
     public delegate void StageEventActive();
     public delegate void StageEventComplete();
+    public delegate void StageEventReset();
 
     public static event StageEventStart OnStageEventStarted;
     public static event StageEventActive OnStageEventActive;
     public static event StageEventComplete OnStageEventCompleted;
+    public static event StageEventReset OnStageEventReset;
 
     [Header("DEBUG")]
     public bool canShowDebug = false;

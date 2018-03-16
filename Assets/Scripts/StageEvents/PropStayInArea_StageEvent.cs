@@ -26,11 +26,13 @@ public class PropStayInArea_StageEvent : StageEvent
     [Space(10)]
     public float targetWaitTime = 1f;
 
-    private void Update()
+    public override void Update()
     {
         StageEventAction();
 
         ManageTargetInArea();
+
+        base.Update();
     }
 
     public override void StageEventStart()
@@ -64,16 +66,26 @@ public class PropStayInArea_StageEvent : StageEvent
                         if (playerPickUpController.currentHeldProp == targetPropTransform.gameObject)
                         {
                             isTargetInArea = true;
+
+                            isCountingEventTime = false;
+                        }
+                        else
+                        {
+                            isCountingEventTime = true;
                         }
                     }
                     else
                     {
                         isTargetInArea = true;
+
+                        isCountingEventTime = false;
                     }
                 }
                 else
                 {
                     isTargetInArea = false;
+
+                    isCountingEventTime = true;
                 }
 
                 if (canShowDebug)

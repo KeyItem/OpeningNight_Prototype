@@ -84,10 +84,14 @@ public class PlayerInteractionController : MonoBehaviour
                 if (playerPickUpController.isPlayerHoldingObject)
                 {
                     newInteractableObject.InteractWithProp(playerPickUpController.currentHeldProp);
+
+                    PassOffInteractionAudio(INTERACTION_TYPE.USE, newInteractableObject);
                 }
                 else
                 {
                     newInteractableObject.Interact(gameObject);
+
+                    PassOffInteractionAudio(INTERACTION_TYPE.USE, newInteractableObject);
                 }
                 break;
 
@@ -95,10 +99,14 @@ public class PlayerInteractionController : MonoBehaviour
                 if (playerPickUpController.isPlayerHoldingObject)
                 {
                     newInteractableObject.InteractWithProp(playerPickUpController.currentHeldProp);
+
+                    PassOffInteractionAudio(INTERACTION_TYPE.USE, newInteractableObject);
                 }
                 else
                 {
                     newInteractableObject.Interact(gameObject);
+
+                    PassOffInteractionAudio(INTERACTION_TYPE.USE, newInteractableObject);
                 }
                 break;
 
@@ -106,10 +114,14 @@ public class PlayerInteractionController : MonoBehaviour
                 if (playerPickUpController.isPlayerHoldingObject)
                 {
                     newInteractableObject.InteractWithProp(playerPickUpController.currentHeldProp);
+
+                    PassOffInteractionAudio(INTERACTION_TYPE.USE, newInteractableObject);
                 }
                 else
                 {
                     newInteractableObject.Interact(gameObject);
+
+                    PassOffInteractionAudio(INTERACTION_TYPE.USE, newInteractableObject);
                 }
                 break;
 
@@ -117,6 +129,8 @@ public class PlayerInteractionController : MonoBehaviour
                 if (playerPickUpController.isPlayerHoldingObject)
                 {
                     newInteractableObject.InteractWithProp(playerPickUpController.currentHeldProp);
+
+                    PassOffInteractionAudio(INTERACTION_TYPE.USE, newInteractableObject);
                 }
                 else
                 {
@@ -261,5 +275,30 @@ public class PlayerInteractionController : MonoBehaviour
         {
             interactableObjectsInRange[i] = objectsInRange[i].gameObject;
         }
+    }
+
+    private void PassOffInteractionAudio(INTERACTION_TYPE interactionType, Interactable interactionObject)
+    {
+        AudioClip newInteractionAudio = null;
+
+        switch (interactionType)
+        {
+            case INTERACTION_TYPE.PICKUP:
+                newInteractionAudio = interactionObject.interactionPickUpAudio;
+                break;
+
+            case INTERACTION_TYPE.DROP:
+                newInteractionAudio = interactionObject.interactionDropAudio;
+                break;
+
+            case INTERACTION_TYPE.USE:
+                newInteractionAudio = interactionObject.interactionAudio;
+                break;
+
+            default:
+                break;
+        }
+
+        AudioManager.Instance.RequestNewAudioSource(AUDIO_SOURCE_TYPE.SOUND_EFFECT, newInteractionAudio);
     }
 }

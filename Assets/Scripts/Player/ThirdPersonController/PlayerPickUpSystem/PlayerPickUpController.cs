@@ -51,6 +51,8 @@ public class PlayerPickUpController : MonoBehaviour
         currentlyPickedUpObject.localPosition = Vector3.zero;
         currentlyPickedUpObject.rotation = Quaternion.identity;
 
+        PassOffInteractionAudio(INTERACTION_TYPE.PICKUP, currentInteractable);
+
         isPlayerHoldingObject = true;
     }
 
@@ -69,10 +71,13 @@ public class PlayerPickUpController : MonoBehaviour
 
         currentObjectRigidbody.isKinematic = false;
 
+        PassOffInteractionAudio(INTERACTION_TYPE.DROP, currentInteractable);
+
         currentHeldProp = null;
         currentlyPickedUpObject = null;
         currentObjectRigidbody = null;
         currentObjectCollider = null;
+        currentInteractable = null;
 
         isPlayerHoldingObject = false;
     }
@@ -88,5 +93,30 @@ public class PlayerPickUpController : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void PassOffInteractionAudio(INTERACTION_TYPE interactionType, Interactable interactionObject)
+    {
+        AudioClip newInteractionAudio = null;
+
+        switch (interactionType)
+        {
+            case INTERACTION_TYPE.PICKUP:
+                newInteractionAudio = interactionObject.interactionPickUpAudio;
+                break;
+
+            case INTERACTION_TYPE.DROP:
+                newInteractionAudio = interactionObject.interactionDropAudio;
+                break;
+
+            case INTERACTION_TYPE.USE:
+                newInteractionAudio = interactionObject.interactionAudio;
+                break;
+
+            default:
+                break;
+        }
+
+        AudioManager.Instance.RequestNewAudioSource(AUDIO_SOURCE_TYPE.SOUND_EFFECT, newInteractionAudio);
     }
 }
