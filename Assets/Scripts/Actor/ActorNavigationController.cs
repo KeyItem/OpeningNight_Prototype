@@ -4,6 +4,9 @@ using UnityEngine.AI;
 
 public class ActorNavigationController : MonoBehaviour
 {
+    [HideInInspector]
+    public ActorController targetActorController;
+
     private NavMeshAgent navAgent;
 
     private Animator actorAnimator;
@@ -82,7 +85,7 @@ public class ActorNavigationController : MonoBehaviour
         actorCurrentMoveSpeed = currentActorMovementData.actorMovePointSpeeds[currentMovementIndex];
         actorCurrentTargetNavPoint = currentActorMovementData.actorMovePointTransform[currentMovementIndex];
 
-        navAgent.speed = actorCurrentMoveSpeed;
+        navAgent.speed = ReturnModifiedMovementTime(transform.position, actorCurrentTargetNavPoint.position, actorCurrentMoveSpeed);
 
         navAgent.updatePosition = true;
         navAgent.updateRotation = true;
@@ -110,6 +113,8 @@ public class ActorNavigationController : MonoBehaviour
         transform.rotation = actorCurrentTargetNavPoint.rotation;
 
         actorCurrentTargetNavPoint = null;
+
+        targetActorController.FinishedActorEvent();
     }
 
     public void ReceiveNewActorMovementData(ActorMovementData newActorMovementData)
@@ -119,6 +124,15 @@ public class ActorNavigationController : MonoBehaviour
         currentActorMovementData = newActorMovementData;
 
         SetNewNavigationTarget();
+    }
+
+    private float ReturnModifiedMovementTime(Vector3 currentPosition, Vector3 targetPosition, float moveToTime)
+    {
+        float targetDistance = Vector3.Distance(currentPosition, targetPosition);
+
+        float modifiedMoveTime = targetDistance / moveToTime;
+
+        return modifiedMoveTime;
     }
 
     public bool CanMoveToNextMovementAction()

@@ -158,7 +158,7 @@ public class SceneEventManager : MonoBehaviour
 
         if (DoesSceneEventContainActorEvent(currentSceneEvent))
         {
-            ActorManager.Instance.PassOffActorMovement(currentSceneEvent.actorsInvolvedInScene, currentSceneEvent.actorMoveData);
+            ActorManager.Instance.ReceiveActorActionsData(currentSceneEvent.actorActionsData);
         }
 
         if (DoesSceneEventContainStageEvent(currentSceneEvent))
@@ -216,7 +216,7 @@ public class SceneEventManager : MonoBehaviour
         }
     }
 
-    private void NextLine(bool hasStageEvent, bool hasActor)
+    private void NextLine(bool hasStageEvent, bool hasActorEvent)
     {
         if (OnSceneEventStart != null)
         {
@@ -227,9 +227,9 @@ public class SceneEventManager : MonoBehaviour
 
         AudioManager.Instance.RequestNewAudioSource(AUDIO_SOURCE_TYPE.DIALOGUE, currentDialogData.dialogLines[currentSceneEventIndex].targetAudioClip);
 
-        if (hasActor)
+        if (hasActorEvent)
         {
-            ActorManager.Instance.PassOffActorMovement(currentSceneEvent.actorsInvolvedInScene, currentSceneEvent.actorMoveData);
+            ActorManager.Instance.ReceiveActorActionsData(currentSceneEvent.actorActionsData);
         }
 
         if (hasStageEvent)
@@ -300,7 +300,7 @@ public class SceneEventManager : MonoBehaviour
     {
         currentSceneEventHelpIndex = 0;
 
-        maxSceneEventTime = currentSceneEvent.stageEventActiveTime;
+        maxSceneEventTime = currentSceneEvent.targetStageEvent.stageEventCompleteTime;
         currentSceneEventTime = maxSceneEventTime;
     }
 
@@ -308,7 +308,7 @@ public class SceneEventManager : MonoBehaviour
     {
         if (CanMoveToNextSceneEventHelp())
         {
-            maxSceneEventTime = currentSceneEvent.stageEventActiveTime;
+            maxSceneEventTime = currentSceneEvent.targetStageEvent.stageEventCompleteTime;
             currentSceneEventTime = maxSceneEventTime;
 
             isSceneEventHelpActive = true;
@@ -353,7 +353,7 @@ public class SceneEventManager : MonoBehaviour
 
     private bool DoesSceneEventContainActorEvent(SceneEvent targetSceneEvent)
     {
-        if (targetSceneEvent.actorMoveData.Length > 0)
+        if (targetSceneEvent.actorActionsData.Length > 0)
         {
             return true;
         }
@@ -390,7 +390,7 @@ public class SceneEventManager : MonoBehaviour
         currentSceneData = null;
         currentDialogData = null;
 
-        Debug.Log("All Scenes Complete");
+        targetDebugString = "All Scenes Complete";
 
         allFinishedSceneEvents = true;
     }
@@ -429,11 +429,6 @@ public class SceneEventManager : MonoBehaviour
         }
 
         ConversationSystem.Instance.ClearDialogBox();
-
-        if (currentSceneEvent.stageEventHasActiveTime)
-        {
-            ConversationSystem.Instance.ReceiveConversationLine(currentDialogData.dialogHelp[currentSceneEventIndex].helperDialog[currentSceneEventHelpIndex], currentDialogData.dialogHelp[currentSceneEventIndex].speakerNames[currentSceneEventHelpIndex], currentDialogData.dialogHelp[currentSceneEventIndex].helperDialogTime[currentSceneEventHelpIndex]);
-        }
 
         StageEventManager.Instance.StartStageEvent(currentStageEvent);
 

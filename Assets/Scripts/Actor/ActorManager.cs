@@ -6,7 +6,7 @@ public class ActorManager : MonoBehaviour
     private static ActorManager _instance;
     public static ActorManager Instance { get { return _instance; } }
 
-    [Header("Actor Manager Attributes")]
+    [Header("Scene Actors")]
     public ActorController[] sceneActors;
 
     private void Awake()
@@ -26,23 +26,24 @@ public class ActorManager : MonoBehaviour
         }
     }
 
-   public void PassOffActorMovement(ACTOR_NAME[] actorsRequired, ActorMovementData[] actorMovementData)
+    public void ReceiveActorActionsData(ActorActionData[] newActorActionData)
     {
-        if (actorsRequired.Length > 0)
+        for (int i = 0; i < newActorActionData.Length; i++)
         {
-            for (int i = 0; i < actorsRequired.Length; i++)
+            ActorController targetActorController = ReturnRequestedActorInScene(newActorActionData[i].targetActor);
+
+            if (targetActorController != null)
             {
-                ActorController newActorController = ReturnRequestedActorInScene(actorsRequired[i]);
-
-                if (newActorController != null)
-                {
-                    newActorController.ReceiveNewMovementCommand(actorMovementData[i]);
-                }
+                targetActorController.ReceiveNewActorActions(newActorActionData[i].actorActions);
             }
-        }  
+            else
+            {
+                Debug.LogError("Requested Actor Not In Scene :: " + newActorActionData[i].targetActor);
+            }
+        }
     }
-
-    private ActorController ReturnRequestedActorInScene(ACTOR_NAME targetActorName)
+    
+    public ActorController ReturnRequestedActorInScene(ACTOR_NAME targetActorName)
     {
         if (targetActorName != ACTOR_NAME.NONE)
         {
@@ -57,4 +58,20 @@ public class ActorManager : MonoBehaviour
 
         return null;
     }
+}
+
+[System.Serializable]
+public struct ActorActionData
+{
+    [Header("Actor Action Data Attributes")]
+    public ACTOR_NAME targetActor;
+
+    [Space(10)]
+    public ActorActionInfo actorActions;
+}
+
+[System.Serializable]
+public struct ActorActionInfo
+{
+    public ActorAction[] actions;
 }
