@@ -94,7 +94,7 @@ public class ActorController : MonoBehaviour
 
     private void FinishedAllActorEvents()
     {
-        Debug.Log("Finished All Actor Events");
+
     }
 
     private bool CanMoveToNextActorEvent()

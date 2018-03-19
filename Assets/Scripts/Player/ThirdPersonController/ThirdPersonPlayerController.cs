@@ -976,21 +976,21 @@ public class ThirdPersonPlayerController : PlayerController
 }
 
 [System.Serializable]
-public class PlayerMovementAttributes
+public struct PlayerMovementAttributes
 {
     [Header("Player Movement Attributes")]
-    public float playerBaseWalkSpeed = 1f;
-    public float playerBaseSprintSpeed = 1f;
-    public float playerBaseCoverSpeed = 1f;
+    public float playerBaseWalkSpeed;
+    public float playerBaseSprintSpeed;
+    public float playerBaseCoverSpeed;
 
     [Space(10)]
-    public float playerBaseMoveSmoothTime = 0f;
-    public float playerSprintMoveSmoothTime = 0f;
-    public float playerCoverMoveSmoothTime = 0f;
+    public float playerBaseMoveSmoothTime;
+    public float playerSprintMoveSmoothTime;
+    public float playerCoverMoveSmoothTime;
 
     [Space(10)]
     [Range(0, 1f)]
-    public float playerAirControl = 0f;
+    public float playerAirControl;
 
     public PlayerMovementAttributes(float playerBaseWalkSpeed, float playerBaseSprintSpeed, float playerBaseCoverSpeed, float playerBaseMoveSmoothTime, float playerSprintMoveSmoothTime, float playerCoverMoveSmoothTime, float playerAirControl, float playerBaseStandingHeight, float playerCrouchHeight, float playerHeightPadding, float playerTurnSmoothTime, float playerBaseJumpForce, float playerTerminalVelocity)
     {
@@ -1005,10 +1005,10 @@ public class PlayerMovementAttributes
 }
 
 [System.Serializable]
-public class PlayerTurningAttributes
+public struct PlayerTurningAttributes
 {
     [Header("Player Turning Attributes")]
-    public float playerTurnSmoothTime = 0.2f;
+    public float playerTurnSmoothTime;
 
     public PlayerTurningAttributes (float playerTurnSmoothTime)
     {
@@ -1017,13 +1017,13 @@ public class PlayerTurningAttributes
 }
 
 [System.Serializable]
-public class PlayerJumpingAttributes
+public struct PlayerJumpingAttributes
 {
     [Header("Player Jumping Attributes")]
-    public float playerBaseJumpForce = 1f;
+    public float playerBaseJumpForce;
 
     [Space(10)]
-    public float playerTerminalVelocity = -50f;
+    public float playerTerminalVelocity;
 
     public PlayerJumpingAttributes (float playerBaseJumpForce, float playerTerminalVelocity)
     {
@@ -1033,32 +1033,32 @@ public class PlayerJumpingAttributes
 }
 
 [System.Serializable]
-public class PlayerClimbingAttributes
+public struct PlayerClimbingAttributes
 {
     [Header("Player Climbing Attributes")]
-    public float playerClimbRayLength = 1f;
+    public float playerClimbRayLength;
 
     [Header("Player Wall Scaling Attributes")]
-    public float playerScalingMinHorizontal = 1f;
-    public float playerScalingMaxHorizontal = 1f;
+    public float playerScalingMinHorizontal;
+    public float playerScalingMaxHorizontal;
 
     [Space(10)]
-    public float playerScalingMinVertical = 1f;
-    public float playerScalingMaxVertical = 1f;
+    public float playerScalingMinVertical;
+    public float playerScalingMaxVertical;
 
     [Space(10)]
-    public float playerWallScaleTime = 1f;
+    public float playerWallScaleTime;
 
     [Header("Player Wall Vaulting Attributes")]
-    public float playerVaultingHorizontalMin = 1f;
-    public float playerVaultingHorizontalMax = 3f;
+    public float playerVaultingHorizontalMin;
+    public float playerVaultingHorizontalMax;
 
     [Space(10)]
-    public float playerVaultingVerticalMin = 1f;
-    public float playerVaultingVerticalMax = 3f;
+    public float playerVaultingVerticalMin;
+    public float playerVaultingVerticalMax;
 
     [Space(10)]
-    public float playerWallVaultingTime = 1f;
+    public float playerWallVaultingTime;
 
     public PlayerClimbingAttributes (float playerClimbRayDistance, float playerScalingMinHorizontal, float playerScalingMaxHorizontal, float playerScalingMinVertical, float playerScalingMaxVertical, float playerWallScaleTime, float playerWallVaultingHorizontalMinDistance, float playerWallVaultingHorizontalMaxDistance, float playerWallVaultingVerticalMinDistance, float playerWallVaultingVerticalMaxDistance, float playerWallVaultingTime)
     {
@@ -1077,42 +1077,35 @@ public class PlayerClimbingAttributes
 }
 
 [System.Serializable]
-public class PlayerRollingAttributes
+public struct PlayerRollingAttributes
 {
     [Header("Player Roll Attributes")]
-    public float playerMinRollingDistance = 1f;
-    public float playerMaxRollingDistance = 3f;
+    public float playerMinRollingDistance;
+    public float playerMaxRollingDistance;
 
     [Space(10)]
     public float playerBaseRollTime;
 
     [Space(10)]
     public AnimationCurve playerRollSpeedCurve;
-
-    public PlayerRollingAttributes(float playerMinRollDistance, float playerMaxRollDistance, float playerRollSpeed)
-    {
-        this.playerMinRollingDistance = playerMinRollDistance;
-        this.playerMaxRollingDistance = playerMaxRollDistance;
-        this.playerBaseRollTime = playerRollSpeed;
-    }
 }
 
 [System.Serializable]
-public class PlayerGroundingAttributes
+public struct PlayerGroundingAttributes
 {
     [Header("Player Height Attributes")]
-    public float playerBaseStandHeight = 1.5f;
-    public float playerCrouchHeight = 1f;
+    public float playerBaseStandHeight;
+    public float playerCrouchHeight;
 
     [Space(10)]
-    public float playerHeightPadding = 0.2f;
+    public float playerHeightPadding;
 
     [Header("Player Slope Attributes")]
-    public float playerSlopeDetectionRayLength = 1f;
+    public float playerSlopeDetectionRayLength;
 
     [Space(10)]
-    public float playerMaxSlopeAngle = 120f;
-    public float playerSlopeAdjustSmoothTime = 5f;
+    public float playerMaxSlopeAngle;
+    public float playerSlopeAdjustSmoothTime;
 
     public PlayerGroundingAttributes (float playerBaseStandHeight, float playerCrouchHeight, float playerHeightPadding, float playerSlopeDetectionRayLength, float playerMaxSlopeAngle, float playerSlopeAdjustmentTime)
     {
@@ -1126,13 +1119,13 @@ public class PlayerGroundingAttributes
 }
 
 [System.Serializable]
-public class PlayerCoverAttributes
+public struct PlayerCoverAttributes
 {
     [Header("Player Cover Attributes")]
-    public float playerCoverDetectionRadius = 5f;
+    public float playerCoverDetectionRadius;
 
     [Space(10)]
-    public float playerCoverTransitionTime = 1f;
+    public float playerCoverTransitionTime;
 
     public PlayerCoverAttributes (float playerCoverDetectionRadius, float playerCoverTransitionTime)
     {
@@ -1142,13 +1135,13 @@ public class PlayerCoverAttributes
 }
 
 [System.Serializable]
-public class PlayerInteractionAttributes
+public struct PlayerInteractionAttributes
 {
     [Header("Player Interaction Attributes")]
-    public float playerInteractionMaxRadius = 1f;
-    public float playerInteractionMaxVerticalHeight = 1f;
-    public float playerInteractionPhysicsMaxAngle = 60f;
-    public float playerInteractionActorMaxAngle = 30f;
+    public float playerInteractionMaxRadius;
+    public float playerInteractionMaxVerticalHeight;
+    public float playerInteractionPhysicsMaxAngle;
+    public float playerInteractionActorMaxAngle;
 
     public PlayerInteractionAttributes(float playerInteractionMaxRadius, float playerInteractionMaxVerticalHeight, float playerInteractionPhysicsMaxAngle, float playerInteractionActorMaxAngle)
     {
@@ -1160,10 +1153,10 @@ public class PlayerInteractionAttributes
 }
 
 [System.Serializable]
-public class PlayerPhysicsInteractionAttributes
+public struct PlayerPhysicsInteractionAttributes
 {
     [Header("Player Physics Interaction Attributes")]
-    public float playerPhysicsCollisionMultiplier = 1f;
+    public float playerPhysicsCollisionMultiplier;
 
     public PlayerPhysicsInteractionAttributes (float playerPhysicsCollisionMultiplier)
     {
