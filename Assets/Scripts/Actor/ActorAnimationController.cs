@@ -5,6 +5,7 @@ public class ActorAnimationController : MonoBehaviour
 {
     [Header("Actor Animation Controller")]
     public Animator actorAnimator;
+    private AnimatorOverrideController actorAnimatorOverrideController;
 
     private void Start()
     {
@@ -16,8 +17,13 @@ public class ActorAnimationController : MonoBehaviour
         actorAnimator = GetComponentInChildren<Animator>();
     }
 
-    public void ReceiveNewAnimationData(ActorAnimationData newActorAnimationData)
+    public void ImportNewActorAnimationInfo(ActorAnimationInfo newActorAnimationInfo, REPEAT_TYPE repeatType)
     {
+        
+    }
 
+    private void ManageActorAnimations()
+    {
+        //actorAnimatorOverrideController["Action1"] = newActorAnimationInfo.actorAnimations;
     }
 }

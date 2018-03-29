@@ -41,13 +41,13 @@ public class PlayerMoveToPosition_StageEvent : StageEvent
 
                 if (distanceToPosition <= minDistanceToPosition)
                 {
-                    isCountingEventTime = false;
+                    isStageEventCountingFailTime = false;
 
                     StageEventCompleted();
                 }
                 else
                 {
-                    isCountingEventTime = true;
+                    isStageEventCountingFailTime = true;
                 }
 
                 if (canShowDebug)

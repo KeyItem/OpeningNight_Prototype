@@ -8,24 +8,31 @@ public class StageEvent : MonoBehaviour
     public string stageEventName;
 
     [Space(10)]
-    public Transform stageEventTarget;
+    public STAGE_EVENT_TYPE stageEventType;
 
     [Space(10)]
+    public Transform stageEventTarget;
+
+    [HideInInspector]
     public Vector3 stageEventStartPosition;
+    [HideInInspector]
     public Vector3 stageEventStartRotation;
 
     [Space(10)]
     public bool isStageEventActive = false;
 
-    [Header("Stage Event Timing Attributes")]
-    public float stageEventCompleteTime = 3f;
-    private float stageEventCompleteCurrentTime;
+    [Space(10)]
+    public bool isStageEventCompleted = false;
+
+    [Header("Stage Event Fail Timing Attributes")]
+    public float stageEventFailTime = 3f;
+    private float stageEventCurrentFailTime;
 
     [HideInInspector]
-    public bool isCountingEventTime = false;
+    public bool isStageEventCountingFailTime = false;
 
     [Space(10)]
-    public bool doesStageEventHaveTiming = false;
+    public bool stageEventHasFailTime = false;
 
     [Header("DEBUG")]
     public bool canShowDebug = false;
@@ -42,22 +49,25 @@ public class StageEvent : MonoBehaviour
 
     public virtual void ManageStageEventTiming()
     {
-        if (doesStageEventHaveTiming)
+        if (isStageEventActive)
         {
-            if (isCountingEventTime)
+            if (stageEventHasFailTime)
             {
-                stageEventCompleteCurrentTime -= Time.deltaTime;
-
-                if (stageEventCompleteCurrentTime <= 0)
+                if (isStageEventCountingFailTime)
                 {
-                    StageEventFail();
+                    stageEventCurrentFailTime -= Time.deltaTime;
+
+                    if (stageEventCurrentFailTime <= 0)
+                    {
+                        StageEventFail();
+                    }
+                }
+                else
+                {
+                    stageEventCurrentFailTime = stageEventFailTime;
                 }
             }
-            else
-            {
-                stageEventCompleteCurrentTime = stageEventCompleteTime;
-            }
-        }
+        }       
     }
 
     public virtual void StageEventPrepare()
@@ -67,7 +77,7 @@ public class StageEvent : MonoBehaviour
             stageEventTarget = transform;
         }
 
-        stageEventCompleteCurrentTime = stageEventCompleteTime;
+        stageEventCurrentFailTime = stageEventFailTime;
     }
 
     public virtual void StageEventStart() //Called to Start the Stage Event and for it to start listening for Events
@@ -110,18 +120,27 @@ public class StageEvent : MonoBehaviour
         StageEventManager.Instance.CompleteStageEvent();
 
         isStageEventActive = false;
+
+        isStageEventCompleted = true;
     }
 
     public virtual void StageEventFail()
     {
-        StageEventReset();
+        if (stageEventType == STAGE_EVENT_TYPE.REQUIRED)
+        {
+            StageEventReset();
+        }
+        else if (stageEventType == STAGE_EVENT_TYPE.OPTIONAL)
+        {
+            StageEventCompleted();
+        }
     }
 
     public virtual void StageEventReset()
     {
-        stageEventCompleteCurrentTime = stageEventCompleteTime;
+        stageEventCurrentFailTime = stageEventFailTime;
 
-        isCountingEventTime = false;
+        isStageEventCountingFailTime = false;
 
         transform.position = stageEventStartPosition;
         transform.rotation = Quaternion.Euler(stageEventStartRotation);
@@ -131,4 +150,11 @@ public class StageEvent : MonoBehaviour
     {
 
     }
+}
+
+public enum STAGE_EVENT_TYPE
+{
+    NONE,
+    REQUIRED,
+    OPTIONAL
 }

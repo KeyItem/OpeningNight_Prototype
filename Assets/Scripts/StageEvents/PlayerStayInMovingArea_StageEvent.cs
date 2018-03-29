@@ -101,13 +101,13 @@ public class PlayerStayInMovingArea_StageEvent : StageEvent
             {
                 isTargetInArea = true;
 
-                isCountingEventTime = false;
+                isStageEventCountingFailTime = false;
             }
             else
             {
                 isTargetInArea = false;
 
-                isCountingEventTime = true;
+                isStageEventCountingFailTime = true;
             }
         }
     }

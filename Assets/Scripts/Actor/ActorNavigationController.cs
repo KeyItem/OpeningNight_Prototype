@@ -4,21 +4,28 @@ using UnityEngine.AI;
 
 public class ActorNavigationController : MonoBehaviour
 {
-    [HideInInspector]
-    public ActorController targetActorController;
+    private ActorController targetActorController;
 
     private NavMeshAgent navAgent;
 
     private Animator actorAnimator;
 
     [Header("Actor Navigation Attributes")]
+    public ActorMovementInfo currentActorMovementInfo;
+
+    public int currentActorMovementInfoIndex;
+
+    [Header("Actor Current Movement Data Attributes")]
     public ActorMovementData currentActorMovementData;
+
+    [Space(10)]
+    public REPEAT_TYPE currentMovementRepeatType;
 
     [Space(10)]
     public Transform actorCurrentTargetNavPoint;
 
     [Space(10)]
-    public int currentMovementIndex = 0;
+    public int currentMovementDataIndex = 0;
 
     [Space(10)]
     public float actorCurrentMoveSpeed = 1f;
@@ -41,8 +48,31 @@ public class ActorNavigationController : MonoBehaviour
 
     private void ActorNavigationSetup()
     {
+        targetActorController = GetComponent<ActorController>();
+
         navAgent = GetComponent<NavMeshAgent>();
         actorAnimator = GetComponentInChildren<Animator>();
+    }
+
+    public void ImportNewActorMovementInfo(ActorMovementInfo newActorMovementInfo, REPEAT_TYPE movementRepeatType)
+    {
+        currentActorMovementInfoIndex = 0;
+        currentMovementDataIndex = 0;
+
+        currentActorMovementInfo = newActorMovementInfo;
+
+        currentMovementRepeatType = movementRepeatType;
+
+        ImportNewActorMovementData(newActorMovementInfo.actorMovement[0]);
+    }
+
+    private void ImportNewActorMovementData(ActorMovementData newActorMovementData)
+    {
+        currentMovementDataIndex = 0;
+
+        currentActorMovementData = newActorMovementData;
+
+        SetNewNavigationTarget();
     }
 
     private void ManageNavigation()
@@ -67,23 +97,15 @@ public class ActorNavigationController : MonoBehaviour
 
     private void ReachedDestination()
     {
-        if (currentActorMovementData.actorMovePointTransform.Length > 0)
-        {
-            if (CanMoveToNextMovementAction())
-            {
-                SetNewNavigationTarget();
-            }
-            else
-            {
-                FinishedRoute();
-            }
-        }
+        ManageNextMovementAction();
     }
 
     private void SetNewNavigationTarget()
     {
-        actorCurrentMoveSpeed = currentActorMovementData.actorMovePointSpeeds[currentMovementIndex];
-        actorCurrentTargetNavPoint = currentActorMovementData.actorMovePointTransform[currentMovementIndex];
+        actorCurrentMoveSpeed = currentActorMovementData.actorMovePointSpeeds[currentMovementDataIndex];
+        actorCurrentTargetNavPoint = currentActorMovementData.actorMovePointTransform[currentMovementDataIndex];
+
+        Debug.Log(actorCurrentTargetNavPoint.position);
 
         navAgent.speed = ReturnModifiedMovementTime(transform.position, actorCurrentTargetNavPoint.position, actorCurrentMoveSpeed);
 
@@ -99,7 +121,7 @@ public class ActorNavigationController : MonoBehaviour
         navAgent.isStopped = false;
     }
 
-    private void FinishedRoute()
+    private void FinishedAllMovementActions()
     {
         actorAnimator.SetBool("isMoving", false);
 
@@ -113,35 +135,98 @@ public class ActorNavigationController : MonoBehaviour
         transform.rotation = actorCurrentTargetNavPoint.rotation;
 
         actorCurrentTargetNavPoint = null;
-
-        targetActorController.FinishedActorEvent();
-    }
-
-    public void ReceiveNewActorMovementData(ActorMovementData newActorMovementData)
-    {
-        currentMovementIndex = 0;
-
-        currentActorMovementData = newActorMovementData;
-
-        SetNewNavigationTarget();
     }
 
     private float ReturnModifiedMovementTime(Vector3 currentPosition, Vector3 targetPosition, float moveToTime)
     {
         float targetDistance = Vector3.Distance(currentPosition, targetPosition);
 
+        if (targetDistance < 1)
+        {
+            return 1f;
+        }
+
         float modifiedMoveTime = targetDistance / moveToTime;
 
         return modifiedMoveTime;
     }
 
-    public bool CanMoveToNextMovementAction()
+    private void ManageNextMovementAction()
     {
-        int movementIndex = currentMovementIndex;
+        if (CanMoveToNextWaypoint())
+        {
+            SetNewNavigationTarget();
+        }
+        else if (CanMoveToNextMovementData())
+        {
+            ImportNewActorMovementData(currentActorMovementInfo.actorMovement[currentActorMovementInfoIndex]);
+        }
+        else
+        {
+            if (currentMovementRepeatType != REPEAT_TYPE.NONE)
+            {
+                if (currentMovementRepeatType == REPEAT_TYPE.CYCLIC)
+                {
+                    RepeatCyclic();
+                }
+                else if (currentMovementRepeatType == REPEAT_TYPE.REVERSE)
+                {
+                    RepeatReverse();
+                }
+            }
+            else
+            {
+                FinishedAllMovementActions();
+            }
+        }
+    }
+
+    private void RepeatCyclic()
+    {
+        Debug.Log("Repeat Cyclic");
+
+        currentActorMovementInfoIndex = 0;
+        currentMovementDataIndex = 0;
+
+        SetNewNavigationTarget();
+    }
+
+    private void RepeatReverse()
+    {
+        Debug.Log("Repeat Reverse");
+
+        for (int i = 0; i < currentActorMovementInfo.actorMovement.Length; i++)
+        {
+            System.Array.Reverse(currentActorMovementInfo.actorMovement[i].actorMovePointTransform);
+        }
+
+        currentActorMovementInfoIndex = 0;
+        currentMovementDataIndex = 0;
+
+        SetNewNavigationTarget();
+    }
+
+    private bool CanMoveToNextWaypoint()
+    {
+        int movementIndex = currentMovementDataIndex;
 
         if (++movementIndex <= currentActorMovementData.actorMovePointTransform.Length - 1)
         {
-            currentMovementIndex++;
+            currentMovementDataIndex++;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool CanMoveToNextMovementData()
+    {
+        int movementDataIndex = currentActorMovementInfoIndex;
+
+        if (++movementDataIndex <= currentActorMovementInfo.actorMovement.Length - 1)
+        {
+            currentActorMovementInfoIndex++;
 
             return true;
         }

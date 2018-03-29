@@ -1,113 +1,106 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof (ActorActionController))]
+[RequireComponent(typeof(ActorAnimationController))]
+[RequireComponent(typeof(ActorNavigationController))]
+
 public class ActorController : MonoBehaviour
 {
     [Header("Actor Name Attributes")]
     public ACTOR_NAME actorName;
 
-    [Header("Actor Actions")]
-    public ActorAction[] targetActorActions;
+    [Header("Actor Action Info")]
+    private ActorActionData currentActorActionData;
 
-    [Space(10)]
-    public ActorAction currentActorAction;
+    [Header("Actor Action Controller")]
+    public ActorActionController actorActionController;
 
-    [Space(10)]
-    public int currentActorEventIndex;
-
-    [Header("Actor Interaction Attributes")]
-    public Transform targetHoldPoint;
-
-    [Space(10)]
-    public bool isHoldingObject = false;
+    private ActorActionInfo currentActorActionInfo;
 
     [Header("Actor Animation Controller")]
-    private ActorAnimationController actorAnimation;
+    public ActorAnimationController actorAnimationController;
+
+    private ActorAnimationInfo currentActorAnimationInfo;
 
     [Header("Actor Navigation Attributes")]
-    private ActorNavigationController actorNavigation;
+    public ActorNavigationController actorNavigationController;
+
+    private ActorMovementInfo currentActorMovementInfo;
 
     private void Start()
     {
         ActorSetup();
+
+        ActorEnable();
     }
 
     private void ActorSetup()
     {
-        actorAnimation = GetComponent<ActorAnimationController>();
+        actorActionController = GetComponent<ActorActionController>();
 
-        actorNavigation = GetComponent<ActorNavigationController>();
-        actorNavigation.targetActorController = this;
+        actorAnimationController = GetComponent<ActorAnimationController>();
+
+        actorNavigationController = GetComponent<ActorNavigationController>();
     }
 
-    public void ReceiveNewActorActions(ActorActionInfo actorActions)
+    private void ActorEnable()
     {
-        targetActorActions = actorActions.actions;
-
-        currentActorEventIndex = 0;
-
-        PlayActorEvent(targetActorActions[0]);
+        SceneEventManager.OnSceneEventFinished += SceneEventFinished;
     }
 
-    private void PlayNextActorEvent()
+    private void ActorDisable()
     {
-        if (CanMoveToNextActorEvent())
-        {
-            PlayActorEvent(targetActorActions[currentActorEventIndex]);
-        }
-        else
-        {
-            FinishedAllActorEvents();
-        }
+        SceneEventManager.OnSceneEventFinished -= SceneEventFinished;
     }
 
-    private void PlayActorEvent(ActorAction actorAction)
+    public void ReceiveNewActorEvents(ActorActionData newActorActionData)
     {
-        currentActorAction = actorAction;
+        currentActorActionData = newActorActionData;
 
-        switch (currentActorAction.actorActionType)
+        ParseActorActionData(newActorActionData);
+    }
+
+    private void ParseActorActionData(ActorActionData newActorActionData)
+    {
+        if (newActorActionData.actorActions.actorAction.Length > 0)
         {
-            case ACTOR_ACTION_TYPE.MOVE:
-                actorNavigation.ReceiveNewActorMovementData(currentActorAction.actorMovementData);
-                break;
-
-            case ACTOR_ACTION_TYPE.INTERACT:
-                break;
+            SendNewActionEvents(newActorActionData.actorActions, newActorActionData.actorActionRepeatType);
         }
 
-        currentActorAction.ActorActionSetup(this);
+        if (newActorActionData.actorAnimations.actorAnimations.Length > 0)
+        {
+            SendNewAnimationEvents(newActorActionData.actorAnimations, newActorActionData.actorAnimationRepeatType);
+        }
 
-        currentActorAction.ActorActionStart();
+        if (newActorActionData.actorMovements.actorMovement.Length > 0)
+        {
+            SendNewMovementEvents(newActorActionData.actorMovements, newActorActionData.actorMovementRepeatType);
+        }
     }
 
-    private void SendNewMovementAction(ActorMovementData newActorMovementData)
+    private void SendNewMovementEvents(ActorMovementInfo newActorMovementData, REPEAT_TYPE actionRepeatType)
     {
-        actorNavigation.ReceiveNewActorMovementData(newActorMovementData);
+        actorNavigationController.ImportNewActorMovementInfo(newActorMovementData, actionRepeatType);
     }
 
-    public void FinishedActorEvent()
+    private void SendNewActionEvents(ActorActionInfo newActorActionInfo, REPEAT_TYPE actionRepeatType)
     {
-        currentActorAction = null;
+        actorActionController.ImportNewActorActions(newActorActionInfo, actionRepeatType);
+    }
 
-        PlayNextActorEvent();
+    private void SendNewAnimationEvents(ActorAnimationInfo newActorAnimationInfo, REPEAT_TYPE actionRepeatType)
+    {
+        actorAnimationController.ImportNewActorAnimationInfo(newActorAnimationInfo, actionRepeatType);
     }
 
     private void FinishedAllActorEvents()
     {
-
+        Debug.Log("All Actor Actions Finished");
     }
 
-    private bool CanMoveToNextActorEvent()
+    private void SceneEventFinished()
     {
-        int actorEventIndex = currentActorEventIndex;
-
-        if (++actorEventIndex <= targetActorActions.Length - 1)
-        {
-            currentActorEventIndex++;
-
-            return true;
-        }
-
-        return false;
+        Debug.Log("Actor Received Scene Event Finished Pulse");
     }
 }

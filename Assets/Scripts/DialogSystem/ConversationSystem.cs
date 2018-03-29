@@ -139,6 +139,10 @@ public class ConversationSystem : MonoBehaviour
                 EndConversation();
             }
         }
+        else
+        {
+            StartConversation();
+        }
     }
 
     public void ClearDialogBox()

@@ -34,7 +34,7 @@ public class ActorManager : MonoBehaviour
 
             if (targetActorController != null)
             {
-                targetActorController.ReceiveNewActorActions(newActorActionData[i].actorActions);
+                targetActorController.ReceiveNewActorEvents(newActorActionData[i]);
             }
             else
             {
@@ -68,10 +68,59 @@ public struct ActorActionData
 
     [Space(10)]
     public ActorActionInfo actorActions;
+
+    [Space(10)]
+    public REPEAT_TYPE actorActionRepeatType;
+
+    [Space(20)]
+    public ActorAnimationInfo actorAnimations;
+
+    [Space(10)]
+    public REPEAT_TYPE actorAnimationRepeatType;
+
+    [Space(20)]
+    public ActorMovementInfo actorMovements;
+
+    [Space(10)]
+    public REPEAT_TYPE actorMovementRepeatType;
 }
 
 [System.Serializable]
 public struct ActorActionInfo
 {
-    public ActorAction[] actions;
+    public ActorAction[] actorAction;
+}
+
+[System.Serializable]
+public struct ActorMovementInfo
+{
+    public ActorMovementData[] actorMovement;
+}
+
+[System.Serializable]
+public class ActorMovementData
+{
+    public Transform[] actorMovePointTransform;
+
+    [Space(10)]
+    public float[] actorMovePointSpeeds;
+}
+
+[System.Serializable]
+public struct ActorAnimationInfo
+{
+    public ActorAnimation[] actorAnimations;
+}
+
+[System.Serializable]
+public struct ActorAnimation
+{
+    public AnimationClip targetActorAnimation;
+}
+
+public enum REPEAT_TYPE
+{
+    NONE,
+    CYCLIC,
+    REVERSE
 }

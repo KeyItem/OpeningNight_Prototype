@@ -7,6 +7,8 @@ public class PropController : MonoBehaviour
     private Rigidbody propRigidbody;
 
     [Header("Prop Controller Attributes")]
+    public Transform targetProp;
+
     public float propSetupTime = 2f;
 
     [Space(10)]
@@ -23,8 +25,8 @@ public class PropController : MonoBehaviour
 
     private void PropSetup()
     {
-        propInteractable = GetComponent<Interactable>();
-        propRigidbody = GetComponent<Rigidbody>();
+        propInteractable = targetProp.GetComponent<Interactable>();
+        propRigidbody = targetProp.GetComponent<Rigidbody>();
     }
 
     public void StartSetup(PropPoints newPropPoints)
@@ -55,7 +57,7 @@ public class PropController : MonoBehaviour
     {
         if (propSetupTime > 0)
         {
-            transform.position = propPoints.propStartingPosition.position;
+            targetProp.transform.position = propPoints.propStartingPosition.position;
 
             Vector3 startingPosition = propPoints.propStartingPosition.position;
             Vector3 endingPosition = propPoints.propEndingPosition.position;
@@ -73,7 +75,7 @@ public class PropController : MonoBehaviour
 
                 Vector3 newPropPosition = Vector3.Slerp(startingPosition, endingPosition, setupTime);
 
-                transform.position = newPropPosition;
+                targetProp.transform.position = newPropPosition;
 
                 yield return new WaitForEndOfFrame();
             }

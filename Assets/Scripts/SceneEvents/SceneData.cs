@@ -10,7 +10,4 @@ public class SceneData : ScriptableObject
 
     [Space(10)]
     public AudioClip sceneMusic;
-
-    [Space(10)]
-    public float[] sceneEvenLineTimings;
 }

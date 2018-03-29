@@ -6,10 +6,11 @@ public class PropStayInArea_StageEvent : StageEvent
     private PlayerPickUpController playerPickUpController;
 
     [Header("Custom Stage Event Attributes")]
-    public Transform targetPropTransform;
+    public Prop[] targetProps;
 
     [Space(10)]
     public float targetInAreaWaitTime = 1f;
+    private float currentAreaWaitTime;
 
     [Space(10)]
     public float targetMinDistance = 2f;
@@ -18,13 +19,7 @@ public class PropStayInArea_StageEvent : StageEvent
     public bool propMustBeHeld = false;
 
     [Space(10)]
-    public bool isTargetInArea = false;
-
-    [Header("DEBUG")]
-    public float currentDistanceToPosition = 0f;
-
-    [Space(10)]
-    public float targetWaitTime = 1f;
+    public bool areAllTargetsInArea = false;
 
     public override void Update()
     {
@@ -37,9 +32,9 @@ public class PropStayInArea_StageEvent : StageEvent
 
     public override void StageEventStart()
     {
-        targetWaitTime = targetInAreaWaitTime;
+        currentAreaWaitTime = targetInAreaWaitTime;
 
-        if (targetPropTransform == null)
+        if (targetProps == null)
         {
             Debug.LogError("Prop is not assigned :: " + this);
         }
@@ -53,44 +48,29 @@ public class PropStayInArea_StageEvent : StageEvent
     {
         if (isStageEventActive)
         {
-            if (targetPropTransform != null && stageEventTarget != null)
+            if (targetProps != null && stageEventTarget != null)
             {
-                float distanceToPosition = Vector3.Distance(targetPropTransform.position, stageEventTarget.position);
-
-                currentDistanceToPosition = distanceToPosition;
-
-                if (distanceToPosition <= targetMinDistance)
+                if (AreAllPropsInArea())
                 {
                     if (propMustBeHeld)
                     {
-                        if (playerPickUpController.currentHeldProp == targetPropTransform.gameObject)
+                        if (IsPropHeldInPosition())
                         {
-                            isTargetInArea = true;
-
-                            isCountingEventTime = false;
+                            areAllTargetsInArea = true;
                         }
                         else
                         {
-                            isCountingEventTime = true;
+                            areAllTargetsInArea = false;
                         }
                     }
                     else
                     {
-                        isTargetInArea = true;
-
-                        isCountingEventTime = false;
+                        areAllTargetsInArea = true;
                     }
                 }
                 else
                 {
-                    isTargetInArea = false;
-
-                    isCountingEventTime = true;
-                }
-
-                if (canShowDebug)
-                {
-                    Debug.DrawLine(targetPropTransform.position, stageEventTarget.position, Color.yellow);
+                    areAllTargetsInArea = false;
                 }
             }
         }
@@ -100,19 +80,52 @@ public class PropStayInArea_StageEvent : StageEvent
     {
         if (isStageEventActive)
         {
-            if (isTargetInArea)
+            if (areAllTargetsInArea)
             {
-                targetWaitTime -= Time.deltaTime;
+                currentAreaWaitTime -= Time.deltaTime;
 
-                if (targetWaitTime <= 0)
+                if (currentAreaWaitTime <= 0)
                 {
                     StageEventCompleted();
                 }
             }
             else
             {
-                targetWaitTime = targetInAreaWaitTime;
+                currentAreaWaitTime = targetInAreaWaitTime;
             }
         }
+    }
+
+    private bool AreAllPropsInArea()
+    {
+        for (int i = 0; i < targetProps.Length; i++)
+        {
+            float deltaDistance = Vector3.Distance(targetProps[i].targetProp.position, stageEventTarget.position);
+
+            if (canShowDebug)
+            {
+                Debug.DrawLine(targetProps[i].targetProp.position, stageEventTarget.position, Color.yellow);
+            }
+
+            if (deltaDistance >= targetMinDistance)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private bool IsPropHeldInPosition()
+    {
+        for (int i = 0; i < targetProps.Length; i++)
+        {
+            if (targetProps[i].targetProp == playerPickUpController.currentHeldProp)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

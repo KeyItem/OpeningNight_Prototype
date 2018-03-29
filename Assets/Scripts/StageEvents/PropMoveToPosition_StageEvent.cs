@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PropMoveToPosition_StageEvent : StageEvent
@@ -6,13 +7,10 @@ public class PropMoveToPosition_StageEvent : StageEvent
     private PlayerPickUpController playerPickUpController;
 
     [Header("Custom Stage Event Attributes")]
-    public Transform targetProp;
+    public Prop[] targetProps;
 
     [Space(10)]
-    public float minDistanceToPosition = 2f;
-
-    [Header("DEBUG")]
-    public float currentDistanceToPosition = 0f;
+    public float propMinDistanceToTargetPosition = 2f;
 
     public override void Update()
     {
@@ -32,31 +30,33 @@ public class PropMoveToPosition_StageEvent : StageEvent
     {
         if (isStageEventActive)
         {
-            if (targetProp != null)
+            if (targetProps.Length > 0)
             {
-                if (playerPickUpController.currentHeldProp == targetProp.gameObject)
+                if (AreAllPropsInPosition())
                 {
-                    float distanceToPosition = Vector3.Distance(targetProp.position, stageEventTarget.position);
-
-                    currentDistanceToPosition = distanceToPosition;
-
-                    if (distanceToPosition <= minDistanceToPosition)
-                    {
-                        isCountingEventTime = false;
-
-                        StageEventCompleted();
-                    }
-                    else
-                    {
-                        isCountingEventTime = true;
-                    }
-
-                    if (canShowDebug)
-                    {
-                        Debug.DrawLine(targetProp.position, transform.position, Color.yellow);
-                    }
-                }            
+                    StageEventCompleted();
+                }
             }
         }
+    }
+
+    private bool AreAllPropsInPosition()
+    {
+        for (int i = 0; i < targetProps.Length; i++)
+        {
+            float deltaDistance = Vector3.Distance(targetProps[i].targetProp.position, stageEventTarget.position);
+
+            if (canShowDebug)
+            {
+                Debug.DrawLine(targetProps[i].targetProp.position, stageEventTarget.position, Color.yellow);
+            }
+
+            if (deltaDistance > propMinDistanceToTargetPosition)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

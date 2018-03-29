@@ -7,13 +7,7 @@ public class PropManager : MonoBehaviour
     public static PropManager Instance { get { return _instance; } }
 
     [Header("Prop Manager Attributes")]
-    public PropController[] propsToSetup;
-
-    [Space(10)]
-    public PropPoints[] propPoints;
-
-    [Space(10)]
-    public Transform propSpawnPoint;
+    public Prop[] propsToSetup;
 
     [Space(10)]
     public bool arePropsSetup = false;
@@ -44,9 +38,7 @@ public class PropManager : MonoBehaviour
     {
         for (int i = 0; i < propsToSetup.Length; i++)
         {
-            propsToSetup[i].transform.position = propSpawnPoint.position;
-
-            propsToSetup[i].gameObject.SetActive(false);
+            propsToSetup[i].propController.gameObject.SetActive(false);
         }
     }
 
@@ -54,16 +46,16 @@ public class PropManager : MonoBehaviour
     {
         for (int i = 0; i < propsToSetup.Length; i++)
         {
-            if (!propsToSetup[i].isPropInitialized)
+            if (!propsToSetup[i].propController.isPropInitialized)
             {
-                SetupProp(propsToSetup[i], propPoints[i]);
+                SetupProp(propsToSetup[i].propController, propsToSetup[i].propPoints);
             }
         }
     }
 
     public void SetupTargetProp(int propIndex)
     {
-        SetupProp(propsToSetup[propIndex], propPoints[propIndex]);
+        SetupProp(propsToSetup[propIndex].propController, propsToSetup[propIndex].propPoints);
     }
 
     private void SetupProp(PropController propController, PropPoints newPropPoints)
@@ -72,4 +64,12 @@ public class PropManager : MonoBehaviour
 
         propController.StartSetup(newPropPoints);
     }
+}
+
+[System.Serializable]
+public struct PropPoints
+{
+    [Header("Prop Points")]
+    public Transform propStartingPosition;
+    public Transform propEndingPosition;
 }
