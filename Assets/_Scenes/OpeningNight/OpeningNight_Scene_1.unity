@@ -4859,7 +4859,8 @@ MonoBehaviour:
   currentActorMovementInfoIndex: 0
   currentActorMovementData:
     actorMovePointTransform: []
-    actorMovePointSpeeds: []
+    actorMoveTimes: []
+    actorWaitTimes: []
   currentMovementRepeatType: 0
   actorCurrentTargetNavPoint: {fileID: 0}
   currentMovementDataIndex: 0
@@ -5216,7 +5217,8 @@ MonoBehaviour:
   currentActorMovementInfoIndex: 0
   currentActorMovementData:
     actorMovePointTransform: []
-    actorMovePointSpeeds: []
+    actorMoveTimes: []
+    actorWaitTimes: []
   currentMovementRepeatType: 0
   actorCurrentTargetNavPoint: {fileID: 0}
   currentMovementDataIndex: 0
@@ -14804,21 +14806,29 @@ MonoBehaviour:
       actorMovement:
       - actorMovePointTransform:
         - {fileID: 861370472}
-        actorMovePointSpeeds:
+        actorMoveTimes:
+        - 2
+        actorWaitTimes:
         - 0.5
       - actorMovePointTransform:
         - {fileID: 542967430}
-        actorMovePointSpeeds:
+        actorMoveTimes:
+        - 2
+        actorWaitTimes:
         - 0.5
       - actorMovePointTransform:
         - {fileID: 720339929}
-        actorMovePointSpeeds:
+        actorMoveTimes:
+        - 2
+        actorWaitTimes:
         - 0.5
       - actorMovePointTransform:
         - {fileID: 1568882865}
-        actorMovePointSpeeds:
+        actorMoveTimes:
+        - 2
+        actorWaitTimes:
         - 0.5
-    actorMovementRepeatType: 2
+    actorMovementRepeatType: 1
   targetStageEvent: {fileID: 683554859}
   sceneEventRequiresStageEventCompleted: 1
   requiredStageEventsToProceed: []

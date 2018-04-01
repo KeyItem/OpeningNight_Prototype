@@ -103,7 +103,10 @@ public class ActorMovementData
     public Transform[] actorMovePointTransform;
 
     [Space(10)]
-    public float[] actorMovePointSpeeds;
+    public float[] actorMoveTimes;
+
+    [Space(10)]
+    public float[] actorWaitTimes;
 }
 
 [System.Serializable]

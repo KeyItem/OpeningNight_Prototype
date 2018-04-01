@@ -97,15 +97,20 @@ public class ActorNavigationController : MonoBehaviour
 
     private void ReachedDestination()
     {
-        ManageNextMovementAction();
+        if (currentActorMovementData.actorWaitTimes[currentMovementDataIndex] > 0)
+        {
+            StartCoroutine(WaitUntilNextPoint(currentActorMovementData.actorWaitTimes[currentMovementDataIndex]));
+        }
+        else
+        {
+            ManageNextMovementAction();
+        }
     }
 
     private void SetNewNavigationTarget()
     {
-        actorCurrentMoveSpeed = currentActorMovementData.actorMovePointSpeeds[currentMovementDataIndex];
+        actorCurrentMoveSpeed = currentActorMovementData.actorMoveTimes[currentMovementDataIndex];
         actorCurrentTargetNavPoint = currentActorMovementData.actorMovePointTransform[currentMovementDataIndex];
-
-        Debug.Log(actorCurrentTargetNavPoint.position);
 
         navAgent.speed = ReturnModifiedMovementTime(transform.position, actorCurrentTargetNavPoint.position, actorCurrentMoveSpeed);
 
@@ -183,22 +188,14 @@ public class ActorNavigationController : MonoBehaviour
 
     private void RepeatCyclic()
     {
-        Debug.Log("Repeat Cyclic");
-
         currentActorMovementInfoIndex = 0;
-        currentMovementDataIndex = 0;
 
-        SetNewNavigationTarget();
+        ImportNewActorMovementData(currentActorMovementInfo.actorMovement[0]);
     }
 
     private void RepeatReverse()
     {
-        Debug.Log("Repeat Reverse");
-
-        for (int i = 0; i < currentActorMovementInfo.actorMovement.Length; i++)
-        {
-            System.Array.Reverse(currentActorMovementInfo.actorMovement[i].actorMovePointTransform);
-        }
+        System.Array.Reverse(currentActorMovementInfo.actorMovement);
 
         currentActorMovementInfoIndex = 0;
         currentMovementDataIndex = 0;
@@ -232,5 +229,17 @@ public class ActorNavigationController : MonoBehaviour
         }
 
         return false;
+    }
+
+    private IEnumerator WaitUntilNextPoint(float waitTime)
+    {
+        if (waitTime > 0)
+        {
+            yield return new WaitForSeconds(waitTime);
+        }
+
+        ManageNextMovementAction();
+
+        yield return null;
     }
 }
