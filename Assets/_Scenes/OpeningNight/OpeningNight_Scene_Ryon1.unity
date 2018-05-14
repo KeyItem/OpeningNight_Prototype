@@ -4714,7 +4714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ab43a9c8ba7cc841a502d87b2106e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneEventName: Scene1_Event1
+  sceneEventName: Scene1_Event2
   sceneEventActiveTime: 20
   sceneEventHasDialogue: 1
   actorActionsData:
@@ -4756,8 +4756,8 @@ MonoBehaviour:
         - 2
         - 2
     actorMovementRepeatType: 1
-  targetStageEvent: {fileID: 0}
-  sceneEventRequiresStageEventCompleted: 0
+  targetStageEvent: {fileID: 683554859}
+  sceneEventRequiresStageEventCompleted: 1
   requiredStageEventsToProceed: []
   stageLightCommands: {fileID: 0}
   stageLightTargetTransforms: []
@@ -4989,6 +4989,61 @@ Transform:
   m_Father: {fileID: 1237003479}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &897812828
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 897812829}
+  - component: {fileID: 897812830}
+  m_Layer: 0
+  m_Name: StageEvent_0 (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &897812829
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 897812828}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1141229713}
+  m_Father: {fileID: 1185752202}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &897812830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 897812828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5a57261ec9c2dd42820bc53a231a64b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stageEventName: 
+  stageEventType: 0
+  stageEventTarget: {fileID: 1141229713}
+  stageEventStartPosition: {x: 0, y: 0, z: 0}
+  stageEventStartRotation: {x: 0, y: 0, z: 0}
+  isStageEventActive: 0
+  isStageEventCompleted: 0
+  stageEventFailTime: 3
+  isStageEventCountingFailTime: 0
+  stageEventHasFailTime: 0
+  canShowDebug: 0
+  targetPlayer: {fileID: 0}
+  minDistanceToPosition: 2
+  currentDistanceToPosition: 0
 --- !u!1001 &910736899
 Prefab:
   m_ObjectHideFlags: 0
@@ -6681,6 +6736,34 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1130782355}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1141229712
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1141229713}
+  m_Layer: 0
+  m_Name: TargetArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1141229713
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1141229712}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 897812829}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1141267443
 GameObject:
   m_ObjectHideFlags: 0
@@ -7597,6 +7680,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 683554858}
+  - {fileID: 897812829}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
